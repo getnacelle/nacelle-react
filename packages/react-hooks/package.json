@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-hooks",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "Custom convenience hooks for use when building apps with Nacelle",
   "main": "build/index.js",
   "module": "build/index.es.js",

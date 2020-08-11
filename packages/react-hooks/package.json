@@ -68,5 +68,9 @@
       "pre-commit": "lint-staged",
       "pre-push": "npm run test"
     }
+  },
+  "gitHead": "2c3fc376a7c83dfe62225c5aaefa4b59e6c1e331",
+  "publishConfig": {
+    "access": "public"
   }
 }

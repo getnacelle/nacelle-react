@@ -1,4 +1,4 @@
-# @nacelle/nacelle-react-hooks
+# @nacelle/react-hooks
 
 > React Hooks for use with Nacelle apps
 

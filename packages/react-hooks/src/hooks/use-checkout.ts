@@ -74,10 +74,9 @@ export default function useCheckout(
           body: JSON.stringify({ query: CHECKOUT_QUERY, variables })
         }
       );
-      // console.log(response);
+
       const checkoutResult: CheckoutResponse = await response.json();
-      // console.log(checkoutResult);
-      // TODO: Update this to map data to a more dev-friendly format
+
       setCheckoutData(checkoutResult);
 
       if (isMounted.current) {

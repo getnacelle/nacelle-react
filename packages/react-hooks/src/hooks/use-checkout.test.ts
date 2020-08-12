@@ -11,31 +11,7 @@ const checkoutResponse = {
         source: 'Shopify'
       }
     }
-  },
-  status: 200,
-  statusText: '',
-  headers: {
-    'content-length': '342',
-    'content-type': 'application/json'
-  },
-  config: {
-    url: 'https://hailfrequency.com/v2/graphql',
-    method: 'post',
-    data: '{"query": { "mutation": {}}',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-      'X-Nacelle-Space-Id': 'my-space-id',
-      'X-Nacelle-Space-Token': 'my-space-token'
-    },
-    transformRequest: [null],
-    transformResponse: [null],
-    timeout: 0,
-    xsrfCookieName: 'XSRF-TOKEN',
-    xsrfHeaderName: 'X-XSRF-TOKEN',
-    maxContentLength: -1
-  },
-  request: {}
+  }
 };
 
 const items = [

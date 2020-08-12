@@ -58,8 +58,8 @@ const Cart = () => {
   );
   useEffect(() => {
     if (checkoutData) {
-      const payload = checkoutData.data.data.processCheckout;
-      window.location = payload.url;
+      const {processCheckout} = checkoutData.data;
+      window.location = processCheckout.url;
     }
   }, [checkoutData]);
   return (

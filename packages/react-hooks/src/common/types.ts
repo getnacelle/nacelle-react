@@ -35,33 +35,11 @@ export interface VariableInput {
 
 export interface CheckoutResponse {
   data: {
-    data: {
-      processCheckout: {
-        id: string;
-        completed: boolean;
-        url: string;
-        source: string;
-      };
+    processCheckout: {
+      id: string;
+      completed: boolean;
+      url: string;
+      source: string;
     };
   };
-  status: number;
-  statusText: string;
-  headers: {
-    [name: string]: string;
-  };
-  config: {
-    url: string;
-    method: string;
-    data: string;
-    headers: {
-      [name: string]: string;
-    };
-    transformRequest: unknown[];
-    transformResponse: unknown[];
-    timeout: number;
-    xsrfCookieName: string;
-    xsrfHeaderName: string;
-    maxContentLength: number;
-  };
-  request?: unknown;
 }

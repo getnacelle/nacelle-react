@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'React';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Variant, Credentials, CheckoutResponse } from '../common/types';
 
 const CHECKOUT_QUERY = `

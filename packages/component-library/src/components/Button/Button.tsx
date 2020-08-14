@@ -15,8 +15,8 @@ const Button: FC<ButtonProps> = ({
   styles,
   fullWidth = false,
   disabled = false,
-  children,
-  onClick
+  onClick,
+  children
 }) => {
   const combinedStyles = composeStyles([
     defaultStyles,

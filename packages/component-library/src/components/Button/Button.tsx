@@ -2,12 +2,13 @@ import React, { FC, MouseEvent } from 'react';
 import { CSSObject } from '@emotion/core';
 
 import { composeStyles } from '../../utils/styles';
-import { defaultStyles } from './Button.styles';
+import { defaultStyles, secondaryStyles } from './Button.styles';
 
 export type ButtonProps = {
   styles?: CSSObject;
   fullWidth?: boolean;
   disabled?: boolean;
+  variant?: 'primary' | 'secondary';
   onClick?: (evt: MouseEvent) => void | unknown;
 };
 
@@ -16,12 +17,14 @@ const Button: FC<ButtonProps> = ({
   fullWidth = false,
   disabled = false,
   onClick,
+  variant = 'primary',
   children
 }) => {
   const combinedStyles = composeStyles([
     defaultStyles,
-    styles,
-    fullWidth && { width: '100%' }
+    variant === 'secondary' && secondaryStyles,
+    fullWidth && { width: '100%' },
+    styles
   ]);
 
   return (

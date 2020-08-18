@@ -3,6 +3,7 @@ import { CSSObject } from '@emotion/core';
 
 import { handleShopifyImages } from './shopify';
 import { handleContentfulImages } from './contentful';
+import { composeStyles } from '../../utils/styles';
 
 export type ImageFormat = 'jpg' | 'webp' | 'png' | 'jpeg' | 'pjpg';
 
@@ -23,9 +24,11 @@ const Image: FC<ImageProps> = ({
   format = 'jpg',
   loading = 'lazy',
   height,
-  width
+  width,
+  ...props
 }) => {
   const imageFormats = Array.isArray(format) ? format : [format];
+  const combinedStyles = composeStyles([styles, { height, width }]);
 
   return (
     <picture>
@@ -33,8 +36,9 @@ const Image: FC<ImageProps> = ({
       <img
         src={src}
         alt={alt}
-        css={[styles, { height, width }]}
+        css={combinedStyles}
         loading={loading}
+        {...props}
       />
     </picture>
   );

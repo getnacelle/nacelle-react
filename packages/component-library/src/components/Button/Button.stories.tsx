@@ -15,6 +15,9 @@ const Template: Story<ButtonProps> = (args) => <Button {...args}>TEXT</Button>;
 
 export const Primary = Template.bind({});
 
+export const Secondary = Template.bind({});
+Secondary.args = { variant: 'secondary' };
+
 export const CustomStyles = Template.bind({});
 CustomStyles.args = {
   styles: {

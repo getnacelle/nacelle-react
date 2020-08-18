@@ -7,6 +7,7 @@ const story: Meta = {
   title: 'Components/TextInput',
   component: TextInput,
   argTypes: {
+    onChange: { action: 'changed' },
     onFocus: { action: 'focused' },
     onBlur: { action: 'blurred' }
   }

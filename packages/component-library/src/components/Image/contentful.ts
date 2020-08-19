@@ -12,33 +12,35 @@ export function formatContentfulUrl(src: string, format: ImageFormat): string {
   const [base, args, extension] = splitContentfulSrc(src);
   const imgFormat = format === 'jpeg' ? 'jpg' : format;
 
-  if (imgFormat !== extension) {
-    const newArgs = args
-      .split('&')
-      .filter((el) => !el.includes('fl='))
-      .filter((el) => !el.includes('fm='))
-      .join('&');
-
-    switch (imgFormat) {
-      case 'pjpg':
-        return `${base}.${extension}?${newArgs}&fm=jpg&fl=progressive`;
-      case 'png':
-      case 'jpg':
-      case 'webp':
-      default:
-        return `${base}.${extension}?${newArgs}&fm=${imgFormat}`;
-    }
+  if (imgFormat === extension) {
+    // return the original image if not being converted to a possible extension
+    return `${base}.${extension}`;
   }
 
-  // return the original image if not being converted to a possible extension
-  return src;
+  const newArgs = args
+    .split('&')
+    .filter((el) => !el.includes('fl='))
+    .filter((el) => !el.includes('fm='))
+    .join('&');
+
+  const argsString = newArgs ? `${newArgs}&` : '';
+
+  switch (imgFormat) {
+    case 'pjpg':
+      return `${base}.${extension}?${argsString}fm=jpg&fl=progressive`;
+    case 'png':
+    case 'jpg':
+    case 'webp':
+    default:
+      return `${base}.${extension}?${argsString}fm=${imgFormat}`;
+  }
 }
 
 export function handleContentfulImages(
   src: string,
   format: ImageFormat,
-  width: number,
-  height: number
+  width?: number,
+  height?: number
 ): string {
   const imageSrc = formatContentfulUrl(src, format);
 
@@ -62,8 +64,8 @@ export function handleContentfulImages(
 }
 
 export function createContentfulDimensions(
-  width: number,
-  height: number
+  width?: number,
+  height?: number
 ): string {
   if (width && height) {
     return `w=${width}&h=${height}`;

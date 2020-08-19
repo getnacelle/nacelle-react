@@ -15,7 +15,8 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended',
+    'jest-dom'
   ],
   globals: {
     Atomics: 'readonly',
@@ -43,6 +44,10 @@ module.exports = {
       {
         aspects: ['invalidHref']
       }
-    ]
+    ],
+    'jest-dom/prefer-checked': 'error',
+    'jest-dom/prefer-enabled-disabled': 'error',
+    'jest-dom/prefer-required': 'error',
+    'jest-dom/prefer-to-have-attribute': 'error'
   }
 };

@@ -15,6 +15,7 @@ export type ImageProps = {
   loading?: 'lazy' | 'eager';
   height?: number;
   width?: number;
+  testId?: string;
 };
 
 const Image: FC<ImageProps> = ({
@@ -25,13 +26,15 @@ const Image: FC<ImageProps> = ({
   loading = 'lazy',
   height,
   width,
+  testId,
   ...props
 }) => {
   const imageFormats = Array.isArray(format) ? format : [format];
   const combinedStyles = composeStyles([styles, { height, width }]);
+  const id = testId ? { 'data-testid': testId } : {};
 
   return (
-    <picture>
+    <picture {...id}>
       {imageFormats.map(renderSource(src, width, height))}
       <img
         src={src}

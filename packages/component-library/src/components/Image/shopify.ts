@@ -9,7 +9,10 @@ export function formatShopifyUrl(src: string, format: ImageFormat): string {
     : src;
 }
 
-export function createShopifyDimensions(width: number, height: number): string {
+export function createShopifyDimensions(
+  width?: number,
+  height?: number
+): string {
   if (width && height) {
     return `_${width}x${height}`;
   }
@@ -24,8 +27,8 @@ export function createShopifyDimensions(width: number, height: number): string {
 export function handleShopifyImages(
   src: string,
   format: ImageFormat,
-  width: number,
-  height: number
+  width?: number,
+  height?: number
 ): string {
   const imageSrc = formatShopifyUrl(src, format);
 
@@ -33,7 +36,7 @@ export function handleShopifyImages(
     return imageSrc;
   }
 
-  const [baseWithExt, args] = src.split('?');
+  const [baseWithExt, args] = imageSrc.split('?');
   const [extension] = Array.from(baseWithExt.split('.')).reverse();
   const [base] = baseWithExt.split(`.${extension}`);
 

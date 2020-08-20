@@ -15,6 +15,10 @@ export interface SelectProps extends InputHTMLAttributes<HTMLSelectElement> {
   placeholder?: string;
 }
 
+/**
+ * Creates a <select /> component. If a placeholder option
+ * is provided, it is used as the first <option /> in the list
+ */
 const Select: FC<SelectProps> = ({
   options,
   placeholder,

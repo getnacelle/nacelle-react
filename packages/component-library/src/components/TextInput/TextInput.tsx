@@ -27,6 +27,13 @@ export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
     | 'date';
 }
 
+/**
+ * Creates an <input /> component. Pass a ref prop to get access to
+ * the html value of the input element if needed
+ *
+ * Use the fullWidth prop to make the button take up the entire
+ * width of the container
+ */
 const TextInput: ForwardRefRenderFunction<Ref, TextInputProps> = (
   {
     styles,

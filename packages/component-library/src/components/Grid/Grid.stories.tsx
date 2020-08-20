@@ -65,4 +65,16 @@ Rows.args = { flow: 'row', columns: 8 };
 export const Columns = Template.bind({});
 Columns.args = { flow: 'column', columns: 5 };
 
+export const ProductGrid = (args) => (
+  <Grid {...args}>
+    {colors.map((color, idx) => (
+      <Cell key={`${idx}-${color}`} styles={{ backgroundColor: color }} />
+    ))}
+  </Grid>
+);
+ProductGrid.args = {
+  minRowHeight: 200,
+  columns: 'repeat(auto-fill, minmax(200px, 1fr))'
+};
+
 export default story;

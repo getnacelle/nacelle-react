@@ -1,5 +1,5 @@
 {
-  "name": "@nacelle/react-component-library",
+  "name": "@nacelle/react-components",
   "version": "2.0.0",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",

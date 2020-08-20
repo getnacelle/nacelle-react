@@ -14,6 +14,11 @@ export type CellProps = {
   center?: boolean;
 };
 
+/**
+ * Used to create a cell within a <Grid />
+ *
+ * Uses the same API as https://styled-css-grid.js.org/
+ */
 const Cell: FC<CellProps> = ({
   styles,
   width = 1,

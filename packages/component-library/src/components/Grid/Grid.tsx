@@ -26,6 +26,12 @@ function createGridFr(value: string | number): string {
   return `repeat(${value}, 1fr)`;
 }
 
+/**
+ * Creates a CSS grid and can be used with <Cell>
+ * to create response grid layouts.
+ *
+ * Uses the same API as https://styled-css-grid.js.org/
+ */
 const Grid: FC<GridProps> = ({
   styles,
   flow = 'row',

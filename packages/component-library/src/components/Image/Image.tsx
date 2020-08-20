@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, HTMLAttributes } from 'react';
 import { CSSObject } from '@emotion/core';
 
 import { handleShopifyImages } from './shopify';
@@ -7,7 +7,7 @@ import { composeStyles } from '../../utils/styles';
 
 export type ImageFormat = 'jpg' | 'webp' | 'png' | 'jpeg' | 'pjpg';
 
-export type ImageProps = {
+export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
   styles?: CSSObject;
   src: string;
   alt: string;
@@ -16,8 +16,18 @@ export type ImageProps = {
   height?: number;
   width?: number;
   testId?: string;
-};
+}
 
+/**
+ * Creates an html picture element with an <img /> fallback
+ * and tries to optmize the image size if the image comes
+ * from the Shopify or Contentful CDN.
+ *
+ * Use the format prop to specify all <source> formats, and
+ * the component will try to convert the image URL to the specified
+ * format if it is using the Shopify or Contentful CDN.
+ *
+ */
 const Image: FC<ImageProps> = ({
   src,
   alt,

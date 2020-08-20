@@ -7,9 +7,7 @@ const story: Meta = {
   title: 'Components/Select',
   component: Select,
   argTypes: {
-    onChange: { action: 'changed ' },
-    onFocus: { action: 'focused' },
-    onBlur: { action: 'blurred' }
+    onChange: { action: 'changed' }
   }
 };
 

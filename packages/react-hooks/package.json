@@ -11,7 +11,8 @@
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf ./build",
     "build": "rollup -c",
-    "test": "jest ./src",
+    "test": "jest ./src --watch",
+    "test:ci": "jest ./src --runInBand",
     "lint": "eslint ./src"
   },
   "keywords": [

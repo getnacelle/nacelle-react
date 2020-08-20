@@ -9,7 +9,7 @@
     "prebuild": "rimraf ./build",
     "build": "rollup -c",
     "test": "jest ./src --watch",
-    "test:ci": "jest ./src",
+    "test:ci": "jest ./src --runInBand",
     "lint": "eslint ./src",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"

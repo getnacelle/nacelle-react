@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "test": "lerna run test",
+    "test:ci": "lerna run test:ci",
     "lint": "lerna run lint",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap --hoist"
   },
   "devDependencies": {
     "lerna": "^3.22.1"

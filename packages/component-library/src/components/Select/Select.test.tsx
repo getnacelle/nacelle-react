@@ -20,6 +20,6 @@ describe('Button', () => {
   it('should load with a placeholder option', () => {
     const { options } = setupSelect({ ...props, placeholder: 'Select one' });
     expect(options.length).toEqual(3);
-    expect(options[0].textContent).toEqual('Select one');
+    expect(options[0]).toHaveTextContent('Select one');
   });
 });

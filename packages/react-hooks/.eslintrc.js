@@ -33,6 +33,7 @@ module.exports = {
   rules: {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
+    'react/prop-types': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'jsx-a11y/accessible-emoji': 1,
@@ -44,4 +45,4 @@ module.exports = {
       }
     ]
   }
-}
+};

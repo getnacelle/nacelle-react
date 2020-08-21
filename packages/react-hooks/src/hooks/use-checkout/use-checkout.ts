@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Variant, Credentials, CheckoutResponse } from '../common/types';
+import { Variant, Credentials, CheckoutResponse } from '../../common/types';
 
 const CHECKOUT_QUERY = `
 mutation sendCheckout($input: CheckoutInput) {
@@ -14,16 +14,18 @@ mutation sendCheckout($input: CheckoutInput) {
 
 /**
  * Fetch checkout data (url, id, etc.) from the Hail Frequency API
+ *
  * @param credentials an object containing your nacelle_space_id and your nacelle_graphql_token
  * @param lineItems an array of 'variant' objects containing an 'id' and a 'qty'
  * @param checkoutId an id string of a previously checkout to be continued
+ *
  * @returns an array with checkout data [0], a checkout callback fn [1], and an isSending boolean [2]
  */
-export default function useCheckout(
+export const useCheckout = (
   credentials: Credentials,
   lineItems: Variant[],
   checkoutId?: string
-): [null | CheckoutResponse, () => Promise<CheckoutResponse>, boolean] {
+): [null | CheckoutResponse, () => Promise<CheckoutResponse>, boolean] => {
   const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
     null
   );
@@ -90,4 +92,4 @@ export default function useCheckout(
   }, [cartItems, checkoutId, credentials, isCheckingOut]);
 
   return [checkoutData, checkout, isCheckingOut];
-}
+};

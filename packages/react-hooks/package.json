@@ -12,7 +12,7 @@
     "prebuild": "rimraf ./build",
     "build": "rollup -c",
     "test": "jest ./src --watch",
-    "test:ci": "jest ./src --runInBand",
+    "test:ci": "jest ./src --runInBand --coverage",
     "lint": "eslint ./src"
   },
   "keywords": [

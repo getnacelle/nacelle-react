@@ -2,7 +2,6 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "test": "lerna run test",
     "test:ci": "lerna run test:ci",
     "lint": "lerna run lint",
     "bootstrap": "lerna bootstrap --hoist"

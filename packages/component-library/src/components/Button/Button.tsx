@@ -1,27 +1,38 @@
-import React, { FC, MouseEvent } from 'react';
+import React, { FC, InputHTMLAttributes } from 'react';
 import { CSSObject } from '@emotion/core';
 
 import { composeStyles } from '../../utils/styles';
-import { defaultStyles } from './Button.styles';
+import { defaultStyles, secondaryStyles } from './Button.styles';
 
-export type ButtonProps = {
+export interface ButtonProps extends InputHTMLAttributes<HTMLButtonElement> {
   styles?: CSSObject;
   fullWidth?: boolean;
   disabled?: boolean;
-  onClick?: (evt: MouseEvent) => void | unknown;
-};
+  variant?: 'primary' | 'secondary';
+}
 
+/**
+ * A button component with two variants:
+ *
+ * - primary (default): filled button with background color
+ * - secondary: outlined button
+ *
+ * Use the fullWidth prop to make the button take up the entire
+ * width of the container
+ */
 const Button: FC<ButtonProps> = ({
   styles,
   fullWidth = false,
   disabled = false,
-  children,
-  onClick
+  onClick,
+  variant = 'primary',
+  children
 }) => {
   const combinedStyles = composeStyles([
     defaultStyles,
-    styles,
-    fullWidth && { width: '100%' }
+    variant === 'secondary' && secondaryStyles,
+    fullWidth && { width: '100%' },
+    styles
   ]);
 
   return (

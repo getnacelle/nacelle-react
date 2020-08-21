@@ -15,7 +15,8 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended',
+    'plugin:jest-dom/recommended'
   ],
   globals: {
     Atomics: 'readonly',
@@ -29,7 +30,13 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: ['react', '@typescript-eslint', 'react-hooks', 'jsx-a11y'],
+  plugins: [
+    'react',
+    '@typescript-eslint',
+    'react-hooks',
+    'jsx-a11y',
+    'jest-dom'
+  ],
   rules: {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
@@ -43,6 +50,10 @@ module.exports = {
       {
         aspects: ['invalidHref']
       }
-    ]
+    ],
+    'jest-dom/prefer-checked': 'error',
+    'jest-dom/prefer-enabled-disabled': 'error',
+    'jest-dom/prefer-required': 'error',
+    'jest-dom/prefer-to-have-attribute': 'error'
   }
 };

@@ -1,8 +1,9 @@
 module.exports = {
   roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.(tsx|ts)?$': 'ts-jest'
+    '^.+\\.(tsx|ts)?$': 'babel-jest'
   },
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|tsx)?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   watchPlugins: [

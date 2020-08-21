@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import useCheckout from './use-checkout';
+import { useCheckout } from './use-checkout';
 
 const checkoutResponse = {
   data: {

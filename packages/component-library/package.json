@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-components",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -71,6 +71,5 @@
     "rollup-plugin-typescript2": "^0.27.2",
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
-  },
-  "dependencies": {}
+  }
 }

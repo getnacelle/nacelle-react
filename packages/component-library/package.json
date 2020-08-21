@@ -4,6 +4,9 @@
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf ./build",
@@ -71,5 +74,9 @@
     "rollup-plugin-typescript2": "^0.27.2",
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
+  },
+  "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
+  "publishConfig": {
+    "access": "public"
   }
 }

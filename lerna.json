@@ -1,9 +1,15 @@
 {
   "npmClient": "npm",
-  "packages": ["packages/*", "examples/*"],
-  "version": "2.1.1",
+  "packages": [
+    "packages/*",
+    "examples/*"
+  ],
+  "version": "2.1.2",
   "publish": {
-    "ignoreChanges": ["*.md", ".gitignore"],
+    "ignoreChanges": [
+      "*.md",
+      ".gitignore"
+    ],
     "message": "chore(release): publish"
   }
 }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useCheckout } from '@nacelle/react-hooks';
+import { useCheckout, useCart } from '@nacelle/react-hooks';
+
 import { ItemQuantity } from 'components';
 import { formatCurrency } from 'utils';
-import { useCart, useDetectDevice } from 'hooks';
+import { useDetectDevice } from 'hooks';
 import * as styles from './cart.styles';
 
 const checkoutCredentials = {
@@ -69,6 +70,8 @@ const Cart = () => {
 const CartItem = ({ item, cartActions, isMobile }) => {
   const [itemQuantity, updateQuantity] = useState(item.quantity || 0);
 
+  const formatPrice = formatCurrency(item.locale, item.priceCurrency);
+
   const incrementQty = () => {
     const qty = itemQuantity + 1;
 
@@ -102,14 +105,14 @@ const CartItem = ({ item, cartActions, isMobile }) => {
           <h4 css={styles.cartItemTitle}>{item.title}</h4>
           {isMobile && (
             <span css={[styles.cartItemPrice, { flexGrow: 0 }]}>
-              {formatCurrency(item.price)}
+              {formatPrice(item.price)}
             </span>
           )}
         </div>
 
         <div css={styles.productInteractLayout}>
           {!isMobile && (
-            <span css={styles.cartItemPrice}>{formatCurrency(item.price)}</span>
+            <span css={styles.cartItemPrice}>{formatPrice(item.price)}</span>
           )}
           <ItemQuantity
             quantity={itemQuantity}
@@ -126,12 +129,16 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 };
 
 function calculateSubTotal(cart) {
+  const cartLocale = cart.length ? cart[0].locale : 'en-us';
+  const cartCurrency = cart.length ? cart[0].priceCurrency : 'USD';
+  const formatPrice = formatCurrency(cartLocale, cartCurrency);
+
   const total = cart.reduce((subTotal, item) => {
     const itemTotal = item.quantity * parseInt(item.price, 10);
     return subTotal + itemTotal;
   }, 0);
 
-  return formatCurrency(total);
+  return formatPrice(total);
 }
 
 export default Cart;

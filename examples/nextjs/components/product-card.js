@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useAddToCart, useFormatPrice } from 'hooks';
+import { useCart } from '@nacelle/react-hooks';
+
+import { formatCurrency } from 'utils';
 import { Image } from 'components';
 import * as styles from 'styles/products.styles';
 
@@ -26,16 +28,20 @@ const LinkPDP = ({ linkToPDP, children }) => {
 
 const ProductCard = ({ product, linkToPDP }) => {
   const [quantity, setQuantity] = useState(0);
-  const minPrice = useFormatPrice(product, product.priceRange.min);
-  const maxPrice = useFormatPrice(product, product.priceRange.max);
-  const price =
-    product.priceRange.min === product.priceRange.max
-      ? minPrice
-      : `$${minPrice} - $${maxPrice}`;
+  const [, { addToCart, toggleCart }] = useCart();
 
   const productVariant = product.variants[0];
+  const formatPrice = formatCurrency(
+    product.locale,
+    productVariant.priceCurrency
+  );
 
-  const addItemToCart = useAddToCart(product, productVariant, quantity);
+  const addItemToCart = () => {
+    const item = { ...product, variant: productVariant, quantity };
+
+    addToCart(item);
+    return toggleCart();
+  };
 
   const incrementQty = () => setQuantity((qty) => qty + 1);
   const decrementQty = () => setQuantity((qty) => (qty > 0 ? qty - 1 : 0));
@@ -62,7 +68,9 @@ const ProductCard = ({ product, linkToPDP }) => {
           <LinkPDP linkToPDP={linkToPDP ? `/products/${product.handle}` : null}>
             <h3 css={styles.productTitle}>{product.title}</h3>
           </LinkPDP>
-          <span css={styles.productPrice}>{price}</span>
+          <span css={styles.productPrice}>
+            {formatPrice(productVariant.price)}
+          </span>
           <div css={styles.productInteractLayout}>
             <div css={styles.counterLayout}>
               <span css={styles.quantity}>{quantity}</span>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCart } from '@nacelle/react-hooks';
 
-import { useCart } from 'hooks';
 import * as styles from './header.styles';
 
 const MobileNav = ({ show, navItems, toggleNav, title }) => {

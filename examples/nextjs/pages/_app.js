@@ -1,7 +1,8 @@
 import App from 'next/app';
 import React from 'react';
+import { CartProvider } from '@nacelle/react-hooks';
+
 import { Layout, DeviceDetector } from 'components';
-import { CartProvider } from 'hooks/use-cart';
 import $nacelle from 'services/nacelle.js';
 import '../styles/globals.css';
 

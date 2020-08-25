@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
+import { useCart } from '@nacelle/react-hooks';
+
 import $nacelle from 'services/nacelle';
 import { Image } from 'components';
-
-import { useAddToCart } from 'hooks';
 import { formatCurrency } from 'utils';
 import * as styles from 'styles/products.styles';
 
 const ProductDetail = ({ product }) => {
   const [quantity, setQuantity] = useState(0);
+  const [, { addToCart, toggleCart }] = useCart();
+  const { locale, priceRange } = product;
 
+  const formatPrice = formatCurrency(locale, priceRange.currencyCode);
   const productMedia = product.media[0];
   const productVariant = product.variants[0];
 
-  const addItemToCart = useAddToCart(product, productVariant, quantity);
+  const addItemToCart = () => {
+    const item = { ...product, variant: productVariant, quantity };
+
+    addToCart(item);
+    return toggleCart();
+  };
 
   const incrementQty = () => setQuantity((qty) => qty + 1);
   const decrementQty = () => setQuantity((qty) => (qty > 0 ? qty - 1 : 0));
@@ -32,7 +40,7 @@ const ProductDetail = ({ product }) => {
         <div css={styles.column}>
           <h3 css={styles.productTitle}>{product.title}</h3>
           <span css={styles.productPrice}>
-            {formatCurrency(productVariant.price)}
+            {formatPrice(productVariant.price)}
           </span>
           <p css={styles.productDesc}>{stripHtml(product.description)}</p>
           <div css={styles.productInteractLayout}>

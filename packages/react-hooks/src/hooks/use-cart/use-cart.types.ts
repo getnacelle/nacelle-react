@@ -85,6 +85,7 @@ export type CartItem = {
   vendor: string;
   weight: string;
   weightUnit: string;
+  locale: string;
 };
 
 export type CartState = {

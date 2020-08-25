@@ -126,7 +126,7 @@ const cartReducer = (
  * @returns a formatted cart item
  */
 export function formatCartItem(item: ShopifyItem): CartItem {
-  const { title, vendor, tags, handle, id: productId } = item;
+  const { title, vendor, tags, handle, locale, id: productId } = item;
   const { featuredMedia: image, ...variant } = item.variant;
 
   return {
@@ -137,6 +137,7 @@ export function formatCartItem(item: ShopifyItem): CartItem {
     handle,
     productId,
     image,
+    locale,
     quantity: item.quantity > 0 ? item.quantity : 1
   };
 }

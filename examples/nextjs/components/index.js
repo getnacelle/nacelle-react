@@ -1,0 +1,12 @@
+export { default as Cart } from './cart';
+export { default as DeviceDetector } from './detect-device';
+export { default as Header } from './header';
+export { default as HeroBanner } from './hero-banner';
+export { default as Image } from './image';
+export { default as Layout } from './layout';
+export { default as ProductCard } from './product-card';
+export { default as ProductGallery } from './product-gallery';
+export { default as Sections } from './sections';
+export { default as SideBySide } from './side-by-side';
+export { default as ItemQuantity } from './item-quantity';
+export { default as Footer } from './footer';

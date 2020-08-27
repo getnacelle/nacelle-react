@@ -1,6 +1,6 @@
 {
   "name": "nacelle-nextjs-example",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,8 +10,8 @@
   "dependencies": {
     "@emotion/core": "^10.0.34",
     "@nacelle/contentful-preview-connector": "^0.1.4",
-    "@nacelle/react-components": "^2.2.0",
-    "@nacelle/react-hooks": "^2.2.0",
+    "@nacelle/react-components": "^2.2.1",
+    "@nacelle/react-hooks": "^2.2.1",
     "@react-hook/media-query": "^1.1.1",
     "emotion": "^10.0.27",
     "emotion-server": "^10.0.27",

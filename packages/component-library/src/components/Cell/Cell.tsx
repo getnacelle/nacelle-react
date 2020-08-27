@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
-import { CSSObject } from '@emotion/core';
+/** @jsx jsx */
+import { FC } from 'react';
+import { jsx, CSSObject } from '@emotion/core';
 
 import { composeStyles } from '../../utils/styles';
 import { defaultStyles } from './Cell.styles';

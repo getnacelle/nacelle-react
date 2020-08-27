@@ -1,9 +1,9 @@
-import React, { FC, HTMLAttributes } from 'react';
-import { CSSObject } from '@emotion/core';
+/** @jsx jsx */
+import { FC, HTMLAttributes } from 'react';
+import { jsx, CSSObject } from '@emotion/core';
 
 import { handleShopifyImages } from './shopify';
 import { handleContentfulImages } from './contentful';
-import { composeStyles } from '../../utils/styles';
 
 export type ImageFormat = 'jpg' | 'webp' | 'png' | 'jpeg' | 'pjpg';
 
@@ -31,28 +31,21 @@ export interface ImageProps extends HTMLAttributes<HTMLImageElement> {
 const Image: FC<ImageProps> = ({
   src,
   alt,
-  styles,
   format = 'jpg',
   loading = 'lazy',
   height,
   width,
   testId,
+  styles,
   ...props
 }) => {
   const imageFormats = Array.isArray(format) ? format : [format];
-  const combinedStyles = composeStyles([styles, { height, width }]);
   const id = testId ? { 'data-testid': testId } : {};
 
   return (
     <picture {...id}>
       {imageFormats.map(renderSource(src, width, height))}
-      <img
-        src={src}
-        alt={alt}
-        css={combinedStyles}
-        loading={loading}
-        {...props}
-      />
+      <img src={src} alt={alt} loading={loading} css={styles} {...props} />
     </picture>
   );
 };

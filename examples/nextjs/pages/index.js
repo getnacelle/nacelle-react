@@ -1,15 +1,13 @@
+import React, { Fragment } from 'react';
+
 import $nacelle from 'services/nacelle';
-import React from 'react';
-import { Sections } from 'components';
+import ContentSections from 'components/ContentSections';
 
 export default function Home({ page }) {
   return (
-    <>
-      <Sections
-        sections={page.sections}
-        options={{ heroBanner: { textColor: '#ffffff' } }}
-      />
-    </>
+    <Fragment>
+      <ContentSections sections={page.sections} />
+    </Fragment>
   );
 }
 

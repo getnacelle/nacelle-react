@@ -1,14 +1,16 @@
-import React, { FC, InputHTMLAttributes } from 'react';
-import { CSSObject } from '@emotion/core';
+/** @jsx jsx */
+import { FC, InputHTMLAttributes } from 'react';
+import { jsx, CSSObject } from '@emotion/core';
 
 import { composeStyles } from '../../utils/styles';
 import { defaultStyles, secondaryStyles } from './Button.styles';
 
 export interface ButtonProps extends InputHTMLAttributes<HTMLButtonElement> {
   styles?: CSSObject;
-  fullWidth?: boolean;
+  fullwidth?: boolean;
   disabled?: boolean;
   variant?: 'primary' | 'secondary';
+  type: 'button' | 'submit' | 'reset';
 }
 
 /**
@@ -17,26 +19,32 @@ export interface ButtonProps extends InputHTMLAttributes<HTMLButtonElement> {
  * - primary (default): filled button with background color
  * - secondary: outlined button
  *
- * Use the fullWidth prop to make the button take up the entire
+ * Use the fullwidth prop to make the button take up the entire
  * width of the container
  */
 const Button: FC<ButtonProps> = ({
-  styles,
-  fullWidth = false,
+  fullwidth = false,
   disabled = false,
   onClick,
   variant = 'primary',
-  children
+  children,
+  styles,
+  ...props
 }) => {
   const combinedStyles = composeStyles([
     defaultStyles,
     variant === 'secondary' && secondaryStyles,
-    fullWidth && { width: '100%' },
+    fullwidth && { width: '100%' },
     styles
   ]);
 
   return (
-    <button disabled={disabled} onClick={onClick} css={combinedStyles}>
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      css={combinedStyles}
+      {...props}
+    >
       {children}
     </button>
   );

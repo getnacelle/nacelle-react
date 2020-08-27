@@ -1,19 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+
 import $nacelle from 'services/nacelle';
-import { Sections, ProductGallery, ProductCard } from 'components';
+import ContentSections from 'components/ContentSections';
+import ProductGallery from 'components/ProductGallery';
 
 export default function Shop({ page, products }) {
   return (
-    <>
-      <main>
-        {page && <Sections sections={page.sections} />}
-        <ProductGallery>
-          {products.map((product) => (
-            <ProductCard product={product} key={product.id} linkToPDP />
-          ))}
-        </ProductGallery>
-      </main>
-    </>
+    <Fragment>
+      {page && <ContentSections sections={page.sections} />}
+      <ProductGallery products={products} />
+    </Fragment>
   );
 }
 

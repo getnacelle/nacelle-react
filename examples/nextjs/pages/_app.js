@@ -1,19 +1,19 @@
 import App from 'next/app';
 import React from 'react';
+import { Global } from '@emotion/core';
 import { CartProvider } from '@nacelle/react-hooks';
 
-import { Layout, DeviceDetector } from 'components';
+import Layout from 'components/Layout';
 import $nacelle from 'services/nacelle.js';
-import '../styles/globals.css';
+import * as styles from 'styles/global.styles';
 
 function MyApp({ Component, pageProps, space }) {
   return (
     <CartProvider>
-      <DeviceDetector>
-        <Layout space={space}>
-          <Component {...pageProps} />
-        </Layout>
-      </DeviceDetector>
+      <Global styles={styles.global} />
+      <Layout space={space}>
+        <Component {...pageProps} />
+      </Layout>
     </CartProvider>
   );
 }

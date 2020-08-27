@@ -1,9 +1,6 @@
-import React, { createContext } from 'react';
 import { useMediaQueries } from '@react-hook/media-query';
 
-export const DeviceContext = createContext();
-
-export default function DeviceDetector({ children }) {
+export default function useDetectDevice() {
   const { matchesAll: isMobile } = useMediaQueries({
     screen: 'screen',
     width: '(max-width: 768px)'
@@ -25,7 +22,7 @@ export default function DeviceDetector({ children }) {
     width: '(min-width: 1408px)'
   });
 
-  const device = {
+  return {
     isMobile,
     isTablet,
     isTouch: isMobile || isTablet,
@@ -33,8 +30,4 @@ export default function DeviceDetector({ children }) {
     isWidescreen,
     isFullHD
   };
-
-  return (
-    <DeviceContext.Provider value={device}>{children}</DeviceContext.Provider>
-  );
 }

@@ -4,7 +4,7 @@ module.exports = {
       presets: [
         ['@babel/preset-env', { targets: { esmodules: true } }],
         '@babel/preset-typescript',
-        '@emotion/babel-preset-css-prop'
+        ['@emotion/babel-preset-css-prop', { autoLabel: true }]
       ]
     }
   }

@@ -1,5 +1,6 @@
-import React, { FC, InputHTMLAttributes } from 'react';
-import { CSSObject } from '@emotion/core';
+/** @jsx jsx */
+import { FC, InputHTMLAttributes } from 'react';
+import { jsx, CSSObject } from '@emotion/core';
 
 import { composeStyles } from '../../utils/styles';
 import { defaultStyles } from './Select.styles';

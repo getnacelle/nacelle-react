@@ -1,4 +1,3 @@
-import jsx from 'acorn-jsx';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -20,12 +19,11 @@ export default {
       sourcemap: true
     }
   ],
-  // acornInjectPlugins: [jsx()],
   plugins: [
     peerDepsExternal(),
     resolve(),
     commonjs(),
-    typescript({ useTsconfigDeclarationDir: true })
-    // terser()
+    typescript({ useTsconfigDeclarationDir: true }),
+    terser()
   ]
 };

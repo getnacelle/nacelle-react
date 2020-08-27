@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-components",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -28,9 +28,9 @@
   "author": "Nacelle Dev Team",
   "license": "ISC",
   "peerDependencies": {
+    "@emotion/core": ">=10.0.34",
     "react": ">=16.12.0",
-    "react-dom": ">=16.12.0",
-    "@emotion/core": ">=10.0.34"
+    "react-dom": ">=16.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -77,6 +77,5 @@
   "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {}
+  }
 }

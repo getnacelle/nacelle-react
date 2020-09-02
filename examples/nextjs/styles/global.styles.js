@@ -5,5 +5,12 @@ export const global = {
     fontSize: 16,
     fontFamily: "'Source Sans Pro', sans-serif",
     boxSizing: 'border-box'
+  },
+  a: {
+    textDecoration: 'none',
+    color: 'inherit',
+    '&:visited': {
+      color: 'inherit'
+    }
   }
 };

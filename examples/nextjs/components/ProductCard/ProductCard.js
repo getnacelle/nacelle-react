@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { useCart } from '@nacelle/react-hooks';
 import { Image, Button, Grid } from '@nacelle/react-components';
 
-import ItemQuantity from 'components/ItemQuantity';
 import { formatCurrency } from 'utils';
-import * as styles from './ProductCard.styles';
+import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
+import * as styles from './ProductCard.styles';
 
 const IMAGE_FORMATS = ['webp', 'jpg'];
 
@@ -115,4 +115,4 @@ function determineColumnCount(device, isPDP) {
   return 1;
 }
 
-export default ProductCard;
+export default React.memo(ProductCard);

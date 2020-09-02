@@ -11,7 +11,7 @@ const CollectionGrid = ({ fields }) => {
     const fetchCollection = async () => {
       try {
         const collection = await $nacelle.data.collection({ handle: collectionHandle })
-        const products = await $nacelle.data.products({ 
+        const products = await $nacelle.data.products({
           handles: collection
           .productLists
           .find(listEntry => listEntry.slug === 'default')

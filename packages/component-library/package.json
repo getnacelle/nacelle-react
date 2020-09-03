@@ -72,6 +72,28 @@
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "lint-staged": {
+    "src/**/*.(js|ts)": [
+      "prettier --write",
+      "npm run lint"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
   "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
   "publishConfig": {
     "access": "public"

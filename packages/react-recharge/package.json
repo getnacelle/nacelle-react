@@ -1,0 +1,49 @@
+{
+  "name": "@nacelle/react-recharge",
+  "version": "2.2.1",
+  "description": "React integration for Shopify ReCharge",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "nacelle",
+    "shopify",
+    "recharge",
+    "jamstack"
+  ],
+  "author": "Nacelle Dev Team",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "lint-staged": {
+    "src/**/*.(js|ts)": [
+      "prettier --write",
+      "npm run lint"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

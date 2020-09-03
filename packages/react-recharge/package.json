@@ -8,7 +8,12 @@
     "build"
   ],
   "scripts": {
-    "lint": "eslint ./"
+    "prepublishOnly": "npm run build",
+    "prebuild": "rimraf ./build",
+    "build": "rollup -c",
+    "test": "jest ./src --watch",
+    "test:ci": "jest ./src --runInBand --coverage",
+    "lint": "eslint ./src"
   },
   "keywords": [
     "react",
@@ -20,7 +25,19 @@
   "author": "Nacelle Dev Team",
   "license": "ISC",
   "dependencies": {},
+  "peerDependencies": {
+    "@emotion/core": ">=10.0.34",
+    "react": ">=16.12.0",
+    "react-dom": ">=16.12.0"
+  },
   "devDependencies": {
+    "rollup": "^2.23.1",
+    "@emotion/core": "^10.0.35",
+    "rollup-plugin-peer-deps-external": "^2.2.3",
+    "rollup-plugin-terser": "^7.0.0",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
     "@nacelle/interphase-node": "^1.0.4",
     "@types/jest": "^26.0.9",
     "@types/react": "^16.9.46",
@@ -31,10 +48,13 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "chalk": "^4.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "dotenv-safe": "^8.2.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "rimraf": "^3.0.2"
   },
   "repository": {
     "type": "git",

@@ -17,36 +17,41 @@ export const initialState: CartState = {
   cart: [],
   show: false,
   checkoutId: null,
-  checkoutComplete: false
+  checkoutComplete: false,
+  useLocalStorage: true
 };
 
 const cartReducer = (
   state: CartState,
   action: CartReducerAction
 ): CartState => {
+  let cart: CartItem[]
   switch (action.type) {
     case ADD_TO_CART: {
       if (isInCart(state.cart, action.payload)) {
-        return {
-          ...state,
-          cart: state.cart.map((item) => {
-            const payloadId =
-              'variant' in action.payload
-                ? action.payload.variant.id
-                : action.payload.id;
+        cart = state.cart.map((item) => {
+          const payloadId =
+            'variant' in action.payload
+              ? action.payload.variant.id
+              : action.payload.id;
 
-            if (item.id !== payloadId) {
-              return item;
-            }
+          if (item.id !== payloadId) {
+            return item;
+          }
 
-            return { ...item, quantity: item.quantity + 1 };
-          })
-        };
+          return { ...item, quantity: item.quantity + 1 };
+        })
+      } else {
+        cart = [...state.cart, { ...formatCartItem(action.payload) }]
+      }
+
+      if (state.useLocalStorage) {
+        window.localStorage.setItem('cart', JSON.stringify(cart))
       }
 
       return {
         ...state,
-        cart: [...state.cart, { ...formatCartItem(action.payload) }]
+        cart
       };
     }
     case REMOVE_FROM_CART: {
@@ -55,48 +60,64 @@ const cartReducer = (
           ? action.payload.variant.id
           : action.payload.id;
 
+      cart = state.cart.filter((item) => item.id !== payloadId)
+      if (state.useLocalStorage) {
+        window.localStorage.setItem('cart', JSON.stringify(cart))
+      }
+
       return {
         ...state,
-        cart: state.cart.filter((item) => item.id !== payloadId)
+        cart
       };
     }
-
     case INCREMENT_ITEM:
+      cart = state.cart.map((item) => {
+        const payloadId =
+          'variant' in action.payload
+            ? action.payload.variant.id
+            : action.payload.id;
+
+        if (item.id === payloadId) {
+          return { ...item, quantity: item.quantity + 1 };
+        }
+
+        return item;
+      })
+
+      if (state.useLocalStorage) {
+        window.localStorage.setItem('cart', JSON.stringify(cart))
+      }
       return {
         ...state,
-        cart: state.cart.map((item) => {
-          const payloadId =
-            'variant' in action.payload
-              ? action.payload.variant.id
-              : action.payload.id;
-
-          if (item.id === payloadId) {
-            return { ...item, quantity: item.quantity + 1 };
-          }
-
-          return item;
-        })
+        cart
       };
     case DECREMENT_ITEM:
+      cart = state.cart.map((item) => {
+        const payloadId =
+          'variant' in action.payload
+            ? action.payload.variant.id
+            : action.payload.id;
+
+        if (item.id === payloadId) {
+          return {
+            ...item,
+            quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
+          };
+        }
+
+        return item;
+      })
+
+      if (state.useLocalStorage) {
+        window.localStorage.setItem('cart', JSON.stringify(cart))
+      }
+
       return {
         ...state,
-        cart: state.cart.map((item) => {
-          const payloadId =
-            'variant' in action.payload
-              ? action.payload.variant.id
-              : action.payload.id;
-
-          if (item.id === payloadId) {
-            return {
-              ...item,
-              quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
-            };
-          }
-
-          return item;
-        })
+        cart
       };
     case CLEAR_CART:
+      window.localStorage.removeItem('cart')
       return {
         ...state,
         cart: []

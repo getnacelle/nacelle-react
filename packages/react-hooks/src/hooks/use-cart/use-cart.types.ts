@@ -93,6 +93,7 @@ export type CartState = {
   show: boolean;
   checkoutId: string;
   checkoutComplete: boolean;
+  useLocalStorage: boolean;
 };
 
 export type CheckoutStatus = {

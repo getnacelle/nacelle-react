@@ -8,13 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.34",
+    "@emotion/core": "^10.0.35",
     "@nacelle/contentful-preview-connector": "^0.1.4",
     "@nacelle/react-components": "^2.2.1",
     "@nacelle/react-hooks": "^2.2.1",
     "@react-hook/media-query": "^1.1.1",
-    "emotion": "^10.0.27",
-    "emotion-server": "^10.0.27",
     "fuse.js": "^6.4.1",
     "next": "9.5.1",
     "react": "^16.13.1",

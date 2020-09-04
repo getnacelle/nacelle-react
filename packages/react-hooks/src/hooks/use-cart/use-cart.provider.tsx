@@ -40,18 +40,21 @@ const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({ useLocalStorage, children }) => {
   let cart: CartItem[] = []
+  let setCacheItem: Function = () => { }
   if (useLocalStorage && typeof window !== 'undefined') {
+    setCacheItem = window.localStorage.setItem.bind(localStorage)
     const localCart = window.localStorage.getItem('cart')
     if (localCart) {
       cart = JSON.parse(localCart)
     }
   }
+
   const [state, dispatch] = useReducer(
     cartReducer,
     {
       ...initialState,
       cart,
-      useLocalStorage
+      setCacheItem
     }
   );
 

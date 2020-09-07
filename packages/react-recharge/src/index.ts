@@ -1,3 +1,3 @@
-import ReChargeSubscription from './components/ReChargeSubscription/ReChargeSubscription';
+import RechargeSelect from './components/RechargeSelect/RechargeSelect';
 
-export { ReChargeSubscription };
+export { RechargeSelect };

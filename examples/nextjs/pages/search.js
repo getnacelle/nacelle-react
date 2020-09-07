@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { TextInput, Grid } from '@nacelle/react-components';
 
 import ProductGallery from 'components/ProductGallery';

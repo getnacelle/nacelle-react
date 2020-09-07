@@ -16,7 +16,7 @@ describe('Button', () => {
   });
 
   it('should have a secondary style variant', () => {
-    const { button } = setupButton({ variant: 'secondary' });
+    const { button } = setupButton({ variant: 'secondary', type: 'button' });
     expect(button).toHaveStyle('background-color: #fff');
   });
 });

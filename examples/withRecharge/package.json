@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@nacelle/react-components": "^2.2.1",
+    "atob": "^2.1.2",
     "next": "9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

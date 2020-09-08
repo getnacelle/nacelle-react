@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useRef } from 'react';
 import Head from 'next/head';
+import atob from 'atob';
 import { RechargeSelect } from '@nacelle/react-recharge';
 import { Image, Button } from '@nacelle/react-components';
 
@@ -13,7 +14,11 @@ const Home = () => {
   const selectedVariant = product.variants.find(
     ({ id }) => id === selectedVariantId
   );
-  const variantPrice = determineVariantPrice(product, selectedVariant);
+  const variantPrice = itemMetafields.current.length
+    ? determineVariantPrice(product, selectedVariant)
+    : selectedVariant.price;
+
+  const isInCart = cart.findIndex((item) => item.productId === product.id) > -1;
 
   const addItemToCart = () => {
     const cartItem = {
@@ -59,7 +64,12 @@ const Home = () => {
             <h2>{product.title}</h2>
             <h4>{`$${parseInt(product.variants[0].price, 10).toFixed(2)}`}</h4>
           </div>
-          <Button styles={styles.button} fullwidth onClick={addItemToCart}>
+          <Button
+            styles={styles.button}
+            fullwidth
+            onClick={addItemToCart}
+            disabled={isInCart}
+          >
             ADD TO CART
           </Button>
           <RechargeSelect
@@ -113,9 +123,12 @@ function determineVariantPrice(product, selectedVariant) {
 
   const parsedPriceMap = JSON.parse(priceVariantMap.value);
   const discountPrices = parsedPriceMap[productId];
-  const variantPrice = discountPrices.discount_variant_price;
 
-  return variantPrice || selectedVariant.price;
+  if (discountPrices.discount_variant_id === variantId) {
+    return discountPrices.discount_variant_price;
+  }
+
+  return selectedVariant.price;
 }
 
 export default Home;

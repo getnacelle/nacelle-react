@@ -10,13 +10,12 @@ const Home = () => {
   const [cart, setCart] = useState([]);
   const itemMetafields = useRef([]);
   const selectedVariantId = product.variants[0].id;
+  const selectedVariant = product.variants.find(
+    ({ id }) => id === selectedVariantId
+  );
+  const variantPrice = determineVariantPrice(product, selectedVariant);
 
   const addItemToCart = () => {
-    const selectedVariant = product.variants.find(
-      ({ id }) => id === selectedVariantId
-    );
-    const variantPrice = determineVariantPrice(product, selectedVariant);
-
     const cartItem = {
       image: product.featuredMedia,
       title: product.title,
@@ -77,9 +76,7 @@ const Home = () => {
               <article key={item.productId} css={styles.cartItem}>
                 <div css={styles.cartItemInfo}>
                   <h3>{item.title}</h3>
-                  <span>{`$${parseInt(item.variant.price, 10).toFixed(
-                    2
-                  )}`}</span>
+                  <span>{`$${parseInt(variantPrice, 10).toFixed(2)}`}</span>
                 </div>
                 <Button
                   styles={styles.removeButton}
@@ -115,9 +112,10 @@ function determineVariantPrice(product, selectedVariant) {
   }
 
   const parsedPriceMap = JSON.parse(priceVariantMap.value);
-  const mappedPrice = parsedPriceMap[productId][variantId];
+  const discountPrices = parsedPriceMap[productId];
+  const variantPrice = discountPrices.discount_variant_price;
 
-  return mappedPrice || selectedVariant.price;
+  return variantPrice || selectedVariant.price;
 }
 
 export default Home;

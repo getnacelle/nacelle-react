@@ -55,6 +55,13 @@
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
   "lint-staged": {
     "src/**/*.(js|ts)": [
       "prettier --write",

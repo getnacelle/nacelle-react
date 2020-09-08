@@ -1,5 +1,5 @@
 {
-  "name": "nacelle-nextjs-example",
+  "name": "nacelle-recharge-example",
   "version": "2.2.1",
   "private": true,
   "scripts": {
@@ -9,18 +9,15 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
-    "@nacelle/contentful-preview-connector": "^0.1.4",
     "@nacelle/react-components": "^2.2.1",
-    "@nacelle/react-hooks": "^2.2.1",
-    "@react-hook/media-query": "^1.1.1",
-    "fuse.js": "^6.4.1",
+    "atob": "^2.1.2",
     "next": "9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.27",
-    "@nacelle/client-js-sdk": "^2.0.2",
+    "@nacelle/react-recharge": "^2.2.1",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8"

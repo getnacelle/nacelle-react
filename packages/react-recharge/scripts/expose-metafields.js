@@ -1,4 +1,10 @@
-require('dotenv-safe').config();
+#!/usr/bin/env node
+
+const modules = `${process.cwd()}/node_modules`
+
+require('dotenv-safe').config({
+  example: `${modules}/@nacelle/react-recharge/build/.env.example`
+});
 
 const chalk = require('chalk');
 const { Interphase } = require('@nacelle/interphase-node');

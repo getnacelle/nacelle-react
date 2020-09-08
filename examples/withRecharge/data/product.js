@@ -1,6 +1,4 @@
-import { ShopifyItem } from '../components/RechargeSelect/RechargeSelect.types';
-
-export const shopifyItem: ShopifyItem = {
+export default {
   id: 'pepper-wood-apparel.myshopify.com::shevonne-bag::en-us',
   handle: 'shevonne-bag',
   locale: 'en-us',
@@ -59,38 +57,15 @@ export const shopifyItem: ShopifyItem = {
       key: 'shipping_interval_frequency',
       namespace: 'subscriptions',
       value: '30,14,7'
+    },
+    {
+      id: null,
+      namespace: 'subscriptions',
+      key: 'original_to_hidden_variant_map',
+      value:
+        '{"4915654230151": {"discount_variant_id": "33893988368519", "discount_variant_price": "135.20"}}'
     }
   ],
-  variant: {
-    id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8zMzg5Mzk4ODM2ODUxOQ==',
-    title: 'Default Title',
-    price: '245.0',
-    priceCurrency: 'USD',
-    compareAtPrice: null,
-    compareAtPriceCurrency: null,
-    swatchSrc: null,
-    selectedOptions: [
-      {
-        name: 'Title',
-        value: 'Default Title'
-      }
-    ],
-    featuredMedia: {
-      id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0SW1hZ2UvMTYyODQ4MTIzNzgyNDc=',
-      thumbnailSrc:
-        'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578&width=100',
-      src:
-        'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578',
-      type: 'image',
-      altText: null
-    },
-    sku: null,
-    availableForSale: true,
-    metafields: [],
-    weight: null,
-    weightUnit: null,
-    priceRules: null
-  },
   variants: [
     {
       id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8zMzg5Mzk4ODM2ODUxOQ==',
@@ -117,7 +92,20 @@ export const shopifyItem: ShopifyItem = {
       },
       sku: null,
       availableForSale: true,
-      metafields: [],
+      metafields: [
+        {
+          id: null,
+          namespace: 'subscriptions',
+          key: 'discount_variant_price',
+          value: '135.20'
+        },
+        {
+          id: null,
+          namespace: 'subscriptions',
+          key: 'discount_variant_id',
+          value: '33893988368519'
+        }
+      ],
       weight: null,
       weightUnit: null,
       priceRules: null

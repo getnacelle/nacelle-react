@@ -39,22 +39,17 @@ const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({ useLocalStorage, children }) => {
-  let cart: CartItem[] = []
-  let setCacheItem: Function = () => { }
-  if (useLocalStorage && typeof window !== 'undefined') {
-    setCacheItem = window.localStorage.setItem.bind(localStorage)
-    const localCart = window.localStorage.getItem('cart')
-    if (localCart) {
-      cart = JSON.parse(localCart)
-    }
-  }
+  const hasWindow = typeof window !== 'undefined';
+  const cart = useLocalStorage && hasWindow
+    ? JSON.parse(window.localStorage.getItem('cart')) || []
+    : []
 
   const [state, dispatch] = useReducer(
     cartReducer,
     {
       ...initialState,
       cart,
-      setCacheItem
+      useLocalStorage: useLocalStorage && hasWindow
     }
   );
 

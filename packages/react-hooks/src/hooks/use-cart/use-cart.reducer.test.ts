@@ -141,7 +141,7 @@ describe('useCart reducer', () => {
     });
 
     it('should add to item localStorage cart', () => {
-      cartReducer({ ...initialState, setCacheItem: window.localStorage.setItem }, {
+      cartReducer({ ...initialState, useLocalStorage: true }, {
         type: ADD_TO_CART,
         payload: shopifyItem
       });
@@ -168,7 +168,7 @@ describe('useCart reducer', () => {
       const cartState = {
         ...initialState,
         cart: [formatCartItem(shopifyItem)],
-        setCacheItem: window.localStorage.setItem
+        useLocalStorage: true
       };
 
       cartReducer(cartState, {
@@ -201,7 +201,7 @@ describe('useCart reducer', () => {
       const cartState = {
         ...initialState,
         cart: [formatCartItem(shopifyItem)],
-        setCacheItem: window.localStorage.setItem
+        useLocalStorage: true
       };
 
       cartReducer(cartState, {
@@ -252,7 +252,7 @@ describe('useCart reducer', () => {
       const cartState = {
         ...initialState,
         cart: [{ ...formatCartItem(shopifyItem), quantity: 2 }],
-        setCacheItem: window.localStorage.setItem
+        useLocalStorage: true
       };
 
       cartReducer(cartState, {

@@ -18,18 +18,20 @@ export const initialState: CartState = {
   show: false,
   checkoutId: null,
   checkoutComplete: false,
-  setCacheItem: () => { }
+  useLocalStorage: true
 };
 
 const cartReducer = (
   state: CartState,
   action: CartReducerAction
 ): CartState => {
+  const setCacheItem = state.useLocalStorage ? window.localStorage.setItem.bind(localStorage) : () => { };
+
   switch (action.type) {
     case ADD_TO_CART: {
       const cart: CartItem[] = buildCart(state.cart, action.payload);
 
-      state.setCacheItem('cart', JSON.stringify(cart));
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
         cart
@@ -43,7 +45,7 @@ const cartReducer = (
 
       const cart: CartItem[] = state.cart.filter((item) => item.id !== payloadId);
 
-      state.setCacheItem('cart', JSON.stringify(cart));
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
         cart
@@ -63,7 +65,7 @@ const cartReducer = (
         return item;
       });
 
-      state.setCacheItem('cart', JSON.stringify(cart));
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
         cart
@@ -86,13 +88,13 @@ const cartReducer = (
         return item;
       })
 
-      state.setCacheItem('cart', JSON.stringify(cart));
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
         cart
       };
     case CLEAR_CART:
-      window.localStorage.removeItem('cart')
+      if (state.useLocalStorage) window.localStorage.removeItem('cart')
       return {
         ...state,
         cart: []

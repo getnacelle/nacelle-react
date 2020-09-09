@@ -1,0 +1,29 @@
+{
+  "name": "@nacelle/gatsby-source-nacelle-example",
+  "version": "0.0.1",
+  "description": "An example project built with gatsby-source-nacelle",
+  "main": "src/pages/index.js",
+  "scripts": {
+    "dev": "gatsby develop",
+    "clean": "gatsby clean"
+  },
+  "keywords": [
+    "Nacelle",
+    "Gatsby",
+    "e-commerce",
+    "eCommerce",
+    "Shopify"
+  ],
+  "author": "Nick Richmond",
+  "license": "ISC",
+  "dependencies": {
+    "gatsby": "^2.24.54",
+    "gatsby-image": "^2.4.17",
+    "gatsby-plugin-sharp": "^2.6.32",
+    "gatsby-source-filesystem": "^2.3.28",
+    "gatsby-source-nacelle": "^0.0.1",
+    "gatsby-transformer-sharp": "^2.5.14",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

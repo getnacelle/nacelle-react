@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-components",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
+    "@emotion/babel-preset-css-prop": "^10.0.27",
     "@emotion/core": "^10.0.35",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
@@ -69,8 +70,29 @@
     "rollup-plugin-peer-deps-external": "^2.2.3",
     "rollup-plugin-terser": "^7.0.0",
     "rollup-plugin-typescript2": "^0.27.2",
-    "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "lint-staged": {
+    "src/**/*.(js|ts)": [
+      "prettier --write",
+      "npm run lint"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
   },
   "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
   "publishConfig": {

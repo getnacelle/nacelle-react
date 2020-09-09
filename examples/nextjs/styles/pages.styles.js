@@ -51,3 +51,67 @@ export const gettingLayout = {
 export const layout = {
   padding: '48px 24px'
 };
+
+export const filterSection = {
+  backgroundColor: 'whitesmoke',
+  padding: '3rem 1.5rem',
+  display: 'flex',
+  flexDirection: 'column'
+};
+
+export const searchInput = {
+  padding: 12,
+  fontSize: 18,
+  minWidth: 400,
+  alignSelf: 'center'
+};
+
+export const refineSearch = {
+  fontSize: 24,
+  fontWeight: 400,
+  margin: '4rem 0 1.5rem 0',
+  textTransform: 'uppercase'
+};
+
+export const filterTitle = {
+  textTransform: 'capitalize',
+  fontSize: 20,
+  fontWeight: 400
+};
+
+export const filterLayout = {
+  '@media screen and (max-width: 1023px)': {
+    borderLeft: 'none',
+    paddingLeft: 0
+  },
+  display: 'flex',
+  flexDirection: 'column',
+  borderLeft: '1px solid #cecece',
+  paddingLeft: 32,
+  paddingBottom: 16,
+  '&:first-of-type': {
+    border: 'none',
+    paddingLeft: 0
+  }
+};
+
+export const checkboxLayout = {
+  display: 'flex',
+  margin: '1px 0',
+  '& label': {
+    marginLeft: 12,
+    fontWeight: 300
+  }
+};
+
+export const filterGrid = {
+  '@media screen and (max-width: 1023px)': {
+    gridTemplateColumns: '1fr',
+    gridGap: 0
+  }
+};
+
+export const resultCount = {
+  marginLeft: 24,
+  fontWeight: 400
+};

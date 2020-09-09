@@ -37,9 +37,6 @@ export const navLink = {
 export const cartButton = {
   outline: 0,
   border: 0,
-  cursor: 'pointer',
-  background: 'none',
-  color: '#3b3b3b',
   padding: '0 6px',
   position: 'relative'
 };
@@ -156,4 +153,10 @@ export const mobileNavItems = {
   display: 'flex',
   flexDirection: 'column',
   padding: 16
+};
+
+export const buttons = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center'
 };

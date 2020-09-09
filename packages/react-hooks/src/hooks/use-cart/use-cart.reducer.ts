@@ -71,7 +71,7 @@ const cartReducer = (
         cart
       };
     }
-    case DECREMENT_ITEM:
+    case DECREMENT_ITEM: {
       const cart: CartItem[] = state.cart.map((item) => {
         const payloadId =
           'variant' in action.payload
@@ -93,6 +93,7 @@ const cartReducer = (
         ...state,
         cart
       };
+    }
     case CLEAR_CART:
       if (state.useLocalStorage) window.localStorage.removeItem('cart')
       return {

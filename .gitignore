@@ -1,5 +1,14 @@
 node_modules/
 build/
+public/
 coverage/
+
 .vscode/
+.cache/
+
+# Log files
 lerna-debug.log
+
+# Environment Variables
+.env
+.env.production

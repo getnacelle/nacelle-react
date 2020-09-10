@@ -2,7 +2,7 @@
 
 Adds a React component [Recharge](https://rechargepayments.com/) subscriptions in your [Nacelle](https://getnacelle.com/) project.
 
-![Image of React-Select Component](component.png)
+![Image of RechargeSelect Component](component.png)
 
 ## Requirements
 
@@ -69,4 +69,4 @@ const getCartMetafields = (cartMetafields) => {
 
 ### Example
 
-An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/master/examples/nextjs).
+An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/master/examples/withRecharge).

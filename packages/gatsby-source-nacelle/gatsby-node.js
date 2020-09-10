@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const { print } = require('gatsby/graphql');
-const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const {
   sourceAllNodes,
   createSchemaCustomization,

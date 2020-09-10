@@ -1,10 +1,3 @@
-<p align="center">
-  <a href="https://www.getnacelle.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-    <img alt="Nacelle" src="https://raw.githubusercontent.com/getnacelle/gatsby-theme-nacelle/master/examples/store-with-checkout/src/images/nacelle-rocket-icon-crop.png" width="60" />
-  </a>
-</p>
-
 <h1 align="center">
   Gatsby-Source-Nacelle
 </h1>
@@ -65,8 +58,8 @@ Install [dotenv](https://www.npmjs.com/package/dotenv), then create a `.env` fil
 
 ```dotenv
 # .env
-NACELLE_SPACE_ID="your-nacelle-space-id"
-NACELLE_GRAPHQL_TOKEN="your-nacelle-graphql-token"
+NACELLE_SPACE_ID=your-nacelle-space-id
+NACELLE_GRAPHQL_TOKEN=your-nacelle-graphql-token
 ```
 
 ```javascript
@@ -88,4 +81,4 @@ module.exports = {
 
 ## Next Steps
 
-Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](../../examples/gatsby-source-nacelle) to lean how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.
+Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](../../examples/gatsby-source-nacelle) to learn how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.

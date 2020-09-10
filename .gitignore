@@ -14,4 +14,4 @@ lerna-debug.log
 .env.production
 
 # gatsby-source-nacelle
-examples/gatsby-source-nacelle/*/nacelle-fragments/*.graphql
+examples/*/nacelle-fragments/*.graphql

@@ -15,7 +15,7 @@ export default function Layout({ children }) {
         }
       }
     }
-  `)
+`)
   const mainMenu = linkListData.nacelleSpace.linklists.find(linkList => linkList.handle === 'main-menu')
   return (
     <>

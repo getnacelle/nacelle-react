@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const { print } = require('gatsby/graphql');
-const { createRemoteFileNode } = require('gatsby-source-filesystem')
+const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const {
   sourceAllNodes,
   createSchemaCustomization,
@@ -13,7 +13,7 @@ const {
 require('dotenv').config();
 
 const CHUNK_SIZE = 100;
-const fragmentsDir = process.cwd() + `/nacelle-fragments`;
+const fragmentsDir = process.cwd() + `/gql-fragments`;
 
 const PaginateNacelle = {
   name: 'NacellePagination',
@@ -46,7 +46,7 @@ const PaginateNacelle = {
 };
 
 async function createSourcingConfig(gatsbyApi, pluginOptions) {
-  const { verbose } = pluginOptions
+  const { verbose } = pluginOptions;
   const nacelleSpaceId =
     pluginOptions.nacelleSpaceId || pluginOptions.nacelle_space_id;
   const nacelleSpaceToken =
@@ -72,7 +72,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
     if (verbose) {
       console.log(args.operationName, args.variables);
     }
-    
+
     return defaultExecute(args);
   };
   const schema = await loadSchema(execute);

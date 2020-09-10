@@ -3,7 +3,6 @@ build/
 public/
 coverage/
 
-.vscode/
 .cache/
 
 # Log files
@@ -12,6 +11,3 @@ lerna-debug.log
 # Environment Variables
 .env
 .env.production
-
-# gatsby-source-nacelle
-examples/*/nacelle-fragments/*.graphql

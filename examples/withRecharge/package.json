@@ -1,6 +1,6 @@
 {
   "name": "nacelle-recharge-example",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.27",
-    "@nacelle/react-recharge": "^2.3.0",
+    "@nacelle/react-recharge": "^2.5.0",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8"

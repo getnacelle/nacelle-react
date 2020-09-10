@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-klaviyo",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "description": "React integration for Klaviyo",
   "main": "build/index.js",
   "module": "build/index.es.js",

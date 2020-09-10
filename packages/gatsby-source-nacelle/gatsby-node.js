@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const { ensureDir } = require('fs-extra');
 const { print } = require('gatsby/graphql');
 const {
   sourceAllNodes,
@@ -155,7 +155,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
   ];
 
   // Provide (or generate) fragments with fields to be fetched
-  fs.ensureDir(fragmentsDir);
+  ensureDir(fragmentsDir);
   const fragments = await readOrGenerateDefaultFragments(fragmentsDir, {
     schema,
     gatsbyNodeTypes

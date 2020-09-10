@@ -11,11 +11,11 @@
     "clean": "gatsby clean"
   },
   "keywords": [
-    "Nacelle",
-    "Gatsby",
+    "nacelle",
+    "gatsby",
     "e-commerce",
     "eCommerce",
-    "Shopify"
+    "shopify"
   ],
   "author": "Nick Richmond",
   "license": "ISC",

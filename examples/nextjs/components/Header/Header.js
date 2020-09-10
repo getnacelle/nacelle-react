@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCart } from '@nacelle/react-hooks';
@@ -73,10 +73,14 @@ const DesktopNav = ({ navItems }) => {
 const Header = ({ space }) => {
   const [{ cart }, { toggleCart }] = useCart();
   const [showNav, setShowNav] = useState(false);
+  const [showCartCount, setShowCartCount] = useState(false);
   const toggleNav = () => setShowNav((navState) => !navState);
 
+  useEffect(() => {
+    setShowCartCount(cart.length > 0);
+  }, [cart]);
+
   const navItems = space.linklists[0].links;
-  const showCartCount = cart.length > 0;
 
   return (
     <header css={styles.header}>

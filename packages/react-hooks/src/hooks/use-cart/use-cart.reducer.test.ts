@@ -139,6 +139,14 @@ describe('useCart reducer', () => {
         { ...formatCartItem(shopifyItem), quantity: 2 }
       ]);
     });
+
+    it('should add to item localStorage cart', () => {
+      cartReducer({ ...initialState, useLocalStorage: true }, {
+        type: ADD_TO_CART,
+        payload: shopifyItem
+      });
+      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([formatCartItem(shopifyItem)]);
+    });
   });
 
   describe(`${REMOVE_FROM_CART}`, () => {
@@ -155,6 +163,21 @@ describe('useCart reducer', () => {
 
       expect(result.cart).toEqual([]);
     });
+
+    it('should remove an item from localStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [formatCartItem(shopifyItem)],
+        useLocalStorage: true
+      };
+
+      cartReducer(cartState, {
+        type: REMOVE_FROM_CART,
+        payload: shopifyItem
+      });
+
+      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([]);
+    });
   });
 
   describe(`${INCREMENT_ITEM}`, () => {
@@ -170,6 +193,23 @@ describe('useCart reducer', () => {
       });
 
       expect(result.cart).toEqual([
+        { ...formatCartItem(shopifyItem), quantity: 2 }
+      ]);
+    });
+
+    it('should increment the quantity of an item in localStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [formatCartItem(shopifyItem)],
+        useLocalStorage: true
+      };
+
+      cartReducer(cartState, {
+        type: INCREMENT_ITEM,
+        payload: shopifyItem
+      });
+
+      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
         { ...formatCartItem(shopifyItem), quantity: 2 }
       ]);
     });
@@ -205,6 +245,23 @@ describe('useCart reducer', () => {
 
       expect(result.cart).toEqual([
         { ...formatCartItem(shopifyItem), quantity: 0 }
+      ]);
+    });
+
+    it('should decrement the quantity of an item in localStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [{ ...formatCartItem(shopifyItem), quantity: 2 }],
+        useLocalStorage: true
+      };
+
+      cartReducer(cartState, {
+        type: DECREMENT_ITEM,
+        payload: shopifyItem
+      });
+
+      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
+        { ...formatCartItem(shopifyItem), quantity: 1 }
       ]);
     });
   });

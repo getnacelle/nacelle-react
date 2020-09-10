@@ -17,36 +17,24 @@ export const initialState: CartState = {
   cart: [],
   show: false,
   checkoutId: null,
-  checkoutComplete: false
+  checkoutComplete: false,
+  useLocalStorage: true
 };
 
 const cartReducer = (
   state: CartState,
   action: CartReducerAction
 ): CartState => {
+  const setCacheItem = state.useLocalStorage ? window.localStorage.setItem.bind(localStorage) : () => { };
+
   switch (action.type) {
     case ADD_TO_CART: {
-      if (isInCart(state.cart, action.payload)) {
-        return {
-          ...state,
-          cart: state.cart.map((item) => {
-            const payloadId =
-              'variant' in action.payload
-                ? action.payload.variant.id
-                : action.payload.id;
+      const cart: CartItem[] = buildCart(state.cart, action.payload);
 
-            if (item.id !== payloadId) {
-              return item;
-            }
-
-            return { ...item, quantity: item.quantity + 1 };
-          })
-        };
-      }
-
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
-        cart: [...state.cart, { ...formatCartItem(action.payload) }]
+        cart
       };
     }
     case REMOVE_FROM_CART: {
@@ -55,48 +43,59 @@ const cartReducer = (
           ? action.payload.variant.id
           : action.payload.id;
 
+      const cart: CartItem[] = state.cart.filter((item) => item.id !== payloadId);
+
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
-        cart: state.cart.filter((item) => item.id !== payloadId)
+        cart
       };
     }
+    case INCREMENT_ITEM: {
+      const cart: CartItem[] = state.cart.map((item) => {
+        const payloadId =
+          'variant' in action.payload
+            ? action.payload.variant.id
+            : action.payload.id;
 
-    case INCREMENT_ITEM:
+        if (item.id === payloadId) {
+          return { ...item, quantity: item.quantity + 1 };
+        }
+
+        return item;
+      });
+
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
-        cart: state.cart.map((item) => {
-          const payloadId =
-            'variant' in action.payload
-              ? action.payload.variant.id
-              : action.payload.id;
-
-          if (item.id === payloadId) {
-            return { ...item, quantity: item.quantity + 1 };
-          }
-
-          return item;
-        })
+        cart
       };
-    case DECREMENT_ITEM:
+    }
+    case DECREMENT_ITEM: {
+      const cart: CartItem[] = state.cart.map((item) => {
+        const payloadId =
+          'variant' in action.payload
+            ? action.payload.variant.id
+            : action.payload.id;
+
+        if (item.id === payloadId) {
+          return {
+            ...item,
+            quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
+          };
+        }
+
+        return item;
+      })
+
+      setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,
-        cart: state.cart.map((item) => {
-          const payloadId =
-            'variant' in action.payload
-              ? action.payload.variant.id
-              : action.payload.id;
-
-          if (item.id === payloadId) {
-            return {
-              ...item,
-              quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
-            };
-          }
-
-          return item;
-        })
+        cart
       };
+    }
     case CLEAR_CART:
+      if (state.useLocalStorage) window.localStorage.removeItem('cart')
       return {
         ...state,
         cart: []
@@ -152,6 +151,29 @@ export function formatCartItem(item: ShopifyItem): CartItem {
  */
 export function isInCart(cart: CartItem[], payload: ShopifyItem): boolean {
   return cart.findIndex((item) => item.id === payload.variant.id) > -1;
+}
+
+/**
+ * A utility function to build the cart with a new added item
+ *
+ * @param cart the current cart state
+ * @param payload a shopify item
+ *
+ * @returns a cart object containing the new added product
+ */
+export function buildCart(cart: CartItem[], payload: ShopifyItem): CartItem[] {
+  return isInCart(cart, payload)
+    ? cart.map((item) => {
+      const payloadId =
+        'variant' in payload
+          ? payload.variant.id
+          : payload.id;
+      if (item.id !== payloadId) {
+        return item;
+      }
+      return { ...item, quantity: item.quantity + 1 };
+    })
+    : [...cart, { ...formatCartItem(payload) }];
 }
 
 export default cartReducer;

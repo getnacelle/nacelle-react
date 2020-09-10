@@ -1,4 +1,4 @@
-import React, { useReducer, useMemo, useContext, FC } from 'react';
+import React, { useReducer, useMemo, useContext, FC, ReactNode } from 'react';
 
 import {
   CartState,
@@ -28,15 +28,30 @@ export type CartActions = {
   clearCart: () => void;
 };
 
-export type CartProviderProps = {};
+export type CartProviderProps = {
+  useLocalStorage: boolean;
+  children: [ReactNode];
+};
 export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;
 
 const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
-export const CartProvider: FC<CartProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+export const CartProvider: FC<CartProviderProps> = ({ useLocalStorage, children }) => {
+  const hasWindow = typeof window !== 'undefined';
+  const cart = useLocalStorage && hasWindow
+    ? JSON.parse(window.localStorage.getItem('cart')) || []
+    : []
+
+  const [state, dispatch] = useReducer(
+    cartReducer,
+    {
+      ...initialState,
+      cart,
+      useLocalStorage: useLocalStorage && hasWindow
+    }
+  );
 
   const cartActions: CartActions = useMemo(
     () => ({

@@ -10,7 +10,7 @@ import * as styles from 'styles/global.styles';
 
 function MyApp({ Component, pageProps, space, products }) {
   return (
-    <CartProvider>
+    <CartProvider useLocalStorage>
       <Global styles={styles.global} />
       <ProductSearchProvider products={products}>
         <Layout space={space}>

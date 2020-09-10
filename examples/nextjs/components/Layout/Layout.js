@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
-import Cart from 'components/Cart';
 import Footer from 'components/Footer';
 import Header from 'components/Header/Header';
+
+const Cart = dynamic(() => import('../Cart'), { ssr: false });
 
 const Layout = ({ children, space }) => {
   return (

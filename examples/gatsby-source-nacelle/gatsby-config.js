@@ -8,8 +8,6 @@ module.exports = {
         nacelle_space_id: process.env.NACELLE_SPACE_ID,
         nacelle_graphql_token: process.env.NACELLE_GRAPHQL_TOKEN
       }
-    },
-    'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp'
+    }
   ]
 };

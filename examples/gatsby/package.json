@@ -1,5 +1,5 @@
 {
-  "name": "gatsby-source-nacelle-example",
+  "name": "nacelle-gatsby-example",
   "version": "0.0.1",
   "description": "An example project built with gatsby-source-nacelle",
   "main": "src/pages/index.js",

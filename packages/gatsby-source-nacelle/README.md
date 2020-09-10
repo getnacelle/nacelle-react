@@ -81,4 +81,4 @@ module.exports = {
 
 ## Next Steps
 
-Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](../../examples/gatsby-source-nacelle) to learn how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.
+Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](../../examples/gatsby) to learn how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.

@@ -1,10 +1,3 @@
-<p align="center">
-  <a href="https://www.getnacelle.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-    <img alt="Nacelle" src="https://raw.githubusercontent.com/getnacelle/gatsby-theme-nacelle/master/examples/store-with-checkout/src/images/nacelle-rocket-icon-crop.png" width="60" />
-  </a>
-</p>
-
 # Demo Site for Gatsby-Theme-Nacelle
 
 A very basic, totally unstyled Gatsby site built with `gatsby-source-nacelle`. This site demonstrates the use of `gatsby-node.js` to programatically build pages for products and collections.
@@ -24,17 +17,11 @@ To run this locally, you'll need to first [create a Nacelle account](https://das
 Next, we'll use these as environment variables. Create a `.env` file in the root of the `product-gallery` project with the following values:
 
 ```dotenv
-NACELLE_GRAPHQL_TOKEN="your-token-goes-here"
-NACELLE_SPACE_ID="your-space-id-goes-here"
+NACELLE_GRAPHQL_TOKEN=your-token-goes-here
+NACELLE_SPACE_ID=your-space-id-goes-here
 ```
 
 You're ready to go! Get started with Yarn or NPM:
-
-#### With Yarn
-
-```shell
-yarn develop
-```
 
 #### With NPM
 

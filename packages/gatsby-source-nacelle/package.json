@@ -26,5 +26,15 @@
   },
   "peerDependencies": {
     "gatsby": "^2.0.32"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

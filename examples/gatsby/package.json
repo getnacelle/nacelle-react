@@ -24,5 +24,15 @@
     "gatsby-source-nacelle": "^0.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

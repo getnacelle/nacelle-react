@@ -46,14 +46,48 @@ const PaginateNacelle = {
 
 async function createSourcingConfig(gatsbyApi, pluginOptions) {
   const { verbose } = pluginOptions;
+
+  // Extract credentials from plugin options
   const nacelleSpaceId =
-    pluginOptions.nacelleSpaceId || pluginOptions.nacelle_space_id;
-  const nacelleSpaceToken =
-    pluginOptions.nacelleSpaceToken ||
-    pluginOptions.nacelle_space_token ||
-    pluginOptions.nacelleGraphqlToken ||
-    pluginOptions.nacelleGraphQLToken ||
-    pluginOptions.nacelle_graphql_token;
+    pluginOptions.nacelle_space_id ||
+    pluginOptions[
+      Object.keys(pluginOptions).find(
+        (key) => key.toLowerCase() === 'nacellespaceid'
+      )
+    ];
+
+  if (!nacelleSpaceId) {
+    throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
+    
+      {
+        resolve: 'gatsby-source-nacelle',
+        options: {
+          nacelle_space_id: process.env.NACELLE_SPACE_ID,
+          nacelle_graphql_token: process.env.NACELLE_GRAPHQL_TOKEN
+        }
+      }
+    `);
+  }
+  const nacelleGraphqlToken =
+    pluginOptions.nacelle_graphql_token ||
+    pluginOptions[
+      Object.keys(pluginOptions).find(
+        (key) => key.toLowerCase() === 'nacellegraphqltoken'
+      )
+    ];
+
+  if (!nacelleGraphqlToken) {
+    throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
+      
+        {
+          resolve: 'gatsby-source-nacelle',
+          options: {
+            nacelle_space_id: process.env.NACELLE_SPACE_ID,
+            nacelle_graphql_token: process.env.NACELLE_GRAPHQL_TOKEN
+          }
+        }
+      `);
+  }
 
   // Set up remote schema:
   const defaultExecute = createDefaultQueryExecutor(
@@ -63,7 +97,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
       headers: {
         'Content-Type': 'application/json',
         'x-nacelle-space-id': nacelleSpaceId,
-        'x-nacelle-space-token': nacelleSpaceToken
+        'x-nacelle-space-token': nacelleGraphqlToken
       }
     }
   );

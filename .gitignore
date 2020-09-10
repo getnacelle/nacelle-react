@@ -12,3 +12,6 @@ lerna-debug.log
 # Environment Variables
 .env
 .env.production
+
+# gatsby-source-nacelle
+examples/gatsby-source-nacelle/*/nacelle-fragments/*.graphql

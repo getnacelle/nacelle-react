@@ -1,6 +1,6 @@
 {
   "name": "nacelle-klaviyo-example",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
@@ -8,13 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
-    "@nacelle/react-components": "^2.3.0",
+    "@nacelle/react-components": "^2.5.1",
     "next": "9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@nacelle/react-klaviyo": "^2.5.0",
+    "@nacelle/react-klaviyo": "^2.5.1",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8"

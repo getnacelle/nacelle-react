@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-recharge",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "React integration for Shopify ReCharge",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -96,5 +96,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "f3c0e9df0c103e9128741612ff4be31658e97e02"
 }

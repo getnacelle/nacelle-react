@@ -11,8 +11,8 @@ To run this locally, you'll need to first [create a Nacelle account](https://das
 Next, we'll use these as environment variables. Create a `.env` file in the root of the `product-gallery` project with the following values:
 
 ```dotenv
-NACELLE_GRAPHQL_TOKEN=your-token-goes-here
-NACELLE_SPACE_ID=your-space-id-goes-here
+NACELLE_SPACE_ID=your-nacelle-space-id
+NACELLE_GRAPHQL_TOKEN=your-nacelle-graphql-token
 ```
 
 You're ready to go! Get started with Yarn or NPM:

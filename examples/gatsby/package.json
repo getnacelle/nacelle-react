@@ -1,0 +1,38 @@
+{
+  "name": "nacelle-gatsby-example",
+  "version": "0.0.1",
+  "description": "An example project built with gatsby-source-nacelle",
+  "main": "src/pages/index.js",
+  "scripts": {
+    "dev": "gatsby develop",
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "keywords": [
+    "nacelle",
+    "gatsby",
+    "e-commerce",
+    "eCommerce",
+    "shopify"
+  ],
+  "author": "Nick Richmond",
+  "license": "ISC",
+  "dependencies": {
+    "gatsby": "^2.24.57",
+    "@nacelle/gatsby-source-nacelle": "^0.0.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

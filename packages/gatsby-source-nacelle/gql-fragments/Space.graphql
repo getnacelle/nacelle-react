@@ -1,0 +1,38 @@
+fragment Space on Space {
+  remoteId: id
+  name
+  domain
+  linklists {
+    ... on Linklist {
+      handle
+      ... on Link {
+        title
+        to
+        type
+      }
+    }
+  }
+  affinityLinklists {
+    ... on AffinityLinklist {
+      affinityGroupSlug
+      linklists {
+        ... on Linklist {
+          handle
+          ... on Link {
+            title
+            to
+            type
+          }
+        }
+      }
+    }
+  }
+  metafields {
+    ... on Metafield {
+      id
+      namespace
+      key
+      value
+    }
+  }
+}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, graphql, useStaticQuery } from 'gatsby';
 
 export default function Layout({ children }) {
-  const linkListData = useStaticQuery(graphql`
+  const query = graphql`
     query LinkListsQuery {
       nacelleSpace {
         linklists {
@@ -15,7 +15,8 @@ export default function Layout({ children }) {
         }
       }
     }
-  `);
+  `;
+  const linkListData = useStaticQuery(query);
   const mainMenu = linkListData.nacelleSpace.linklists.find(
     (linkList) => linkList.handle === 'main-menu'
   );

@@ -35,26 +35,9 @@ npm i @nacelle/gatsby-theme-nacelle
 
 Then add the theme to your `gatsby-config.js`. Be sure to include your `nacelle-space-id` and `nacelle-graphql-token`, which you can find in your Space settings in the [Nacelle Dashboard](https://dashboard.getnacelle.com/).
 
-#### Adding Your Credentials Directly
-
-```javascript
-// gatsby-config.js
-module.exports = {
-  plugins: [
-    {
-      resolve: '@nacelle/gatsby-theme-nacelle',
-      options: {
-        nacelle_space_id: YOUR_NACELLE_SPACE_ID,
-        nacelle_graphql_token: YOUR_NACELLE_GRAPHQL_TOKEN
-      }
-    }
-  ]
-};
-```
-
 #### Adding Your Credentials Securely
 
-Install [dotenv](https://www.npmjs.com/package/dotenv), then create a `.env` file with your Nacelle credentials. For more information about using environment variables in a Gatsby project, check out the [Gatsby docs](https://www.gatsbyjs.org/docs/environment-variables/).
+Create a `.env` file with your Nacelle credentials. For more information about using environment variables in a Gatsby project, check out the [Gatsby docs](https://www.gatsbyjs.org/docs/environment-variables/).
 
 ```dotenv
 # .env

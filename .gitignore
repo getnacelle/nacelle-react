@@ -3,7 +3,6 @@ build/
 public/
 coverage/
 
-.vscode/
 .cache/
 
 # Log files

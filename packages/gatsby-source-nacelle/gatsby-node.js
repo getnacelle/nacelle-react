@@ -47,15 +47,18 @@ const PaginateNacelle = {
 async function createSourcingConfig(gatsbyApi, pluginOptions) {
   const { verbose } = pluginOptions;
 
-  // Extract credentials from plugin options
-  const nacelleSpaceId =
-    pluginOptions.nacelle_space_id ||
-    pluginOptions[
+  function getPluginOption(option) {
+    // Accepts any camelCase, PascalCase, kebab-case, or snake_case option
+    const sanitize = (str) => str.replace(/[-_]/g, '').toLowerCase();
+    return pluginOptions[
       Object.keys(pluginOptions).find(
-        (key) => key.toLowerCase() === 'nacellespaceid'
+        (key) => sanitize(key) === sanitize(option)
       )
     ];
+  }
 
+  // Extract credentials from plugin options
+  const nacelleSpaceId = getPluginOption('nacellespaceid');
   if (!nacelleSpaceId) {
     throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
     
@@ -68,14 +71,8 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
       }
     `);
   }
-  const nacelleGraphqlToken =
-    pluginOptions.nacelle_graphql_token ||
-    pluginOptions[
-      Object.keys(pluginOptions).find(
-        (key) => key.toLowerCase() === 'nacellegraphqltoken'
-      )
-    ];
 
+  const nacelleGraphqlToken = getPluginOption('nacellegraphqltoken');
   if (!nacelleGraphqlToken) {
     throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
       
@@ -101,6 +98,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
       }
     }
   );
+
   const execute = (args) => {
     if (verbose) {
       console.log(args.operationName, args.variables);
@@ -108,6 +106,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
 
     return defaultExecute(args);
   };
+
   const schema = await loadSchema(execute);
 
   // Configure Gatsby node types

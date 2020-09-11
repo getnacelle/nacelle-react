@@ -21,7 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "gatsby": "^2.24.57",
-    "gatsby-source-nacelle": "^0.0.1",
+    "@nacelle/gatsby-source-nacelle": "^0.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/gatsby-source-nacelle",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "A Gatsby source plugin for loading data from Nacelle's Hail Frequency API",
   "keywords": [
     "gatsby",

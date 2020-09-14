@@ -1,0 +1,40 @@
+{
+  "name": "@nacelle/gatsby-source-nacelle",
+  "version": "2.6.1",
+  "description": "A Gatsby source plugin for loading data from Nacelle's Hail Frequency API",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-theme",
+    "nacelle",
+    "ecommerce",
+    "e-commerce",
+    "commerce",
+    "shopify",
+    "magento"
+  ],
+  "main": "gatsby-node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nacelle Inc. (getnacelle.com)",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "gatsby-graphql-source-toolkit": "^0.5.0",
+    "gatsby-source-filesystem": "^2.3.29"
+  },
+  "peerDependencies": {
+    "gatsby": "^2.0.32"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

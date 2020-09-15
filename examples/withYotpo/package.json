@@ -1,0 +1,22 @@
+{
+  "name": "nacelle-yotpo-example",
+  "version": "2.6.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4000",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@nacelle/react-components": "^2.6.0",
+    "next": "9.5.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@nacelle/react-yotpo": "^2.5.1",
+    "eslint": "^7.6.0",
+    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8"
+  }
+}

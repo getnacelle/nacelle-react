@@ -4,5 +4,6 @@ import Grid from './components/Grid/Grid';
 import Image from './components/Image/Image';
 import Select from './components/Select/Select';
 import TextInput from './components/TextInput/TextInput';
+import EmbedScripts from './components/EmbedScripts/EmbedScripts';
 
-export { Button, Cell, Grid, Image, Select, TextInput };
+export { Button, Cell, Grid, Image, Select, TextInput, EmbedScripts };

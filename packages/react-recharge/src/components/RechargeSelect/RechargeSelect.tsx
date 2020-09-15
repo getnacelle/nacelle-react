@@ -14,6 +14,9 @@ import {
 } from './RechargeSelect.types';
 import * as styles from './RechargeSelect.styles';
 
+/**
+ * Creates a selectable delivery frequency component
+ */
 const RechargeSelect: FC<RechargeSelectProps> = ({
   product,
   disabled,

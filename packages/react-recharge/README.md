@@ -50,8 +50,13 @@ import { RechargeSelect } from '@nacelle/react-recharge';
 
 ### Props
 
-- **product:** A Shopify Product object
-- **getCartMetafields:** This is a callback function that is passed to the component and will return the values of metafields that should be integrated into the cart. Every time the user changes between the delivery frequency or the type of purchase, this callback will be run and provide updated metafields. When the item is added to cart, these metafields should be appended to any other metafields required in the cart.
+- **product (required):** A Shopify Product object
+- **getCartMetafields (required):** This is a callback function that is passed to the component and will return the values of metafields that should be integrated into the cart. Every time the user changes between the delivery frequency or the type of purchase, this callback will be run and provide updated metafields. When the item is added to cart, these metafields should be appended to any other metafields required in the cart.
+- **disabled:** Disable the input
+- **subscriptionLabel:** The label that is used for the subscription selection section of the component. The default value is 'Subscribe'
+- **oneTimeLabel:** The label that is used for the single purchase selection section of the component. The default value is 'One-Time Purchase'
+- **containerStyles:** Any additional styles that should be applied to the containing div
+- **onChange:** Any action that should take place when a value is changed. This function is passed the React synthetic event for the input change
 
 Example of `getCartMetafields`:
 

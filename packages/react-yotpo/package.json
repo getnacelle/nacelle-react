@@ -87,7 +87,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f3c0e9df0c103e9128741612ff4be31658e97e02",
+  "gitHead": "1450cacb61bf460e1bb1111e2a2a5f11c7dc3960",
   "dependencies": {
     "@nacelle/react-components": "^2.7.0"
   }

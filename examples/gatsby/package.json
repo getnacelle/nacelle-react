@@ -1,6 +1,6 @@
 {
   "name": "nacelle-gatsby-example",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "An example project built with gatsby-source-nacelle",
   "main": "src/pages/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "author": "Nick Richmond",
   "license": "ISC",
   "dependencies": {
-    "@nacelle/gatsby-source-nacelle": "^2.6.1",
+    "@nacelle/gatsby-source-nacelle": "^2.7.0",
     "gatsby": "^2.24.57",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

@@ -15,7 +15,8 @@
   ],
   "main": "gatsby-node.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "precommit": "lint-staged",
+    "lint": "eslint ./"
   },
   "author": "Nacelle Inc. (getnacelle.com)",
   "license": "ISC",
@@ -27,6 +28,10 @@
   "peerDependencies": {
     "gatsby": "^2.0.32"
   },
+  "devDependencies": {
+    "lint-staged": "^10.2.11",
+    "eslint": "^7.6.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/getnacelle/nacelle-react.git"
@@ -36,6 +41,16 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "lint-staged": {
+    "**/*.(js|ts|tsx)": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
   },
   "gitHead": "1450cacb61bf460e1bb1111e2a2a5f11c7dc3960"
 }

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { FC, ForwardRefRenderFunction, InputHTMLAttributes } from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import { jsx, CSSObject } from '@emotion/core';
 
 import { defaultStyles } from './TextInput.styles';

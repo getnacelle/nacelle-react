@@ -5,6 +5,8 @@
   "description": "An example project built with gatsby-source-nacelle",
   "main": "src/pages/index.js",
   "scripts": {
+    "lint": "eslint ./",
+    "precommit": "lint-staged",
     "dev": "gatsby develop",
     "develop": "gatsby develop",
     "build": "gatsby build",
@@ -25,6 +27,20 @@
     "gatsby": "^2.24.57",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "lint-staged": "^10.2.11"
+  },
+  "lint-staged": {
+    "**/**/*.(js|ts|tsx)": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",

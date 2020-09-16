@@ -53,7 +53,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
-      "pre-push": "lerna run --concurrency 1 --stream test:ci --since HEAD --exclude-dependents"
+      "pre-push": "npm run test:ci"
     }
   }
 }

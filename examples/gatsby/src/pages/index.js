@@ -7,7 +7,7 @@ export default function HomePage() {
       <p>
         Use the links in the navigation bar to navigate to Product Loading Pages
         and Product Detail Pages created with data sourced with
-        'gatsby-source-nacelle'
+        &apos;gatsby-source-nacelle&apos;
       </p>
     </>
   );

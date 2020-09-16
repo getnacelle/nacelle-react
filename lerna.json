@@ -1,14 +1,15 @@
 {
   "npmClient": "npm",
-  "packages": [
-    "packages/*",
-    "examples/*"
-  ],
+  "packages": ["packages/*", "examples/*"],
   "version": "2.7.1",
   "publish": {
+    "allowBranch": "master",
     "ignoreChanges": [
       "*.md",
-      ".gitignore"
+      ".gitignore",
+      "**/**/**.test.*",
+      "**/.storybook/**",
+      "**/**/*.fixtures.**"
     ],
     "message": "chore(release): publish"
   }

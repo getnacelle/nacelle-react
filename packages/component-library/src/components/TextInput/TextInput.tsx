@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { ForwardRefRenderFunction, InputHTMLAttributes } from 'react';
+import { FC, InputHTMLAttributes } from 'react';
 import { jsx, CSSObject } from '@emotion/core';
 
 import { defaultStyles } from './TextInput.styles';
@@ -35,18 +35,15 @@ export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
  * Use the fullwidth prop to make the button take up the entire
  * width of the container
  */
-const TextInput: ForwardRefRenderFunction<Ref, TextInputProps> = (
-  {
-    styles,
-    placeholder,
-    value,
-    disabled,
-    role = 'text',
-    fullwidth = false,
-    ...props
-  },
-  ref
-) => {
+const TextInput: FC<TextInputProps> = ({
+  styles,
+  placeholder,
+  value,
+  disabled,
+  role = 'text',
+  fullwidth = false,
+  ...props
+}) => {
   const combinedStyles = composeStyles([
     defaultStyles,
     fullwidth && { width: '100%' },
@@ -57,7 +54,6 @@ const TextInput: ForwardRefRenderFunction<Ref, TextInputProps> = (
     <input
       value={value}
       placeholder={placeholder}
-      ref={ref}
       css={combinedStyles}
       role={role}
       disabled={disabled}
@@ -66,4 +62,4 @@ const TextInput: ForwardRefRenderFunction<Ref, TextInputProps> = (
   );
 };
 
-export default React.forwardRef<Ref, TextInputProps>(TextInput);
+export default TextInput;

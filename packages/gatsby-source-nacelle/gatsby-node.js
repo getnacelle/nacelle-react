@@ -61,7 +61,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
   const nacelleSpaceId = getPluginOption('nacellespaceid');
   if (!nacelleSpaceId) {
     throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
-    
+
       {
         resolve: 'gatsby-source-nacelle',
         options: {
@@ -75,7 +75,7 @@ async function createSourcingConfig(gatsbyApi, pluginOptions) {
   const nacelleGraphqlToken = getPluginOption('nacellegraphqltoken');
   if (!nacelleGraphqlToken) {
     throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
-      
+
         {
           resolve: 'gatsby-source-nacelle',
           options: {

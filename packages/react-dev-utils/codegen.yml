@@ -1,6 +1,6 @@
 overwrite: true
 generates:
-  src/graphql.types.ts:
+  src/types/graphql.ts:
     schema:
       - 'https://jlifj5sgd8.execute-api.us-east-1.amazonaws.com/dev/graphql':
           headers:

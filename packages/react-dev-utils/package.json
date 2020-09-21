@@ -1,7 +1,7 @@
 {
-  "name": "@nacelle/react-components",
-  "version": "2.7.1",
-  "description": "A collection of atomic components for building Nacelle applications",
+  "name": "@nacelle/react-dev-utils",
+  "version": "2.6.0",
+  "description": "Development utilities for Nacelle React projects",
   "main": "build/index.js",
   "module": "build/index.es.js",
   "files": [
@@ -12,33 +12,25 @@
     "precommit": "lint-staged",
     "build": "rollup -c",
     "test": "jest ./src --watch",
-    "test:ci": "jest ./src --runInBand --coverage",
+    "test:ci": "jest ./src --runInBand --coverage --passWithNoTests",
     "lint": "eslint ./src",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "generate": "DEBUG=1 graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "keywords": [
     "react",
-    "nacelle",
-    "components",
-    "nextjs",
-    "gatsby",
-    "jamstack"
+    "nacelle"
   ],
   "author": "Nacelle Dev Team",
   "license": "ISC",
-  "peerDependencies": {
-    "@emotion/core": ">=10.0.34",
-    "react": ">=16.12.0",
-    "react-dom": ">=16.12.0"
-  },
   "devDependencies": {
-    "@storybook/react": "^6.0.5",
+    "@graphql-codegen/cli": "1.17.8",
     "eslint": "^7.6.0",
+    "graphql": "^14.6.0",
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.1"
+    "rollup": "^2.23.1",
+    "@graphql-codegen/typescript": "1.17.8"
   },
   "repository": {
     "type": "git",
@@ -57,7 +49,7 @@
       "prettier --write"
     ]
   },
-  "gitHead": "1450cacb61bf460e1bb1111e2a2a5f11c7dc3960",
+  "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
   "publishConfig": {
     "access": "public"
   }

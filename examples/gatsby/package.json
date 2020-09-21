@@ -24,13 +24,14 @@
   "license": "ISC",
   "dependencies": {
     "@nacelle/gatsby-source-nacelle": "^2.7.1",
-    "gatsby": "^2.24.57",
+    "gatsby": "^2.24.63",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
-    "lint-staged": "^10.2.11"
+    "lint-staged": "^10.2.11",
+    "graphql": "^14.6.0"
   },
   "lint-staged": {
     "**/**/*.(js|ts|tsx)": [

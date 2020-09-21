@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { Story, Meta } from '@storybook/react';
+import { shopifyItem } from '@nacelle/react-dev-utils';
 
 import YotpoReviews, { YotpoReviewsProps } from './YotpoReviews';
-import { shopifyItem } from '../../shared/product.fixtures';
 
 const story: Meta = {
   title: 'Components/YotpoReviews',

@@ -12,7 +12,6 @@
     "scripts"
   ],
   "scripts": {
-    "prepublishOnly": "npm run build",
     "prebuild": "rimraf ./build",
     "precommit": "lint-staged",
     "build": "rollup -c",
@@ -38,6 +37,7 @@
   },
   "devDependencies": {
     "@nacelle/interphase-node": "^1.0.4",
+    "@nacelle/react-dev-utils": "^2.6.0",
     "@storybook/react": "^6.0.5",
     "chalk": "^4.1.0",
     "dotenv-safe": "^8.2.0",

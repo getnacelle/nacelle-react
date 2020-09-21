@@ -4,12 +4,11 @@
 /** @jsx jsx */
 import { FC, ChangeEvent, useState, useMemo, useEffect } from 'react';
 import { jsx } from '@emotion/core';
+import { ShopifyItem, Metafield } from '@nacelle/react-dev-utils';
 
 import {
   RechargeSelectProps,
   Metafields,
-  ItemMetaField,
-  ShopifyItem,
   CartMetafield
 } from './RechargeSelect.types';
 import * as styles from './RechargeSelect.styles';
@@ -163,7 +162,7 @@ const RechargeSelect: FC<RechargeSelectProps> = ({
   );
 };
 
-function mapMetafields(metafields: ItemMetaField[]): Metafields {
+function mapMetafields(metafields: Metafield[]): Metafields {
   return metafields.reduce<Metafields>((mappedFields, metafield) => {
     switch (metafield.key) {
       case 'has_subscription':

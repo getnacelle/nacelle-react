@@ -1,9 +1,6 @@
-import {
-  CartState,
-  CartReducerAction,
-  ShopifyItem,
-  CartItem
-} from './use-cart.types';
+import { ShopifyItem } from '@nacelle/react-dev-utils';
+
+import { CartState, CartReducerAction, CartItem } from './use-cart.types';
 
 export const ADD_TO_CART = 'cart/add-to-cart';
 export const INCREMENT_ITEM = 'cart/increment-item';
@@ -25,7 +22,9 @@ const cartReducer = (
   state: CartState,
   action: CartReducerAction
 ): CartState => {
-  const setCacheItem = state.useLocalStorage ? window.localStorage.setItem.bind(localStorage) : () => { };
+  const setCacheItem = state.useLocalStorage
+    ? window.localStorage.setItem.bind(localStorage)
+    : () => {};
 
   switch (action.type) {
     case ADD_TO_CART: {
@@ -43,7 +42,9 @@ const cartReducer = (
           ? action.payload.variant.id
           : action.payload.id;
 
-      const cart: CartItem[] = state.cart.filter((item) => item.id !== payloadId);
+      const cart: CartItem[] = state.cart.filter(
+        (item) => item.id !== payloadId
+      );
 
       setCacheItem('cart', JSON.stringify(cart));
       return {
@@ -86,7 +87,7 @@ const cartReducer = (
         }
 
         return item;
-      })
+      });
 
       setCacheItem('cart', JSON.stringify(cart));
       return {
@@ -95,7 +96,7 @@ const cartReducer = (
       };
     }
     case CLEAR_CART:
-      if (state.useLocalStorage) window.localStorage.removeItem('cart')
+      if (state.useLocalStorage) window.localStorage.removeItem('cart');
       return {
         ...state,
         cart: []
@@ -164,15 +165,13 @@ export function isInCart(cart: CartItem[], payload: ShopifyItem): boolean {
 export function buildCart(cart: CartItem[], payload: ShopifyItem): CartItem[] {
   return isInCart(cart, payload)
     ? cart.map((item) => {
-      const payloadId =
-        'variant' in payload
-          ? payload.variant.id
-          : payload.id;
-      if (item.id !== payloadId) {
-        return item;
-      }
-      return { ...item, quantity: item.quantity + 1 };
-    })
+        const payloadId =
+          'variant' in payload ? payload.variant.id : payload.id;
+        if (item.id !== payloadId) {
+          return item;
+        }
+        return { ...item, quantity: item.quantity + 1 };
+      })
     : [...cart, { ...formatCartItem(payload) }];
 }
 

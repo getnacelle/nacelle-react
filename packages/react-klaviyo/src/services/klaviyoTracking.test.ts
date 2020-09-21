@@ -1,5 +1,6 @@
+import { shopifyItem } from '@nacelle/react-dev-utils';
+
 import klaviyoTracking from './klaviyoTracking';
-import { shopifyItem } from '../shared/product.fixtures';
 
 const klaviyoQueueMock = {
   push: jest.fn(),

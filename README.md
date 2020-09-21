@@ -46,7 +46,7 @@ In the root project, the following global commands are available:
 ### Publishing a Package
 
 ```
-lerna publish
+npm run publish
 ```
 
 This will update and publish all packages that have changed since the last release (it will show you which packages and the versions that will be published). This makes it easy for making changes across interdependent packages. More info [here](https://github.com/lerna/lerna/tree/master/commands/publish#readme).

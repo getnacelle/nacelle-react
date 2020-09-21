@@ -2,10 +2,11 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "build": "lerna run build",
     "test:ci": "lerna run test:ci",
     "lint": "lerna run lint",
     "bootstrap": "lerna bootstrap --hoist",
-    "publish": "lerna publish"
+    "publish": "npm run build && lerna publish"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -32,6 +33,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "graphql": "^14.6.0",
     "husky": "^4.2.5",
     "jest": "^26.3.0",
     "jest-watch-typeahead": "^0.6.0",
@@ -55,5 +57,6 @@
       "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
       "pre-push": "npm run test:ci"
     }
-  }
+  },
+  "dependencies": {}
 }

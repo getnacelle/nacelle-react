@@ -20,7 +20,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install && npm install lerna -g
-      - name: Bootstrap Lerna dependencies
+      - name: Build dependencies
+        run: lerna bootstrap --hoist --ci && npm run build
+      - name: Bootstrap local Lerna dependencies
         run: lerna clean -y && lerna bootstrap --force-local --hoist --ci
       - name: Lint
         run: npm run lint

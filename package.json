@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "lerna run build",
-    "test:ci": "lerna run test:ci",
+    "test:ci": "jest --clearCache && lerna run test:ci",
     "lint": "lerna run lint",
     "bootstrap": "lerna bootstrap --hoist",
     "publish": "npm run build && lerna publish"

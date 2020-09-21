@@ -1,4 +1,4 @@
-import { Product, Variant } from './graphql.types';
+import { Product, Variant } from './graphql';
 
 export interface ShopifyItem extends Product {
   locale?: string;

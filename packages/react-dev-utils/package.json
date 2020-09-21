@@ -10,9 +10,9 @@
   "scripts": {
     "prebuild": "rimraf ./build",
     "precommit": "lint-staged",
-    "build": "rollup -c",
+    "build": "npm run generate && rollup -c",
     "test": "jest ./src --watch",
-    "test:ci": "jest ./src --runInBand --coverage --passWithNoTests",
+    "test:ci": "jest ./src --runInBand --coverage",
     "lint": "eslint ./src",
     "generate": "DEBUG=1 graphql-codegen --config codegen.yml -r dotenv/config"
   },

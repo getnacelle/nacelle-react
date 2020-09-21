@@ -1,4 +1,4 @@
-import { ShopifyItem } from './custom.types';
+import { ShopifyItem } from '../types';
 
 export const shopifyItem: ShopifyItem = {
   id: 'pepper-wood-apparel.myshopify.com::shevonne-bag::en-us',

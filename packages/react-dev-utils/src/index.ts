@@ -1,3 +1,3 @@
-export * from './graphql.types';
-export * from './custom.types';
-export * from './product.fixtures';
+export * from './types';
+export * from './fixtures';
+export * from './utils';

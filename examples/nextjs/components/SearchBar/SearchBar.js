@@ -1,9 +1,9 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Button, TextInput, Image } from '@nacelle/react-components';
+import { formatCurrency } from '@nacelle/react-dev-utils';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { formatCurrency } from 'utils';
 import { useProductSearch } from 'providers/ProductSearch';
 import * as styles from './SearchBar.styles';
 

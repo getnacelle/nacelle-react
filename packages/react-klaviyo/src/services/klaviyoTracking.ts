@@ -1,9 +1,9 @@
+import { ShopifyItem, Variant } from '@nacelle/react-dev-utils';
+
 import {
-  ShopifyItem,
   TrackEvent,
   IdentifyCustomer,
   KlaviyoTrackingItem,
-  ItemVariant,
   Customer
 } from './klaviyoTracking.types';
 
@@ -68,7 +68,7 @@ function decodeProductId(productId: string): string {
  *
  * @returns the highest variant price
  */
-function variantPriceComparisions(variants: ItemVariant[]): string {
+function variantPriceComparisions(variants: Variant[]): string {
   return variants
     .map((variant) => variant.compareAtPrice)
     .sort()

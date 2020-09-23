@@ -19,9 +19,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm install
-      - name: Bootstrap Lerna dependencies
-        run: npm run bootstrap
+        run: npm install && npm install lerna -g
+      - name: Build dependencies
+        run: lerna bootstrap --hoist --ci && lerna run build --scope "@nacelle/*"
+        env:
+          NACELLE_SPACE_ID: ${{ secrets.NACELLE_SPACE_ID }}
+          NACELLE_GRAPHQL_TOKEN: ${{ secrets.NACELLE_GRAPHQL_TOKEN }}
+          DASHBOARD_AUTH_TOKEN: ${{ secrets.DASHBOARD_AUTH_TOKEN }}
+      - name: Bootstrap local Lerna dependencies
+        run: lerna clean -y && lerna bootstrap --force-local --hoist --ci
       - name: Lint
         run: npm run lint
       - name: Tests with coverage report

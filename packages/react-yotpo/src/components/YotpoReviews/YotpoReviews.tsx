@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
+import { ShopifyItem } from '@nacelle/react-dev-utils';
 
 import decodeProductId from '../../utils/decodeProductId';
-import { ShopifyItem } from '../../shared/product.types';
 import { useYotpoRefresh } from '../../hooks/useYotpoRefresh';
 
 export type YotpoReviewsProps = {

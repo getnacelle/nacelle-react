@@ -1,0 +1,56 @@
+{
+  "name": "@nacelle/react-dev-utils",
+  "version": "2.6.0",
+  "description": "Development utilities for Nacelle React projects",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "prebuild": "rimraf ./build",
+    "precommit": "lint-staged",
+    "build": "npm run generate && rollup -c",
+    "test": "jest ./src --watch",
+    "test:ci": "jest ./src --runInBand --coverage",
+    "lint": "eslint ./src",
+    "generate": "DEBUG=1 graphql-codegen --config codegen.yml -r dotenv/config"
+  },
+  "keywords": [
+    "react",
+    "nacelle"
+  ],
+  "author": "Nacelle Dev Team",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.17.8",
+    "eslint": "^7.6.0",
+    "graphql": "^14.6.0",
+    "jest": "^26.3.0",
+    "lint-staged": "^10.2.11",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.23.1",
+    "@graphql-codegen/typescript": "1.17.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "lint-staged": {
+    "src/**/*.(js|ts|tsx)": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
+  "publishConfig": {
+    "access": "public"
+  }
+}

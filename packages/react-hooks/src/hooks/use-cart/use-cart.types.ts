@@ -1,90 +1,32 @@
-export type ShopifyMedia = {
-  altText: string;
-  id: string;
-  src: string;
-  thumbnailSrc: string;
-  type: string;
-};
-
-export type ItemOptions = {
-  name: string;
-  value: string;
-};
-
-export type ItemMetaField = {
-  key: string;
-  namespace: string;
-  value: string;
-};
-
-export type ItemVariant = {
-  availableForSale: boolean;
-  compareAtPrice: string;
-  compareAtPriceCurrency: string;
-  featuredMedia: ShopifyMedia;
-  id: string;
-  metafields: ItemMetaField[];
-  price: string;
-  priceCurrency: string;
-  priceRules?: string;
-  selectedOptions: ItemOptions[];
-  sku: string;
-  swatchSrc: string;
-  title: string;
-  weight: string;
-  weightUnit: string;
-};
-
-export type ShopifyItem = {
-  availableForSale: boolean;
-  createdAt: number;
-  description: string;
-  featuredMedia: ShopifyMedia;
-  globalHandle: string;
-  handle: string;
-  id: string;
-  indexedAt: number;
-  locale: string;
-  media: ShopifyMedia[];
-  metafields: ItemMetaField[];
-  pimSyncSource: string;
-  pimSyncSourceDomain: string;
-  pimSyncSourceProductId: string;
-  priceRange: {
-    currencyCode: string;
-    max: string;
-    min: string;
-  };
-  productType: string;
-  quantity?: number;
-  tags: string[];
-  title: string;
-  variant?: ItemVariant;
-  variants: ItemVariant[];
-  vendor: string;
-};
+import {
+  Metafield,
+  Media,
+  ShopifyItem,
+  PriceRule,
+  SelectedOption
+} from '@nacelle/react-dev-utils';
 
 export type CartItem = {
   availableForSale: boolean;
-  compareAtPrice: string;
-  compareAtPriceCurrency: string;
+  compareAtPrice?: string;
+  compareAtPriceCurrency?: string;
   handle: string;
   id: string;
-  image: ShopifyMedia;
-  metafields: ItemMetaField[];
-  price: string;
-  priceCurrency: string;
-  priceRules?: string;
+  image: Media;
+  metafields?: Metafield[];
+  price?: string;
+  priceCurrency?: string;
+  priceRules?: PriceRule[];
   productId: string;
   quantity: number;
-  selectedOptions: ItemOptions[];
-  sku: string;
-  swatchSrc: string;
+  selectedOptions: SelectedOption[];
+  sku?: string;
+  swatchSrc?: string;
   tags: string[];
   title: string;
   vendor: string;
-  weight: string;
-  weightUnit: string;
+  weight?: number;
+  weightUnit?: string;
   locale: string;
 };
 

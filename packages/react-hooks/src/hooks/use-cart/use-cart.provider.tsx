@@ -1,12 +1,7 @@
 import React, { useReducer, useMemo, useContext, FC, ReactNode } from 'react';
+import { ShopifyItem } from '@nacelle/react-dev-utils';
 
-import {
-  CartState,
-  ShopifyItem,
-  CartItem,
-  CheckoutStatus
-} from './use-cart.types';
-
+import { CartState, CartItem, CheckoutStatus } from './use-cart.types';
 import cartReducer, {
   initialState,
   ADD_TO_CART,
@@ -38,20 +33,21 @@ export type CartActionContextValue = null | CartActions;
 const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
-export const CartProvider: FC<CartProviderProps> = ({ useLocalStorage, children }) => {
+export const CartProvider: FC<CartProviderProps> = ({
+  useLocalStorage,
+  children
+}) => {
   const hasWindow = typeof window !== 'undefined';
-  const cart = useLocalStorage && hasWindow
-    ? JSON.parse(window.localStorage.getItem('cart')) || []
-    : []
+  const cart =
+    useLocalStorage && hasWindow
+      ? JSON.parse(window.localStorage.getItem('cart')) || []
+      : [];
 
-  const [state, dispatch] = useReducer(
-    cartReducer,
-    {
-      ...initialState,
-      cart,
-      useLocalStorage: useLocalStorage && hasWindow
-    }
-  );
+  const [state, dispatch] = useReducer(cartReducer, {
+    ...initialState,
+    cart,
+    useLocalStorage: useLocalStorage && hasWindow
+  });
 
   const cartActions: CartActions = useMemo(
     () => ({

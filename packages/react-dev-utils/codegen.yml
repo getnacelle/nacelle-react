@@ -1,0 +1,13 @@
+overwrite: true
+generates:
+  src/types/graphql.ts:
+    schema:
+      - 'https://jlifj5sgd8.execute-api.us-east-1.amazonaws.com/dev/graphql':
+          headers:
+            authorization: ${DASHBOARD_AUTH_TOKEN}
+      - 'https://dev.dilithiumindex.com/graphql':
+          headers:
+            x-nacelle-space-token: ${NACELLE_SPACE_TOKEN}
+            x-nacelle-space-id: ${NACELLE_SPACE_ID}
+    plugins:
+      - 'typescript'

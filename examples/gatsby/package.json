@@ -1,6 +1,6 @@
 {
   "name": "nacelle-gatsby-example",
-  "version": "2.7.1",
+  "version": "2.8.0",
   "private": true,
   "description": "An example project built with gatsby-source-nacelle",
   "main": "src/pages/index.js",
@@ -23,15 +23,15 @@
   "author": "Nick Richmond",
   "license": "ISC",
   "dependencies": {
-    "@nacelle/gatsby-source-nacelle": "^2.7.1",
+    "@nacelle/gatsby-source-nacelle": "^2.8.0",
     "gatsby": "^2.24.63",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
-    "lint-staged": "^10.2.11",
-    "graphql": "^14.6.0"
+    "graphql": "^14.6.0",
+    "lint-staged": "^10.2.11"
   },
   "lint-staged": {
     "**/**/*.(js|ts|tsx)": [

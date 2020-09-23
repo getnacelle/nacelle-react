@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-yotpo",
-  "version": "2.7.1",
+  "version": "2.8.0",
   "description": "React integration for Yotpo",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -31,7 +31,7 @@
     "react-dom": ">=16.12.0"
   },
   "devDependencies": {
-    "@nacelle/react-dev-utils": "^2.6.0",
+    "@nacelle/react-dev-utils": "^2.8.0",
     "@storybook/react": "^6.0.5",
     "eslint": "^7.6.0",
     "jest": "^26.3.0",

@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-dev-utils",
-  "version": "2.6.0",
+  "version": "2.8.0",
   "description": "Development utilities for Nacelle React projects",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -24,13 +24,13 @@
   "license": "ISC",
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.8",
+    "@graphql-codegen/typescript": "1.17.8",
     "eslint": "^7.6.0",
     "graphql": "^14.6.0",
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.1",
-    "@graphql-codegen/typescript": "1.17.8"
+    "rollup": "^2.23.1"
   },
   "repository": {
     "type": "git",

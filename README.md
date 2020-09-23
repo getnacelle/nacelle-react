@@ -46,7 +46,7 @@ In the root project, the following global commands are available:
 ### Publishing a Package
 
 ```
-lerna publish
+npm run publish
 ```
 
 This will update and publish all packages that have changed since the last release (it will show you which packages and the versions that will be published). This makes it easy for making changes across interdependent packages. More info [here](https://github.com/lerna/lerna/tree/master/commands/publish#readme).
@@ -78,7 +78,7 @@ If your package is scoped (i.e. `@nacelle/package-name`), be sure to include the
 
 - [`gatsby`](https://github.com/getnacelle/nacelle-react/tree/master/examples/gatsby): A simple Gatsby implementation that uses `gatsby-source-nacelle`
 - [`nextjs`](https://github.com/getnacelle/nacelle-react/tree/master/examples/nextjs): An e-commerce store exmaple that uses the Nacelle `component-library` and `react-hooks`
-- [`withKlaviyo`](<(https://github.com/getnacelle/nacelle-react/tree/master/examples/withKlaviyo)>): An example of integrating Klaviyo with Next.js using `react-klaviyo`
+- [`withKlaviyo`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withKlaviyo): An example of integrating Klaviyo with Next.js using `react-klaviyo`
 - [`withRecharge`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withRecharge): An example of integrating ReCharge with Next.js using `react-recharge`
 - [`withYotpo`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withYotpo): An example of integrating Yotpo with Next.js using `react-yotpo`
 

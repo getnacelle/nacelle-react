@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCheckout, useCart } from '@nacelle/react-hooks';
 import { Button, Image } from '@nacelle/react-components';
+import { formatCurrency } from '@nacelle/react-dev-utils';
 
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
-import { formatCurrency } from 'utils';
 import * as styles from './Cart.styles';
 
 const checkoutCredentials = {

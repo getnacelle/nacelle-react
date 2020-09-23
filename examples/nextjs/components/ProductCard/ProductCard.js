@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '@nacelle/react-hooks';
 import { Image, Button, Grid } from '@nacelle/react-components';
+import { formatCurrency } from '@nacelle/react-dev-utils';
 
-import { formatCurrency } from 'utils';
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './ProductCard.styles';

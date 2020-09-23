@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { shopifyItem } from '@nacelle/react-dev-utils';
 
 import RechargeSelect from './RechargeSelect';
 import { RechargeSelectProps } from './RechargeSelect.types';
-import { shopifyItem } from '../../shared/product.fixtures';
 
 function setupSelect(props?: RechargeSelectProps) {
   render(<RechargeSelect {...props} />);

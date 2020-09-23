@@ -1,5 +1,6 @@
+import { shopifyItem } from '@nacelle/react-dev-utils';
+
 import decodeProductId from './decodeProductId';
-import { shopifyItem } from '../shared/product.fixtures';
 
 describe('decodeProductId()', () => {
   afterEach(() => {
@@ -14,7 +15,7 @@ describe('decodeProductId()', () => {
 
   it('should decode a base64 shopify product id', () => {
     const result = decodeProductId(shopifyItem.pimSyncSourceProductId);
-    expect(result).toEqual('4396648431749');
+    expect(result).toEqual('4915654230151');
   });
 
   it('should return null and log an error if decoding fails', () => {

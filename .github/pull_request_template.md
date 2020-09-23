@@ -1,7 +1,7 @@
 <!--
   ⚠️ PR Title ⚠️
   - [package-name|example-name]: short description of PR purpose
-  - Exampple: [component-library]: Add Unit Tests
+  - Example: [component-library]: Add Unit Tests
 -->
 
 **Story:** [NC-0000](#url-here) <!-- link to Jira story -->

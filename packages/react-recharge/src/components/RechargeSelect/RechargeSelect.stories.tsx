@@ -1,9 +1,9 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
+import { shopifyItem } from '@nacelle/react-dev-utils';
 
 import RechargeSelect from './RechargeSelect';
 import { RechargeSelectProps } from './RechargeSelect.types';
-import { shopifyItem } from '../../shared/product.fixtures';
 
 const story: Meta = {
   title: 'Components/RechargeSelect',

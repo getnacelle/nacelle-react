@@ -62,7 +62,7 @@ This will update and publish all packages that have changed since the last relea
 
 ### Creating a New Package
 
-Coming soon: a scripted way to create a new package in this project.
+To create a new example project or a new NPM package within the repo, just run `npm run create` from the project root. This script will prompt you and create the appropriate folders with linting, testing, etc already setup!
 
 #### Ensure Public Access for Scoped Packages
 

@@ -1,11 +1,11 @@
 import React, { FC, useMemo } from 'react';
-import { ShopifyItem } from '@nacelle/react-dev-utils';
+import { NacelleShopProduct } from '@nacelle/types';
 
 import decodeProductId from '../../utils/decodeProductId';
 import { useYotpoRefresh } from '../../hooks/useYotpoRefresh';
 
 export type YotpoReviewsProps = {
-  product: ShopifyItem;
+  product: NacelleShopProduct;
   price: string;
   urlPath: string;
 };

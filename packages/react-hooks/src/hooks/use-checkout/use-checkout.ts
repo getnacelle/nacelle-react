@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { CartItem } from '@nacelle/types';
 
-import { Variant, Credentials, CheckoutResponse } from '../../common/types';
+import { Credentials, CheckoutResponse } from '../../common/types';
 
 const CHECKOUT_QUERY = `
 mutation sendCheckout($input: CheckoutInput) {
@@ -24,7 +25,7 @@ mutation sendCheckout($input: CheckoutInput) {
  */
 export const useCheckout = (
   credentials: Credentials,
-  lineItems: Variant[],
+  lineItems: CartItem[],
   checkoutId?: string
 ): [null | CheckoutResponse, () => Promise<CheckoutResponse>, boolean] => {
   const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
@@ -41,11 +42,10 @@ export const useCheckout = (
     []
   );
 
-  // TODO: Make this format more flexible
   const cartItems = lineItems.map((item, idx) => ({
-    variantId: item.variant.id,
-    cartItemId: `${idx}::${item.variant.id}`,
-    quantity: item.variant.qty,
+    variantId: item.id,
+    cartItemId: `${idx}::${item.id}`,
+    quantity: item.quantity,
     metafields: item.metafields
   }));
 

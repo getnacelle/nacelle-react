@@ -18,7 +18,7 @@ const Cart = () => {
   const { isMobile } = useDetectDevice();
   const [checkoutData, checkout, isCheckingOut] = useCheckout(
     checkoutCredentials,
-    cart.map((item) => ({ variant: { ...item, qty: item.quantity } }))
+    cart
   );
 
   useEffect(() => {

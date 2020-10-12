@@ -1,15 +1,18 @@
 import { InputHTMLAttributes, ChangeEvent } from 'react';
 import { CSSObject } from '@emotion/core';
-import { ShopifyItem } from '@nacelle/react-dev-utils';
+import { NacelleShopProduct, Metafield } from '@nacelle/types';
 
 export interface RechargeSelectProps
   extends InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean;
   subscriptionLabel?: string;
   oneTimeLabel?: string;
-  product: ShopifyItem;
+  product: NacelleShopProduct;
   containerStyles?: CSSObject;
-  onChange?(evt: ChangeEvent<HTMLInputElement>, product?: ShopifyItem): void;
+  onChange?(
+    evt: ChangeEvent<HTMLInputElement>,
+    product?: NacelleShopProduct
+  ): void;
   getCartMetafields(cartMetafields: CartMetafield[]): unknown;
 }
 
@@ -23,11 +26,10 @@ export type CartMetafield = {
   value: string;
 };
 
-export type Metafields = {
+export interface RechargeMetafields extends Metafield {
   has_subscription: boolean;
   is_subscription_only: boolean;
   shipping_interval_frequency: string[];
   shipping_interval_unit_type: string;
   discount_percentage: number;
-  [key: string]: unknown;
-};
+}

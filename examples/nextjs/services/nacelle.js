@@ -26,15 +26,24 @@ client.data.allCollections = (params) => clientPIM.data.allCollections(params);
 const previewBranchName = 'preview';
 const vercelBranch = process.env.VERCEL_GITHUB_COMMIT_REF;
 const inPreviewBranch = vercelBranch && vercelBranch === previewBranchName;
+const previewModeToggled =
+  process.env.NACELLE_PREVIEW_MODE === 'true' || inPreviewBranch;
 const previewVariablesExist = Boolean(
   process.env.CONTENTFUL_PREVIEW_SPACE_ID &&
     process.env.CONTENTFUL_PREVIEW_API_TOKEN
 );
 
-if (
-  (process.env.NACELLE_PREVIEW_MODE || inPreviewBranch) &&
-  previewVariablesExist
-) {
+if (previewModeToggled && !previewVariablesExist) {
+  console.warn(
+    '\nPreview Mode not activated due to missing environment variables:\n' +
+      (!process.env.CONTENTFUL_PREVIEW_SPACE_ID &&
+        '- CONTENTFUL_PREVIEW_SPACE_ID\n') +
+      (!process.env.CONTENTFUL_PREVIEW_API_TOKEN &&
+        '- CONTENTFUL_PREVIEW_API_TOKEN\n')
+  );
+}
+
+if (previewModeToggled && previewVariablesExist) {
   // Initialize the Preview Connector
   // Note: the Contentful Preview API token is not the same as your Content Delivery API token
   const contentfulPreview = new NacelleContentfulPreviewConnector({
@@ -49,7 +58,7 @@ if (
   client.data.articles = (params) => contentfulPreview.articles(params);
   client.data.blog = (params) => contentfulPreview.blog(params);
 
-  console.log('RUNNING NACELLE IN PREVIEW MODE');
+  console.log('\nRUNNING NACELLE IN PREVIEW MODE\n');
 }
 
 export default client;

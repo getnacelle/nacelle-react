@@ -2,6 +2,10 @@
 
 This is a monorepo managed by [Lerna](https://github.com/lerna/lerna). Projects in the monorepo can be found in `./packages`.
 
+## Prerequisites
+
+- Node >= v14.0.0 (LTS)
+
 ## Getting Started
 
 ```

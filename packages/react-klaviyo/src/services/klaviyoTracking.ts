@@ -1,4 +1,4 @@
-import { ShopifyItem, Variant } from '@nacelle/react-dev-utils';
+import { NacelleShopProduct, ProductVariant } from '@nacelle/types';
 
 import {
   TrackEvent,
@@ -35,7 +35,7 @@ function trackEvent(...eventDetails: TrackEvent | IdentifyCustomer) {
  *
  * @returns null
  */
-function viewedProduct(product: ShopifyItem): null | unknown {
+function viewedProduct(product: NacelleShopProduct): null | unknown {
   const item: KlaviyoTrackingItem = {
     Name: product.title,
     ProductID: decodeProductId(product.pimSyncSourceProductId),
@@ -68,7 +68,7 @@ function decodeProductId(productId: string): string {
  *
  * @returns the highest variant price
  */
-function variantPriceComparisions(variants: Variant[]): string {
+function variantPriceComparisions(variants: ProductVariant[]): string {
   return variants
     .map((variant) => variant.compareAtPrice)
     .sort()
@@ -83,7 +83,7 @@ function variantPriceComparisions(variants: Variant[]): string {
  *
  * @returns null
  */
-function addedToCart(product: ShopifyItem): null | unknown {
+function addedToCart(product: NacelleShopProduct): null | unknown {
   const item = {
     Name: product.title,
     ProductID: product.variant.id,

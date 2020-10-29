@@ -38,6 +38,7 @@
   "devDependencies": {
     "@nacelle/interphase-node": "^1.0.4",
     "@nacelle/react-dev-utils": "^2.8.0",
+    "@nacelle/types": "^3.0.0",
     "@storybook/react": "^6.0.5",
     "chalk": "^4.1.0",
     "dotenv-safe": "^8.2.0",

@@ -1,6 +1,6 @@
-import { ShopifyItem } from '../types';
+import { NacelleProduct, NacelleShopProduct } from '@nacelle/types';
 
-export const shopifyItem: ShopifyItem = {
+export const shopifyItem: NacelleShopProduct = {
   id: 'pepper-wood-apparel.myshopify.com::shevonne-bag::en-us',
   handle: 'shevonne-bag',
   locale: 'en-us',
@@ -140,7 +140,7 @@ export const shopifyItem: ShopifyItem = {
   createdAt: 1587622578
 };
 
-export const klaviyoItem: ShopifyItem = {
+export const klaviyoItem: NacelleProduct = {
   id: 'module-integrations.myshopify.com::music-at-work::en-us',
   handle: 'music-at-work',
   locale: 'en-us',

@@ -4,15 +4,12 @@
 /** @jsx jsx */
 import { FC, ChangeEvent, useState, useMemo, useEffect } from 'react';
 import { jsx } from '@emotion/core';
-import {
-  ShopifyItem,
-  Metafield,
-  formatCurrency
-} from '@nacelle/react-dev-utils';
+import { Metafield, NacelleShopProduct } from '@nacelle/types';
+import { formatCurrency } from '@nacelle/react-dev-utils';
 
 import {
   RechargeSelectProps,
-  Metafields,
+  RechargeMetafields,
   CartMetafield
 } from './RechargeSelect.types';
 import * as styles from './RechargeSelect.styles';
@@ -36,7 +33,7 @@ const RechargeSelect: FC<RechargeSelectProps> = ({
     ({ namespace }) => namespace === 'subscriptions'
   );
 
-  const metafields = useMemo<Metafields>(
+  const metafields = useMemo<RechargeMetafields>(
     () => mapMetafields(productMetafields),
     [productMetafields]
   );
@@ -166,8 +163,8 @@ const RechargeSelect: FC<RechargeSelectProps> = ({
   );
 };
 
-function mapMetafields(metafields: Metafield[]): Metafields {
-  return metafields.reduce<Metafields>((mappedFields, metafield) => {
+function mapMetafields(metafields: Metafield[]): RechargeMetafields {
+  return metafields.reduce<RechargeMetafields>((mappedFields, metafield) => {
     switch (metafield.key) {
       case 'has_subscription':
       case 'is_subscription_only':
@@ -185,11 +182,11 @@ function mapMetafields(metafields: Metafield[]): Metafields {
       default:
         return { ...mappedFields, [metafield.key]: metafield.value };
     }
-  }, {} as Metafields);
+  }, {} as RechargeMetafields);
 }
 
 function calculateDiscountPrice(
-  product: ShopifyItem,
+  product: NacelleShopProduct,
   discountPercent: number
 ): string {
   if (!discountPercent) {

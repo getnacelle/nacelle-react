@@ -32,7 +32,7 @@ const previewVariablesExist = Boolean(
 );
 
 if (
-  (process.env.NACELLE_PREVIEW_MODE || inPreviewBranch) &&
+  (process.env.NACELLE_PREVIEW_MODE === 'true' || inPreviewBranch) &&
   previewVariablesExist
 ) {
   // Initialize the Preview Connector

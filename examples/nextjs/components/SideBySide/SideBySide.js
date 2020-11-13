@@ -29,7 +29,10 @@ const SideBySide = ({ fields }) => {
         />
       </section>
       <section
-        css={[styles.column, { backgroundColor: fields.backgroundColor }]}
+        css={[
+          styles.column,
+          { backgroundColor: fields.backgroundColor, flex: 1 }
+        ]}
       >
         <div css={styles.content}>
           <h3 css={styles.title}>{fields.title}</h3>

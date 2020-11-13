@@ -7,10 +7,15 @@ import Link from 'next/link';
 import { useProductSearch } from 'providers/ProductSearch';
 import * as styles from './SearchBar.styles';
 
-const SearchResults = ({ show, results, hideResults }) => {
+const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
   if (!show) {
     return null;
   }
+
+  const onItemClick = () => {
+    hideResults();
+    resetSearchValue();
+  };
 
   return (
     <Fragment>
@@ -28,7 +33,7 @@ const SearchResults = ({ show, results, hideResults }) => {
               href={`/products/${item.handle}`}
               key={`${idx}-${item.handle}`}
             >
-              <a>
+              <a onClick={onItemClick}>
                 <div css={styles.resultCard}>
                   <Image
                     src={item.variants[0].featuredMedia.src}
@@ -70,6 +75,7 @@ const SearchBar = () => {
   const hideResults = () => setShowResults(false);
   const onInputChange = (evt) => setSearchValue(evt.target.value);
   const routeToSearchPage = () => router.push('/search');
+  const resetSearchValue = () => setSearchValue('');
 
   return (
     <Fragment>
@@ -105,6 +111,7 @@ const SearchBar = () => {
         show={showResults}
         results={searchResults}
         hideResults={hideResults}
+        resetSearchValue={resetSearchValue}
       />
     </Fragment>
   );

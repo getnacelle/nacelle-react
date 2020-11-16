@@ -8,7 +8,7 @@ First, setup the appropriate environment variables in `.env.local`:
 To use Contentful's Preview Mode, you'll need the following environment variables in addition to the two above:
 
 - `NACELLE_PREVIEW_MODE` - a boolean indicating if preview mode should be enabled. `true` will enable preview mode.
-- `VERCEL_GITHUB_COMMIT_REF` - a Vercel [system environment variable](https://vercel.com/docs/build-step#system-environment-variables) that specifies the branch the deployment was made from
+- `VERCEL_GITHUB_COMMIT_REF` - a Vercel [system environment variable](https://vercel.com/docs/build-step#system-environment-variables) that specifies the branch the deployment was made from. Note that this is only relevant for a Vercel deployment and is set automatically by Vercel.
 - `CONTENTFUL_PREVIEW_SPACE_ID` - the Contentful Space Id from Contentful's settings page
 - `CONTENTFUL_PREVIEW_API_TOKEN` - the Contentful API Token from Contentful's settings page
 

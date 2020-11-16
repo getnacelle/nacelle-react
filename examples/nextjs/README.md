@@ -1,18 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+First, setup the appropriate environment variables in `.env.local`:
+
+- `NACELLE_SPACE_ID` - your Nacelle Space Id from the Nacelle dashboard
+- `NACELLE_GRAPHQL_TOKEN` - your Nacelle GraphQL Token from the Nacelle dashboard
+
+To use Contentful's Preview Mode, you'll need the following environment variables in addition to the two above:
+
+- `NACELLE_PREVIEW_MODE` - a boolean indicating if preview mode should be enabled. `true` will enable preview mode.
+- `VERCEL_GITHUB_COMMIT_REF` - a Vercel [system environment variable](https://vercel.com/docs/build-step#system-environment-variables) that specifies the branch the deployment was made from. Note that this is only relevant for a Vercel deployment and is set automatically by Vercel.
+- `CONTENTFUL_PREVIEW_SPACE_ID` - the Contentful Space Id from Contentful's settings page
+- `CONTENTFUL_PREVIEW_API_TOKEN` - the Contentful API Token from Contentful's settings page
+
+Then run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
 ## Learn More
 

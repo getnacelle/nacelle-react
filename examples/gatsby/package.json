@@ -24,9 +24,9 @@
   "license": "ISC",
   "dependencies": {
     "@nacelle/gatsby-source-nacelle": "^2.8.0",
-    "gatsby": "^2.24.63",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "gatsby": "^2.26.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

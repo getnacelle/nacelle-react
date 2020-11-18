@@ -21,6 +21,8 @@
   "author": "Nacelle Inc. (getnacelle.com)",
   "license": "ISC",
   "dependencies": {
+    "@nacelle/client-js-sdk": "^3.1.0",
+    "@nacelle/contentful-preview-connector": "^0.1.5",
     "fs-extra": "^9.0.1",
     "gatsby-graphql-source-toolkit": "^0.6.3",
     "gatsby-source-filesystem": "^2.3.29"
@@ -29,8 +31,14 @@
     "gatsby": "^2.0.32"
   },
   "devDependencies": {
-    "eslint": "^7.6.0",
-    "lint-staged": "^10.2.11"
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-react": "^7.12.5",
+    "@babel/register": "^7.12.1",
+    "eslint": "^7.13.0",
+    "eslint-plugin-import": "^2.22.1",
+    "lint-staged": "^10.5.1"
   },
   "repository": {
     "type": "git",

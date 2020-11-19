@@ -4,12 +4,12 @@ const {
 } = require('./src/source-nodes');
 const { cmsPreviewEnabled } = require('./src/utils');
 
-require('dotenv').config();
-
 exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
+  // source data from Hail Frequency API & convert to Gatsby nodes
   await sourceNacelleNodes(gatsbyApi, pluginOptions);
 
   if (cmsPreviewEnabled(pluginOptions)) {
+    // source content data from Contentful Preview API & convert to Gatsby nodes
     await sourceContentfulPreviewNodes(gatsbyApi, pluginOptions);
   }
 };

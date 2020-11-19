@@ -62,6 +62,54 @@ module.exports = {
 };
 ```
 
+## Additional Features
+
+### Previewing Content from Contentful
+
+When Nacelle indexes content data from your Contentful space, only published content entries are indexed. To skip the Nacelle index and instead source unpublished content directly from Contentful, simply provide some additional environment variables and plugin options:
+
+```dotenv
+# .env
+
+# always required
+NACELLE_SPACE_ID=your-nacelle-space-id
+NACELLE_GRAPHQL_TOKEN=your-nacelle-graphql-token
+
+# required for Contentful preview
+CONTENTFUL_PREVIEW_SPACE_ID=your-contentful-space-id
+CONTENTFUL_PREVIEW_API_TOKEN=your-contentful-preview-api-token
+ENABLE_GATSBY_REFRESH_ENDPOINT=true
+```
+
+```javascript
+// gatsby-config.js
+require('dotenv').config();
+
+module.exports = {
+  plugins: [
+    {
+      resolve: '@nacelle/gatsby-theme-nacelle',
+      options: {
+        // always required
+        nacelleSpaceId: process.env.NACELLE_SPACE_ID,
+        nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+        // required for Contentful preview
+        contentfulPreviewSpaceId: process.env.CONTENTFUL_PREVIEW_SPACE_ID,
+        contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,
+        // optional toggle
+        cmsPreviewEnabled: true
+      }
+    }
+  ]
+};
+```
+
+Your Contentful Preview API Token can be found in your Contentful **Settings** under **Api keys**.
+
+By default, if the `contentfulPreviewSpaceId` and `contentfulPreviewApiToken` options are provided, content data will be sourced from Contentful's Preview API instead of the Nacelle content index. Setting `cmsPreviewEnabled` to `false` will allow you to toggle back to sourcing content data from the Nacelle content index while still providing `contentfulPreviewSpaceId` and `contentfulPreviewApiToken` options.
+
+Adding `ENABLE_GATSBY_REFRESH_ENDPOINT=true` to `.env` [enables content refreshing](https://www.gatsbyjs.com/docs/refreshing-content/) during local development. A **Refresh Data** button will appear in Gatsby's GraphiQL explorer. Typically, content changes made in Contentful take about 5-10 seconds before the data can be successfully refreshed.
+
 ## Next Steps
 
 Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](https://github.com/getnacelle/nacelle-react/tree/master/examples/gatsby) to learn how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.

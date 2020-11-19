@@ -29,10 +29,7 @@ exports.pluginOptionsSchema = ({ Joi }) => {
       `Contentful Preview API token from Contentful Dashboard settings`
     ),
     cmsPreviewEnabled: Joi.boolean().description(
-      `By default, if the 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' options are provided, ` +
-        `content data will be sourced from Contentful's Preview API instead of the Nacelle content index. ` +
-        `Setting 'cmsPreviewEnabled' to false will allow you to toggle back to sourcing content data from ` +
-        `the Nacelle content index while still providing 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' options.`
+      `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
     )
   });
 };

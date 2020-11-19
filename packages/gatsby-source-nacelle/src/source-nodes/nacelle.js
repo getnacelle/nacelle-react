@@ -9,10 +9,9 @@ const {
   loadSchema,
   createDefaultQueryExecutor
 } = require('gatsby-graphql-source-toolkit');
-const { getNacelleVariables } = require('../utils');
+const { cmsPreviewEnabled } = require('../utils');
 
-module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
-  const nacelleOptions = getNacelleVariables(pluginOptions);
+module.exports = async function (gatsbyApi, pluginOptions) {
   const CHUNK_SIZE = 100;
   const fragmentsDir = process.cwd() + `/gql-fragments`;
 
@@ -46,12 +45,8 @@ module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
     }
   };
 
-  async function createSourcingConfig(
-    gatsbyApi,
-    pluginOptions,
-    nacelleOptions
-  ) {
-    const { verbose } = pluginOptions;
+  async function createSourcingConfig(gatsbyApi, pluginOptions) {
+    const { nacelleSpaceId, nacelleGraphqlToken, verbose } = pluginOptions;
 
     // Set up remote schema:
     const defaultExecute = createDefaultQueryExecutor(
@@ -60,8 +55,8 @@ module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-nacelle-space-id': nacelleOptions.nacelleSpaceId,
-          'x-nacelle-space-token': nacelleOptions.nacelleGraphqlToken
+          'x-nacelle-space-id': nacelleSpaceId,
+          'x-nacelle-space-token': nacelleGraphqlToken
         }
       }
     );
@@ -159,7 +154,7 @@ module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
     );
 
     function getNodeTypes() {
-      return nacelleOptions.cmsPreview
+      return cmsPreviewEnabled(pluginOptions)
         ? gatsbyNodeTypesLessContent
         : gatsbyNodeTypes;
     }
@@ -182,7 +177,7 @@ module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
       gatsbyApi,
       schema,
       execute,
-      gatsbyTypePrefix: nodeConfig.nodePrefix,
+      gatsbyTypePrefix: 'nacelle',
       gatsbyNodeDefs: buildNodeDefinitions({
         gatsbyNodeTypes: getNodeTypes(),
         documents
@@ -212,18 +207,18 @@ module.exports = async function (gatsbyApi, pluginOptions, nodeConfig) {
     });
   }
 
-  const sourcingConfig = await createSourcingConfig(
-    gatsbyApi,
-    pluginOptions,
-    nacelleOptions
-  );
+  try {
+    const sourcingConfig = await createSourcingConfig(gatsbyApi, pluginOptions);
 
-  // Add explicit types to gatsby schema
-  await createSchemaCustomization(sourcingConfig);
+    // Add explicit types to gatsby schema
+    await createSchemaCustomization(sourcingConfig);
 
-  // Source nodes
-  await sourceAllNodes(sourcingConfig);
+    // Source nodes
+    await sourceAllNodes(sourcingConfig);
 
-  // Source the Space node manually (as it is not sourced automatically yet):
-  await sourceSpaceNode(sourcingConfig);
+    // Source the Space node manually (as it is not sourced automatically yet):
+    await sourceSpaceNode(sourcingConfig);
+  } catch (err) {
+    throw new Error(`Problem sourcing data from Nacelle:\n\n${err}`);
+  }
 };

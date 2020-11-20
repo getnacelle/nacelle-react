@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "eslint": "^7.13.0",
-    "eslint-plugin-import": "^2.22.1",
     "lint-staged": "^10.5.1"
   },
   "repository": {

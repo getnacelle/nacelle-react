@@ -25,7 +25,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       .allContent()
       .then((
         content // change name of reserved keys
-      ) => replaceKeys(content, { id: `remoteId`, fields: 'remoteFields' }))
+      ) => replaceKeys(content, { id: 'remoteId', fields: 'remoteFields' }))
       .catch((err) => {
         throw new Error(
           `Problem fetching content:\n\n${JSON.stringify(err, null, 2)}`
@@ -33,7 +33,6 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       });
 
     contentData.forEach((entry) => {
-      // const nodeContent = JSON.stringify(entry);
       const nodeMeta = {
         id: createNodeId(`NacelleContent-${entry.cmsSyncSourceContentId}`),
         parent: null,

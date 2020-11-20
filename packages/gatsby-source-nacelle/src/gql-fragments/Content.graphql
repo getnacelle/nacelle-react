@@ -42,7 +42,7 @@ fragment Content on Content {
       }
       featuredMedia {
         ... on Media {
-          id
+          remoteId: id
           type
           src
           thumbnailSrc
@@ -59,7 +59,7 @@ fragment Content on Content {
   blogHandle
   featuredMedia {
     ... on Media {
-      id
+      remoteId: id
       type
       src
       thumbnailSrc

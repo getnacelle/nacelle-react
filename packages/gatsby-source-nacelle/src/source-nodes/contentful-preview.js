@@ -24,8 +24,8 @@ module.exports = async function (gatsbyApi, pluginOptions) {
     const contentData = await client.data
       .allContent()
       .then((
-        content // Gatsby disallows `sys` and `fields` node keys, so change them
-      ) => replaceKeys(content, { sys: 'meta', fields: 'contentFields' }))
+        content // change name of reserved keys
+      ) => replaceKeys(content, { id: `remoteId`, fields: 'remoteFields' }))
       .catch((err) => {
         throw new Error(
           `Problem fetching content:\n\n${JSON.stringify(err, null, 2)}`
@@ -33,14 +33,13 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       });
 
     contentData.forEach((entry) => {
-      const nodeContent = JSON.stringify(entry);
+      // const nodeContent = JSON.stringify(entry);
       const nodeMeta = {
         id: createNodeId(`NacelleContent-${entry.cmsSyncSourceContentId}`),
         parent: null,
         children: [],
         internal: {
-          type: 'nacelleContent',
-          content: nodeContent,
+          type: 'NacelleContent',
           contentDigest: createContentDigest(entry)
         }
       };

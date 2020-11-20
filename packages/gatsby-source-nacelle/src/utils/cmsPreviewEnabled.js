@@ -9,9 +9,10 @@ module.exports = function (pluginOptions) {
     contentfulPreviewSpaceId && contentfulPreviewApiToken
   );
 
-  const previewEnabled = cmsPreviewEnabled
-    ? cmsPreviewEnabled && contentfulPreviewVariablesExist
-    : contentfulPreviewVariablesExist;
+  const previewEnabled =
+    typeof cmsPreviewEnabled !== 'undefined'
+      ? cmsPreviewEnabled && contentfulPreviewVariablesExist
+      : contentfulPreviewVariablesExist;
 
   if (
     !contentfulPreviewVariablesExist &&

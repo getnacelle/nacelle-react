@@ -177,7 +177,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       gatsbyApi,
       schema,
       execute,
-      gatsbyTypePrefix: 'nacelle',
+      gatsbyTypePrefix: 'Nacelle',
       gatsbyNodeDefs: buildNodeDefinitions({
         gatsbyNodeTypes: getNodeTypes(),
         documents

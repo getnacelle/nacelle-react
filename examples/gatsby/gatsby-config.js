@@ -7,10 +7,12 @@ module.exports = {
       options: {
         nacelleSpaceId: process.env.NACELLE_SPACE_ID,
         nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-        cmsPreviewEnabled: true,
+        cmsPreviewEnabled: false,
         contentfulPreviewSpaceId: process.env.CONTENTFUL_PREVIEW_SPACE_ID,
         contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN
       }
-    }
+    },
+    'gatsby-transformer-sharp',
+    'gatsby-plugin-sharp'
   ]
 };

@@ -3,7 +3,6 @@ module.exports = `
   type NacelleMedia @dontInfer {
     id: ID
     type: String!
-    remoteImage: File @link
     src: String!
     thumbnailSrc: String!
     altText: String

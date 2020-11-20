@@ -25,7 +25,6 @@
     "@nacelle/contentful-preview-connector": "^0.1.5",
     "fs-extra": "^9.0.1",
     "gatsby-graphql-source-toolkit": "^0.6.3",
-    "gatsby-source-filesystem": "^2.6.0",
     "lodash.isobject": "^3.0.2",
     "lodash.transform": "^4.6.0"
   },

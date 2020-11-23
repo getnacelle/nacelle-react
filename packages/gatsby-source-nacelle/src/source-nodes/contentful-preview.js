@@ -44,7 +44,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
     });
   } catch (err) {
     throw new Error(
-      `Problem sourcing content from Contentful Preview API:\n\n${err}`
+      `Problem sourcing content from Contentful Preview API: ${err.message}`
     );
   }
 };

@@ -1,11 +1,12 @@
 module.exports = `
   "Details for different media types associated with content & products"
   type NacelleMedia @dontInfer {
-    id: ID
+    remoteId: ID
     type: String!
     src: String!
     thumbnailSrc: String!
     altText: String
+    remoteImage: File @link
   }
 
   "Content from a CMS that has been indexed by Nacelle"

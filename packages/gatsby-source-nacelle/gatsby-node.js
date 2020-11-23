@@ -2,7 +2,7 @@ const {
   sourceNacelleNodes,
   sourceContentfulPreviewNodes
 } = require('./src/source-nodes');
-const { cmsPreviewEnabled } = require('./src/utils');
+const { cmsPreviewEnabled, createRemoteImageFileNode } = require('./src/utils');
 const typeDefs = require('./src/type-defs');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
@@ -31,7 +31,6 @@ exports.createSchemaCustomization = ({ actions }) => {
   actions.createTypes(typeDefs);
 };
 
-const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 exports.onCreateNode = async ({
   actions: { createNode },
   getCache,
@@ -39,22 +38,34 @@ exports.onCreateNode = async ({
   node
 }) => {
   // because onCreateNode is called for all nodes, verify that you are only running this code on nodes created by your plugin
-  if (node.internal.type === 'NacelleMedia') {
-    console.log(`Nacelle Media!\n\n${JSON.stringify(node, null, 2)}`);
-    // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
-    const fileNode = await createRemoteFileNode({
-      // the url of the remote image to generate a node for
-      url: node.src,
-      getCache,
+  if (node.internal.type === 'NacelleProduct') {
+    await createRemoteImageFileNode(
+      node,
+      ['featuredMedia', 'media'],
       createNode,
-      createNodeId,
-      parentNodeId: node.id
-    });
+      getCache,
+      createNodeId
+    );
+  }
 
-    if (fileNode) {
-      // with schemaCustomization: add a field `remoteImage` to your source plugin's node from the File node
-      node.remoteImage = fileNode.id;
-    }
+  if (node.internal.type === 'NacelleCollection') {
+    await createRemoteImageFileNode(
+      node,
+      'featuredMedia',
+      createNode,
+      getCache,
+      createNodeId
+    );
+  }
+
+  if (node.internal.type === 'NacelleContent') {
+    await createRemoteImageFileNode(
+      node,
+      'featuredMedia',
+      createNode,
+      getCache,
+      createNodeId
+    );
   }
 };
 

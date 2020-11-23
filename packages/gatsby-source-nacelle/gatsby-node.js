@@ -1,8 +1,8 @@
 const {
-  sourceNacelleNodes,
-  sourceContentfulPreviewNodes
+  sourceProductAndCollectionNodes,
+  sourceContentNodes
 } = require('./src/source-nodes');
-const { cmsPreviewEnabled, createRemoteImageFileNode } = require('./src/utils');
+const { createRemoteImageFileNode } = require('./src/utils');
 const typeDefs = require('./src/type-defs');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
@@ -23,6 +23,15 @@ exports.pluginOptionsSchema = ({ Joi }) => {
       `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
     )
   });
+};
+
+exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
+  // source products & collections from Nacelle's Hail Frequency API & convert to Gatsby nodes
+  await sourceProductAndCollectionNodes(gatsbyApi, pluginOptions);
+
+  // if Contentful preview is enabled, source content from Contentful Preview API,
+  // otherwise source content from Nacelle's Hail Frequency API, then convert to Gatsby nodes
+  await sourceContentNodes(gatsbyApi, pluginOptions);
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
@@ -66,15 +75,5 @@ exports.onCreateNode = async ({
       getCache,
       createNodeId
     );
-  }
-};
-
-exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
-  // source data from Hail Frequency API & convert to Gatsby nodes
-  await sourceNacelleNodes(gatsbyApi, pluginOptions);
-
-  if (cmsPreviewEnabled(pluginOptions)) {
-    // source content data from Contentful Preview API & convert to Gatsby nodes
-    await sourceContentfulPreviewNodes(gatsbyApi, pluginOptions);
   }
 };

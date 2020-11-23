@@ -9,11 +9,10 @@ const {
   loadSchema,
   createDefaultQueryExecutor
 } = require('gatsby-graphql-source-toolkit');
-const { cmsPreviewEnabled } = require('../utils');
 
 module.exports = async function (gatsbyApi, pluginOptions) {
   const CHUNK_SIZE = 100;
-  const fragmentsDir = process.cwd() + `/gql-fragments`;
+  const fragmentsDir = process.cwd() + '/gql-fragments';
 
   const PaginateNacelle = {
     name: 'NacellePagination',
@@ -111,32 +110,6 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       `
       },
       {
-        remoteTypeName: 'Content',
-        queries: `
-        query LIST_CONTENT {
-          getContent(first: $first, after: $after) {
-            nextToken
-            items { ..._ContentId_ }
-          }
-        }
-        query NODE_CONTENT {
-          getContentByHandle(
-            type: $type
-            handle: $handle
-            locale: $locale
-          ) {
-            ..._ContentId_
-          }
-        }
-        fragment _ContentId_ on Content {
-          __typename
-          type
-          handle
-          locale
-        }
-      `
-      },
-      {
         remoteTypeName: 'Space',
         queries: `
         query NODE_SPACE {
@@ -149,27 +122,17 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       }
     ];
 
-    const gatsbyNodeTypesLessContent = gatsbyNodeTypes.filter(
-      (nodeType) => nodeType.remoteTypeName !== 'Content'
-    );
-
-    function getNodeTypes() {
-      return cmsPreviewEnabled(pluginOptions)
-        ? gatsbyNodeTypesLessContent
-        : gatsbyNodeTypes;
-    }
-
     // Provide (or generate) fragments with fields to be fetched
     ensureDir(fragmentsDir);
     const fragments = await readOrGenerateDefaultFragments(fragmentsDir, {
       schema,
-      gatsbyNodeTypes: getNodeTypes()
+      gatsbyNodeTypes
     });
 
     // Compile sourcing queries
     const documents = compileNodeQueries({
       schema,
-      gatsbyNodeTypes: getNodeTypes(),
+      gatsbyNodeTypes,
       customFragments: fragments
     });
 
@@ -179,7 +142,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       execute,
       gatsbyTypePrefix: 'Nacelle',
       gatsbyNodeDefs: buildNodeDefinitions({
-        gatsbyNodeTypes: getNodeTypes(),
+        gatsbyNodeTypes,
         documents
       }),
       paginationAdapters: [PaginateNacelle]
@@ -191,7 +154,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
     const document = config.gatsbyNodeDefs.get(remoteTypeName).document;
     const result = await config.execute({
       query: print(document),
-      operationName: `NODE_SPACE`,
+      operationName: 'NODE_SPACE',
       variables: {}
     });
 
@@ -219,6 +182,6 @@ module.exports = async function (gatsbyApi, pluginOptions) {
     // Source the Space node manually (as it is not sourced automatically yet):
     await sourceSpaceNode(sourcingConfig);
   } catch (err) {
-    throw new Error(`Problem sourcing data from Nacelle:\n\n${err}`);
+    throw new Error(`Problem sourcing data from Nacelle: ${err.message}`);
   }
 };

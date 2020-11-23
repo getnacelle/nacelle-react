@@ -1,5 +1,5 @@
 const { nacelleClient } = require('../services');
-const { replaceKeys } = require('../utils');
+const { replaceKeys, cmsPreviewEnabled } = require('../utils');
 
 module.exports = async function (gatsbyApi, pluginOptions) {
   const { actions, createNodeId, createContentDigest } = gatsbyApi;
@@ -13,7 +13,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
   } = pluginOptions;
 
   const client = nacelleClient({
-    previewMode: true,
+    previewMode: cmsPreviewEnabled(pluginOptions),
     nacelleSpaceId,
     nacelleGraphqlToken,
     contentfulPreviewSpaceId,

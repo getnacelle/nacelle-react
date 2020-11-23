@@ -11,6 +11,8 @@ module.exports = {
         contentfulPreviewSpaceId: process.env.CONTENTFUL_PREVIEW_SPACE_ID,
         contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN
       }
-    }
+    },
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp'
   ]
 };

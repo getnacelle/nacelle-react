@@ -25,6 +25,8 @@
   "dependencies": {
     "@nacelle/gatsby-source-nacelle": "^2.8.0",
     "gatsby": "^2.27.0",
+    "gatsby-plugin-sharp": "^2.9.0",
+    "gatsby-transformer-sharp": "^2.7.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },

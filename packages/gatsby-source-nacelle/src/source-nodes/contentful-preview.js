@@ -21,18 +21,15 @@ module.exports = async function (gatsbyApi, pluginOptions) {
   });
 
   try {
-    const contentData = await client.data
-      .allContent()
-      .then((
-        content // change name of reserved keys
-      ) => replaceKeys(content, { id: 'remoteId', fields: 'remoteFields' }))
-      .catch((err) => {
-        throw new Error(
-          `Problem fetching content:\n\n${JSON.stringify(err, null, 2)}`
-        );
-      });
+    const contentData = await client.data.allContent();
 
-    contentData.forEach((entry) => {
+    // change name of reserved keys
+    const formattedData = replaceKeys(contentData, {
+      id: 'remoteId',
+      fields: 'remoteFields'
+    });
+
+    formattedData.forEach((entry) => {
       const nodeMeta = {
         id: createNodeId(`NacelleContent-${entry.cmsSyncSourceContentId}`),
         parent: null,

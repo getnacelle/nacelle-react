@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'gatsby';
 
-export default function ProductDetail({ data }) {
+const ProductDetail = ({ data }) => {
   const { title, featuredMedia } = data?.nacelleProduct;
   return (
     <>
@@ -13,7 +13,9 @@ export default function ProductDetail({ data }) {
       />
     </>
   );
-}
+};
+
+export default ProductDetail;
 
 export const query = graphql`
   query ProductQuery($handle: String!) {

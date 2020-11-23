@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, graphql, useStaticQuery } from 'gatsby';
 
-export default function AllProducts() {
+const AllProducts = () => {
   const productsData = useStaticQuery(graphql`
     query ProductsQuery {
       allNacelleProduct {
@@ -39,4 +39,6 @@ export default function AllProducts() {
       </ul>
     </>
   );
-}
+};
+
+export default AllProducts;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, graphql } from 'gatsby';
 
-export default function Collection({ data, pageContext }) {
+const Collection = ({ data, pageContext }) => {
   const { title } = pageContext;
   const products = data.allNacelleProduct.edges;
   return (
@@ -23,7 +23,9 @@ export default function Collection({ data, pageContext }) {
       </ul>
     </>
   );
-}
+};
+
+export default Collection;
 
 export const query = graphql`
   query FilteredProductsQuery($handles: [String]) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, graphql, useStaticQuery } from 'gatsby';
 
-export default function Layout({ children }) {
+const Layout = ({ children }) => {
   const query = graphql`
     query LinkListsQuery {
       nacelleSpace {
@@ -38,4 +38,6 @@ export default function Layout({ children }) {
       {children}
     </>
   );
-}
+};
+
+export default Layout;

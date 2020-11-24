@@ -2,13 +2,15 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'gatsby';
 import { useCart } from '@nacelle/react-hooks';
-import { Button, Grid } from '@nacelle/react-components';
 import { formatCurrency } from '@nacelle/react-dev-utils';
+import { Image, Button, Grid } from '@nacelle/react-components';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './ProductCard.styles';
+
+const IMAGE_FORMATS = ['webp', 'jpg'];
 
 const LinkPDP = ({ pdpLink, children }) => {
   if (!pdpLink) {
@@ -16,7 +18,7 @@ const LinkPDP = ({ pdpLink, children }) => {
   }
 
   return (
-    <Link to="/products/[handle]" as={pdpLink} css={styles.pdpLink}>
+    <Link to={pdpLink} css={styles.pdpLink}>
       {children}
     </Link>
   );
@@ -26,6 +28,7 @@ const ProductCard = ({
   product,
   cardStyles,
   showDescription = false,
+  constrainImages = true,
   isPDP = false,
   children
 }) => {
@@ -53,6 +56,8 @@ const ProductCard = ({
     return toggleCart();
   };
 
+  const imageStyles = constrainImages ? styles.productImage : styles.pdpImage;
+
   const incrementQty = () => setQuantity((qty) => qty + 1);
   const decrementQty = () => setQuantity((qty) => (qty > 0 ? qty - 1 : 0));
 
@@ -64,14 +69,25 @@ const ProductCard = ({
           columnGap={isPDP ? 98 : 0}
         >
           <LinkPDP pdpLink={productLink}>
-            <GatsbyImage
-              width={200}
-              image={imageData}
-              alt={
-                product.featuredMedia.altText || product.title || 'product card'
-              }
-              css={styles.productImage}
-            />
+            {imageData ? (
+              <GatsbyImage
+                image={imageData}
+                alt={
+                  product.featuredMedia.altText ||
+                  product.title ||
+                  'product card'
+                }
+                css={imageStyles}
+              />
+            ) : (
+              <Image
+                src={product.featuredMedia.src}
+                alt={product.featuredMedia.altText}
+                width={320}
+                format={IMAGE_FORMATS}
+                styles={imageStyles}
+              />
+            )}
           </LinkPDP>
 
           <div css={styles.column}>

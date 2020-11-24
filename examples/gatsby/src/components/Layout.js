@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
           </Link>
         ))}
       </nav>
-      {children}
+      <div style={{ display: 'grid', placeItems: 'center' }}>{children}</div>
     </>
   );
 };

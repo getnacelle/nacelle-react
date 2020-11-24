@@ -1,4 +1,4 @@
-const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
+const { createRemoteFileNode } = require('gatsby-source-filesystem');
 
 function getNodeMedia(node, nodeMedia) {
   if (Array.isArray(nodeMedia)) {

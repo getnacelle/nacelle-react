@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link, graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 const Collection = ({ data, pageContext }) => {
   const { title } = pageContext;
@@ -13,10 +14,9 @@ const Collection = ({ data, pageContext }) => {
             <h2>
               <Link to={`/products/${el.node.handle}`}>{el.node.title}</Link>
             </h2>
-            <img
-              src={el.node.featuredMedia.src}
-              alt={el.node.title}
-              style={{ width: '100%' }}
+            <GatsbyImage
+              image={getImage(el.node.featuredMedia.remoteImage)}
+              alt={el.node.featuredMedia.altText}
             />
           </li>
         ))}
@@ -42,6 +42,11 @@ export const query = graphql`
           featuredMedia {
             src
             altText
+            remoteImage {
+              childImageSharp {
+                gatsbyImageData
+              }
+            }
           }
         }
       }

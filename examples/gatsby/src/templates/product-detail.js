@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 const ProductDetail = ({ data }) => {
   const { title, featuredMedia } = data?.nacelleProduct;
+  const imageData = getImage(featuredMedia.remoteImage);
   return (
     <>
       <h2>{title}</h2>
-      <img
-        src={featuredMedia.src}
-        alt={featuredMedia.altText}
-        style={{ width: '100%' }}
-      />
+      <GatsbyImage image={imageData} alt={featuredMedia.altText} />
     </>
   );
 };
@@ -23,6 +21,11 @@ export const query = graphql`
       handle
       title
       featuredMedia {
+        remoteImage {
+          childImageSharp {
+            gatsbyImageData
+          }
+        }
         src
         altText
       }

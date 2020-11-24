@@ -64,29 +64,7 @@ export const query = graphql`
       }
     }
     nacelleContent(type: { eq: "page" }, handle: { eq: "shop" }) {
-      sections {
-        fields {
-          mobileFullHeight
-          ctaUrl
-          size
-          ctaText
-          handle
-          title
-          alignment
-          contentType
-          backgroundColor
-          reverseDesktop
-          reverseMobile
-          productHandle
-          heroImageFocus
-          publishDate
-          backgroundAltTag
-          textColor
-          itemsToShow
-          collectionHandle
-          subtitle
-        }
-      }
+      sections
     }
   }
 `;

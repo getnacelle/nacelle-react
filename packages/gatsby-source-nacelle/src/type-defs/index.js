@@ -10,7 +10,7 @@ module.exports = `
   }
 
   "Content from a CMS that has been indexed by Nacelle"
-  type NacelleContent implements Node @infer {
+  type NacelleContent implements Node @dontInfer {
     remoteId: ID!
     handle: String!
     locale: String!
@@ -22,7 +22,9 @@ module.exports = `
     type: String!
     title: String
     description: String
+    sections: JSON
     tags: [String!]
+    remoteFields: JSON
     articleLists: [ContentArticleList!]
     relatedArticles: [ContentRelatedArticle!]
     collectionHandle: String

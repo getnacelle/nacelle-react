@@ -23,8 +23,17 @@
   "author": "Nick Richmond",
   "license": "ISC",
   "dependencies": {
+    "@emotion/core": "^10.1.1",
+    "@loadable/component": "^5.14.1",
+    "@nacelle/client-js-sdk": "^3.1.0",
     "@nacelle/gatsby-source-nacelle": "^2.8.0",
+    "@nacelle/react-components": "^2.8.0",
+    "@nacelle/react-dev-utils": "^2.8.0",
+    "@nacelle/react-hooks": "2.6.0",
+    "@react-hook/media-query": "^1.1.1",
     "gatsby": "^2.27.0",
+    "gatsby-alias-imports": "^1.0.6",
+    "gatsby-plugin-emotion": "^4.5.0",
     "gatsby-plugin-image": "^0.2.0",
     "gatsby-plugin-sharp": "^2.9.0",
     "gatsby-transformer-sharp": "^2.7.0",
@@ -32,6 +41,8 @@
     "react-dom": "^17.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.8",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",

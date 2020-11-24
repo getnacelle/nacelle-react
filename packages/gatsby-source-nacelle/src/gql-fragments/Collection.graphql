@@ -10,7 +10,7 @@ fragment Collection on Collection {
   description
   featuredMedia {
     ... on Media {
-      remoteId: id
+      id
       type
       src
       thumbnailSrc

@@ -18,7 +18,7 @@ fragment Product on Product {
   productType
   featuredMedia {
     ... on Media {
-      remoteId: id
+      id
       type
       src
       thumbnailSrc
@@ -30,7 +30,7 @@ fragment Product on Product {
   tags
   media {
     ... on Media {
-      remoteId: id
+      id
       type
       src
       thumbnailSrc
@@ -39,7 +39,7 @@ fragment Product on Product {
   }
   metafields {
     ... on Metafield {
-      remoteId: id
+      id
       namespace
       key
       value
@@ -47,7 +47,7 @@ fragment Product on Product {
   }
   variants {
     ... on Variant {
-      remoteId: id
+      id
       title
       price
       priceCurrency
@@ -55,7 +55,7 @@ fragment Product on Product {
       compareAtPriceCurrency
       priceRules {
         ... on PriceRule {
-          remoteId: id
+          id
           handle
           title
           price
@@ -68,7 +68,7 @@ fragment Product on Product {
               price
               metafields {
                 ... on Metafield {
-                  remoteId: id
+                  id
                   namespace
                   key
                   value
@@ -79,7 +79,7 @@ fragment Product on Product {
           availableTo
           metafields {
             ... on Metafield {
-              remoteId: id
+              id
               namespace
               key
               value
@@ -96,7 +96,7 @@ fragment Product on Product {
       }
       featuredMedia {
         ... on Media {
-          remoteId: id
+          id
           type
           src
           thumbnailSrc
@@ -107,7 +107,7 @@ fragment Product on Product {
       availableForSale
       metafields {
         ... on Metafield {
-          remoteId: id
+          id
           namespace
           key
           value

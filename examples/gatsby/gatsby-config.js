@@ -14,6 +14,8 @@ module.exports = {
     },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
-    'gatsby-plugin-image'
+    'gatsby-plugin-image',
+    'gatsby-plugin-emotion',
+    'gatsby-alias-imports'
   ]
 };

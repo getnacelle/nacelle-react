@@ -29,7 +29,7 @@ fragment Space on Space {
   }
   metafields {
     ... on Metafield {
-      remoteId: id
+      id
       namespace
       key
       value

@@ -7,7 +7,7 @@ import { Button, Image } from '@nacelle/react-components';
 import SearchBar from 'components/SearchBar';
 import * as styles from './Header.styles';
 
-const MobileNav = ({ show, navItems, toggleNav, title, path }) => {
+const MobileNav = ({ show, navItems, toggleNav, title }) => {
   const navStateStyle = show ? styles.show : styles.hide;
 
   return (
@@ -25,49 +25,40 @@ const MobileNav = ({ show, navItems, toggleNav, title, path }) => {
         <strong>{title}</strong>
       </div>
       <div css={styles.mobileNavItems}>
-        {navItems.map((link, idx) => {
-          const isCurrentPage = path === link.to;
-
-          return (
-            <Link
-              to={link.to}
-              key={`${link.title}-${idx}`}
-              onClick={toggleNav}
-              css={[
-                styles.mobileNavLink,
-                isCurrentPage && { color: '#ee7acb' }
-              ]}
-            >
-              {link.title}
-            </Link>
-          );
-        })}
+        {navItems.map((link, idx) => (
+          <Link
+            to={link.to}
+            key={`${link.title}-${idx}`}
+            onClick={toggleNav}
+            activeStyle={{ color: '#ee7acb' }}
+            css={styles.mobileNavLink}
+          >
+            {link.title}
+          </Link>
+        ))}
       </div>
     </nav>
   );
 };
 
-const DesktopNav = ({ navItems, path }) => {
+const DesktopNav = ({ navItems }) => {
   return (
     <nav css={styles.nav}>
-      {navItems.map((link, idx) => {
-        const isCurrentPage = path === link.to;
-
-        return (
-          <Link
-            to={link.to}
-            key={`${link.title}-${idx}`}
-            css={[styles.navLink, isCurrentPage && { color: '#ee7acb' }]}
-          >
-            {link.title}
-          </Link>
-        );
-      })}
+      {navItems.map((link, idx) => (
+        <Link
+          to={link.to}
+          key={`${link.title}-${idx}`}
+          activeStyle={{ color: '#ee7acb' }}
+          css={styles.navLink}
+        >
+          {link.title}
+        </Link>
+      ))}
     </nav>
   );
 };
 
-const Header = ({ space, path }) => {
+const Header = ({ space }) => {
   const [{ cart }, { toggleCart }] = useCart();
   const [showNav, setShowNav] = useState(false);
   const [showCartCount, setShowCartCount] = useState(false);
@@ -94,9 +85,8 @@ const Header = ({ space, path }) => {
         navItems={navItems}
         toggleNav={toggleNav}
         title={space.name}
-        path={path}
       />
-      <DesktopNav navItems={navItems} path={path} />
+      <DesktopNav navItems={navItems} />
       <div css={styles.buttons}>
         <SearchBar />
         <Button

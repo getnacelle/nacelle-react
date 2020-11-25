@@ -7,7 +7,7 @@ import Header from 'components/Header';
 
 const Cart = Loadable(() => import('../Cart'));
 
-const Layout = ({ children, path }) => {
+const Layout = ({ children }) => {
   const query = graphql`
     query LinkListsQuery {
       nacelleSpace {
@@ -26,7 +26,7 @@ const Layout = ({ children, path }) => {
   const spaceData = useStaticQuery(query);
   return (
     <>
-      <Header space={spaceData.nacelleSpace} path={path} />
+      <Header space={spaceData.nacelleSpace} />
       <Cart />
       <main>{children}</main>
       <Footer space={spaceData.nacelleSpace} />

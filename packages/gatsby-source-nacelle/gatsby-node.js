@@ -50,7 +50,8 @@ exports.onCreateNode = async ({
   const gatsbyActions = { createNode, getCache, createNodeId };
   const isImage = (nodeMediaEntry) =>
     nodeMediaEntry &&
-    nodeMediaEntry.type & nodeMediaEntry.type.startsWith('image');
+    nodeMediaEntry.type &&
+    nodeMediaEntry.type.startsWith('image');
 
   if (node.internal.type === 'NacelleProduct') {
     await createRemoteImageFileNode(
@@ -68,6 +69,7 @@ exports.onCreateNode = async ({
   }
 
   if (node.internal.type === 'NacelleContent') {
+    console.log(`Creating content node...`);
     await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
       isImage
     });

@@ -47,33 +47,29 @@ exports.onCreateNode = async ({
   node
 }) => {
   // because onCreateNode is called for all nodes, verify that you are only running this code on nodes created by your plugin
+  const gatsbyActions = { createNode, getCache, createNodeId };
+  const isImage = (nodeMediaEntry) =>
+    nodeMediaEntry &&
+    nodeMediaEntry.type & nodeMediaEntry.type.startsWith('image');
+
   if (node.internal.type === 'NacelleProduct') {
     await createRemoteImageFileNode(
       node,
       ['featuredMedia', 'media'],
-      createNode,
-      getCache,
-      createNodeId
+      gatsbyActions,
+      { isImage }
     );
   }
 
   if (node.internal.type === 'NacelleCollection') {
-    await createRemoteImageFileNode(
-      node,
-      'featuredMedia',
-      createNode,
-      getCache,
-      createNodeId
-    );
+    await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
+      isImage
+    });
   }
 
   if (node.internal.type === 'NacelleContent') {
-    await createRemoteImageFileNode(
-      node,
-      'featuredMedia',
-      createNode,
-      getCache,
-      createNodeId
-    );
+    await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
+      isImage
+    });
   }
 };

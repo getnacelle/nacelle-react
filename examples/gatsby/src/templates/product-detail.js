@@ -59,7 +59,7 @@ export const query = graphql`
             gatsbyImageData(
               maxWidth: 320
               layout: FLUID
-              placeholder: DOMINANT_COLOR
+              placeholder: TRACED_SVG
             )
           }
         }
@@ -90,7 +90,7 @@ export const query = graphql`
               gatsbyImageData(
                 maxWidth: 320
                 layout: FLUID
-                placeholder: DOMINANT_COLOR
+                placeholder: TRACED_SVG
               )
             }
           }

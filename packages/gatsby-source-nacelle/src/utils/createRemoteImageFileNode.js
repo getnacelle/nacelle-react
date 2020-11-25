@@ -87,6 +87,7 @@ module.exports = async function createRemoteImageFileNode(
   try {
     const nodeMediaArray = Array.isArray(nodeMedia) ? nodeMedia : [nodeMedia];
     const options = { isImage, imageProperties };
+
     nodeMediaArray.forEach(async (media) => {
       if (Array.isArray(node[media])) {
         node.media.forEach(async (_media, idx) => {

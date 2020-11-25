@@ -1,3 +1,5 @@
 gql-fragments
 yarn.lock
 *.log
+
+.vercel

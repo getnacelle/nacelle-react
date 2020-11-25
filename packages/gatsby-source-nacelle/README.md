@@ -64,6 +64,18 @@ module.exports = {
 
 ## Additional Features
 
+### Gatsby Image
+
+`@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
+
+Enabling these image processing techniques requires installing [`gatsby-plugin sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp) and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
+
+```
+npm i gatsby-plugin-sharp gatsby-transformer-sharp
+```
+
+...as well as either [`gatsby-image`](https://www.npmjs.com/package/gatsby-image) or Gatsby's latest offering, [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image). Please refer to the [example project](../../examples/gatsby) to see how `@nacelle/gatsby-source-nacelle` can be used with [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image).
+
 ### Previewing Content from Contentful
 
 When Nacelle indexes content data from your Contentful space, only published content entries are indexed. To skip the Nacelle index and instead source unpublished content directly from Contentful, simply provide some additional environment variables and plugin options:
@@ -109,12 +121,6 @@ Your Contentful Preview API Token can be found in your Contentful **Settings** u
 By default, if the `contentfulPreviewSpaceId` and `contentfulPreviewApiToken` options are provided, content data will be sourced from Contentful's Preview API instead of the Nacelle content index. Setting `cmsPreviewEnabled` to `false` will allow you to toggle back to sourcing content data from the Nacelle content index while still providing `contentfulPreviewSpaceId` and `contentfulPreviewApiToken` options.
 
 Adding `ENABLE_GATSBY_REFRESH_ENDPOINT=true` to `.env` [enables content refreshing](https://www.gatsbyjs.com/docs/refreshing-content/) during local development. A **Refresh Data** button will appear in Gatsby's GraphiQL explorer. Typically, content changes made in Contentful take about 5-10 seconds before the data can be successfully refreshed.
-
-## Gatsby Image
-
-`@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
-
-Please refer to the [example project](../../examples/gatsby) to see how `@nacelle/gatsby-source-nacelle` can be used with [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image).
 
 ## Next Steps
 

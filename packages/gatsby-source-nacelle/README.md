@@ -15,25 +15,25 @@ To learn more, check out the [Nacelle docs](https://docs.getnacelle.com/intro.ht
 
 ## Quick Start
 
-Follow these steps to add `gatsby-theme-nacelle` to your Gatsby site:
+Follow these steps to add `gatsby-source-nacelle` to your Gatsby site:
 
 ### Install
 
 #### With Yarn
 
 ```shell
-yarn add @nacelle/gatsby-theme-nacelle
+yarn add @nacelle/gatsby-source-nacelle
 ```
 
 #### With NPM
 
 ```shell
-npm i @nacelle/gatsby-theme-nacelle
+npm i @nacelle/gatsby-source-nacelle
 ```
 
 ### Configure
 
-Then add the theme to your `gatsby-config.js`. Be sure to include your `nacelle-space-id` and `nacelle-graphql-token`, which you can find in your Space settings in the [Nacelle Dashboard](https://dashboard.getnacelle.com/).
+Then add the plugin to your `gatsby-config.js`. Be sure to include your `nacelle-space-id` and `nacelle-graphql-token`, which you can find in your Space settings in the [Nacelle Dashboard](https://dashboard.getnacelle.com/).
 
 #### Adding Your Credentials Securely
 
@@ -52,7 +52,7 @@ require('dotenv').config();
 module.exports = {
   plugins: [
     {
-      resolve: '@nacelle/gatsby-theme-nacelle',
+      resolve: '@nacelle/gatsby-source-nacelle',
       options: {
         nacelleSpaceId: process.env.NACELLE_SPACE_ID,
         nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
@@ -88,7 +88,7 @@ require('dotenv').config();
 module.exports = {
   plugins: [
     {
-      resolve: '@nacelle/gatsby-theme-nacelle',
+      resolve: '@nacelle/gatsby-source-nacelle',
       options: {
         // always required
         nacelleSpaceId: process.env.NACELLE_SPACE_ID,
@@ -110,6 +110,12 @@ By default, if the `contentfulPreviewSpaceId` and `contentfulPreviewApiToken` op
 
 Adding `ENABLE_GATSBY_REFRESH_ENDPOINT=true` to `.env` [enables content refreshing](https://www.gatsbyjs.com/docs/refreshing-content/) during local development. A **Refresh Data** button will appear in Gatsby's GraphiQL explorer. Typically, content changes made in Contentful take about 5-10 seconds before the data can be successfully refreshed.
 
+## Gatsby Image
+
+`@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
+
+Please refer to the [example project](../../examples/gatsby) to see how `@nacelle/gatsby-source-nacelle` can be used with [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image).
+
 ## Next Steps
 
-Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [examples](https://github.com/getnacelle/nacelle-react/tree/master/examples/gatsby) to learn how to create a basic eCommerce store with product & content data provided by `gatsby-source-nacelle`.
+Once you've established a connection to Nacelle's Hail Frequency API, it's time to start building out your store. Check out the [example project](../../examples/gatsby) to learn how to create a basic eCommerce store with product & content data provided by `@nacelle/gatsby-source-nacelle`.

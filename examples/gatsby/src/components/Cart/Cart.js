@@ -39,6 +39,7 @@ const Cart = () => {
           <Image
             styles={styles.closeIcon}
             src="https://nacelle-assets.s3-us-west-2.amazonaws.com/default-close-icon.svg"
+            alt="close the cart"
           />
         </Button>
       </header>
@@ -104,6 +105,7 @@ const CartItem = ({ item, cartActions, isMobile }) => {
         <Image
           styles={styles.cartItemThumbnail}
           src={item.image.thumbnailSrc}
+          alt={item.image.altText || item.title}
         />
       </Link>
 

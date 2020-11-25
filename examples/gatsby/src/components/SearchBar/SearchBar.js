@@ -27,6 +27,8 @@ const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
             item.locale,
             item.priceRange.currencyCode
           );
+          const altText =
+            item.variants[0].featuredMedia.altText || item.variants[0].title;
 
           return (
             <Link
@@ -37,6 +39,7 @@ const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
               <div css={styles.resultCard}>
                 <Image
                   src={item.variants[0].featuredMedia.src}
+                  alt={altText}
                   width={148}
                   styles={styles.productImage}
                 />

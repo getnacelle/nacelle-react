@@ -19,6 +19,7 @@ const MobileNav = ({ show, navItems, toggleNav, title, path }) => {
           <Image
             styles={styles.closeIcon}
             src="https://nacelle-assets.s3-us-west-2.amazonaws.com/default-close-icon.svg"
+            alt="close the navigation"
           />
         </Button>
         <strong>{title}</strong>

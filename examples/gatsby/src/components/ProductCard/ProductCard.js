@@ -60,6 +60,8 @@ const ProductCard = ({
 
   const incrementQty = () => setQuantity((qty) => qty + 1);
   const decrementQty = () => setQuantity((qty) => (qty > 0 ? qty - 1 : 0));
+  const altText =
+    product.featuredMedia.altText || product.title || 'product card';
 
   return (
     <article css={[styles.cardMargin, cardStyles]}>
@@ -70,19 +72,11 @@ const ProductCard = ({
         >
           <LinkPDP pdpLink={productLink}>
             {imageData ? (
-              <GatsbyImage
-                image={imageData}
-                alt={
-                  product.featuredMedia.altText ||
-                  product.title ||
-                  'product card'
-                }
-                css={imageStyles}
-              />
+              <GatsbyImage image={imageData} alt={altText} css={imageStyles} />
             ) : (
               <Image
                 src={product.featuredMedia.src}
-                alt={product.featuredMedia.altText}
+                alt={altText}
                 width={320}
                 format={IMAGE_FORMATS}
                 styles={imageStyles}

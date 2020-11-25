@@ -57,7 +57,7 @@ export const query = graphql`
         remoteImage {
           childImageSharp {
             gatsbyImageData(
-              maxWidth: 320
+              maxWidth: 800
               layout: FLUID
               placeholder: TRACED_SVG
             )
@@ -88,7 +88,7 @@ export const query = graphql`
           remoteImage {
             childImageSharp {
               gatsbyImageData(
-                maxWidth: 320
+                maxWidth: 800
                 layout: FLUID
                 placeholder: TRACED_SVG
               )

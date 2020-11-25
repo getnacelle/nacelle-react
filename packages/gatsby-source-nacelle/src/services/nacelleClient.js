@@ -33,7 +33,7 @@ module.exports = function nacelleClient({
       connector: previewConnector
     });
 
-    console.info('[Nacelle] sourcing PREVIEW content from Contentful');
+    console.info('[gatsby-source-nacelle] Contentful preview mode activated');
   }
 
   return client;

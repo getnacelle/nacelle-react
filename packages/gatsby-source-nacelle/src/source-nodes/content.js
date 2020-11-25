@@ -26,6 +26,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
   });
 
   try {
+    console.info('[gatsby-source-nacelle] fetching Content');
     const contentData = await client.data.allContent();
 
     // change name of reserved keys

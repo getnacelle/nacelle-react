@@ -10,8 +10,8 @@ import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './Cart.styles';
 
 const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
+  nacelleSpaceId: process.env.GATSBY_NACELLE_SPACE_ID,
+  nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN
 };
 
 const Cart = () => {

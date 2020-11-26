@@ -69,7 +69,6 @@ exports.onCreateNode = async ({
   }
 
   if (node.internal.type === 'NacelleContent') {
-    console.log(`Creating content node...`);
     await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
       isImage
     });

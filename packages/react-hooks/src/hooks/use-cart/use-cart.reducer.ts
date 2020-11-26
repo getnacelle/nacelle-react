@@ -119,7 +119,7 @@ const cartReducer = (
 };
 
 /**
- * Formats a shopify item to allow easier interaction within the cart
+ * Formats a Shopify item to allow easier interaction within the cart
  *
  * @param item a Shopify item object
  *
@@ -146,7 +146,7 @@ export function formatCartItem(item: NacelleShopProduct): CartItem {
  * A utility function which will return true if the item is already in the cart
  *
  * @param cart the current cart state
- * @param payload a shopify item
+ * @param payload a Shopify item
  *
  * @returns a boolean indiciating if the item is already in the cart
  */
@@ -161,7 +161,7 @@ export function isInCart(
  * A utility function to build the cart with a new added item
  *
  * @param cart the current cart state
- * @param payload a shopify item
+ * @param payload a Shopify item
  *
  * @returns a cart object containing the new added product
  */

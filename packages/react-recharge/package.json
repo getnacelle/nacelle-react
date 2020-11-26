@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-recharge",
-  "version": "2.8.1-alpha.0",
+  "version": "2.9.0-alpha.0",
   "description": "React integration for Shopify ReCharge",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@nacelle/interphase-node": "^1.0.4",
-    "@nacelle/react-dev-utils": "^2.8.1-alpha.0",
+    "@nacelle/react-dev-utils": "^2.9.0-alpha.0",
     "@nacelle/types": "^3.0.0",
     "@storybook/react": "^6.0.5",
     "chalk": "^4.1.0",

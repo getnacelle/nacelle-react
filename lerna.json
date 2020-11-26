@@ -4,7 +4,7 @@
     "packages/*",
     "examples/*"
   ],
-  "version": "2.8.1",
+  "version": "2.9.0-alpha.0",
   "publish": {
     "allowBranch": "master",
     "ignoreChanges": [

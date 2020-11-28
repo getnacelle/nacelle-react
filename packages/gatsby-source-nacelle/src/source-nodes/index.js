@@ -3,5 +3,7 @@
 // New utilities should be functions with the parameters: (gatsbyApi, pluginOptions),
 // where `gatsbyApi` and `pluginOptions` are the first two arguments of `exports.sourceNodes`
 
+exports.sourceProductNodes = require('./products');
+exports.sourceCollectionNodes = require('./collections');
 exports.sourceContentNodes = require('./content');
-exports.sourceProductAndCollectionNodes = require('./products-and-collections');
+exports.sourceSpaceNodes = require('./space');

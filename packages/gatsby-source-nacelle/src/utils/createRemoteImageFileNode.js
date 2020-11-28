@@ -1,4 +1,3 @@
-const { createRemoteFileNode } = require('gatsby-source-filesystem');
 const get = require('lodash.get');
 const set = require('lodash.set');
 
@@ -31,36 +30,47 @@ async function createFileNode(
   gatsbyActions,
   { isImage = () => true, imageProperties = ['src', 'url'] }
 ) {
-  // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
+  let createRemoteFileNode;
   try {
-    const nodeMediaEntry = getNodeMedia(node, nodeMedia);
+    createRemoteFileNode = require('gatsby-source-filesystem')
+      .createRemoteFileNode;
+  } catch (err) {
+    createRemoteFileNode = null;
+  }
 
-    if (nodeMediaEntry) {
-      const address = (Array.isArray(imageProperties)
-        ? imageProperties
-        : [imageProperties]
-      ).map((property) => nodeMediaEntry[property])[0];
+  if (createRemoteFileNode) {
+    // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
+    try {
+      const { createRemoteFileNode } = require('gatsby-source-filesystem');
+      const nodeMediaEntry = getNodeMedia(node, nodeMedia);
 
-      if (isImage(nodeMediaEntry)) {
-        const { createNode, getCache, createNodeId } = gatsbyActions;
-        const fileNode = await createRemoteFileNode({
-          url: address.startsWith('//') ? `https:${address}` : address,
-          getCache,
-          createNode,
-          createNodeId,
-          parentNodeId: node.id
-        });
+      if (nodeMediaEntry) {
+        const address = (Array.isArray(imageProperties)
+          ? imageProperties
+          : [imageProperties]
+        ).map((property) => nodeMediaEntry[property])[0];
 
-        if (fileNode) {
-          // add a field `remoteImage` to the source plugin's node from the File node
-          setNodeMedia(node, nodeMedia, fileNode);
+        if (isImage(nodeMediaEntry)) {
+          const { createNode, getCache, createNodeId } = gatsbyActions;
+          const fileNode = await createRemoteFileNode({
+            url: address.startsWith('//') ? `https:${address}` : address,
+            getCache,
+            createNode,
+            createNodeId,
+            parentNodeId: node.id
+          });
+
+          if (fileNode) {
+            // add a field `remoteImage` to the source plugin's node from the File node
+            setNodeMedia(node, nodeMedia, fileNode);
+          }
         }
       }
+    } catch (err) {
+      throw new Error(
+        `Problem creating file node for remote image: ${err.message}`
+      );
     }
-  } catch (err) {
-    throw new Error(
-      `Problem creating file node for remote image: ${err.message}`
-    );
   }
 }
 

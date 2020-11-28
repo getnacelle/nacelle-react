@@ -32,7 +32,6 @@ export const ProductSearchProvider = ({ children }) => {
               title
               selectedOptions {
                 name
-                remoteTypeName
                 value
               }
               featuredMedia {

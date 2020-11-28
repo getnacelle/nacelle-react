@@ -1,10 +1,5 @@
 const { nacelleClient } = require('../services');
-const { cmsPreviewEnabled } = require('../utils');
-
-function replaceKeys(obj, oldKey, newKey) {
-  delete Object.assign(obj, { [newKey]: obj[oldKey] })[oldKey];
-  return obj;
-}
+const { cmsPreviewEnabled, replaceKey } = require('../utils');
 
 module.exports = async function (gatsbyApi, pluginOptions) {
   const { actions, createNodeId, createContentDigest } = gatsbyApi;
@@ -31,9 +26,10 @@ module.exports = async function (gatsbyApi, pluginOptions) {
 
     // change name of reserved keys
     const formattedData = contentData.map((entry) => {
-      entry = replaceKeys(entry, 'id', 'remoteId');
-      entry = replaceKeys(entry, 'fields', 'remoteFields');
-      return entry;
+      entry.replaceKey = replaceKey;
+      return entry
+        .replaceKey(entry, 'id', 'remoteId')
+        .replaceKey(entry, 'fields', 'remoteFields');
     });
 
     formattedData.forEach((entry) => {

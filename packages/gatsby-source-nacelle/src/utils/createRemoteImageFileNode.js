@@ -77,7 +77,7 @@ async function createFileNode(
  * @param {function} options[].isImage - Function used to determine if the target object at `nodeMedia` is an image
  * @param {string|string[]} options[].imageProperties - Property (or all possible properties) of the `nodeMedia` object containing the image url
  */
-module.exports = async function createRemoteImageFileNode(
+module.exports = async function (
   node,
   nodeMedia,
   gatsbyActions,

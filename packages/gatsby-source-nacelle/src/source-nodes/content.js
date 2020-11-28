@@ -21,7 +21,7 @@ module.exports = async function (gatsbyApi, pluginOptions) {
   });
 
   try {
-    console.info('[gatsby-source-nacelle] fetching Content');
+    console.info('[gatsby-source-nacelle] fetching content');
     const contentData = await client.data.allContent();
 
     // change name of reserved keys
@@ -46,8 +46,6 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       createNode(node);
     });
   } catch (err) {
-    throw new Error(
-      `Problem sourcing content from Contentful Preview API: ${err.message}`
-    );
+    throw new Error(`Problem sourcing Nacelle content nodes: ${err.message}`);
   }
 };

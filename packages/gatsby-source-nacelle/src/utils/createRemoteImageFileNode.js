@@ -27,7 +27,7 @@ function setNodeMedia(node, nodeMedia, fileNode, newField = 'remoteImage') {
 async function createFileNode(
   node,
   nodeMedia,
-  gatsbyActions,
+  gatsbyApi,
   { isImage = () => true, imageProperties = ['src', 'url'] }
 ) {
   let createRemoteFileNode;
@@ -51,7 +51,12 @@ async function createFileNode(
         ).map((property) => nodeMediaEntry[property])[0];
 
         if (isImage(nodeMediaEntry)) {
-          const { createNode, getCache, createNodeId } = gatsbyActions;
+          const {
+            actions: { createNode },
+            getCache,
+            createNodeId
+          } = gatsbyApi;
+
           const fileNode = await createRemoteFileNode({
             url: address.startsWith('//') ? `https:${address}` : address,
             getCache,
@@ -79,10 +84,10 @@ async function createFileNode(
  * associate it with a node so that it can be used by Gatsby Image
  * @param {Object} node - A Gatsby node
  * @param {string|string[]} nodeMedia - Singular target property or array of properties representing a path to the target property
- * @param {Object[]} gatsbyActions - Functions provided by `onCreateNode`
- * @param {function} gatsbyActions[].createNode
- * @param {function} gatsbyActions[].getCache
- * @param {function} gatsbyActions[].createNodeId
+ * @param {Object[]} gatsbyApi - Functions provided by `onCreateNode`
+ * @param {function} gatsbyApi[].actions
+ * @param {function} gatsbyApi[].getCache
+ * @param {function} gatsbyApi[].createNodeId
  * @param {Object[]} options
  * @param {function} options[].isImage - Function used to determine if the target object at `nodeMedia` is an image
  * @param {string|string[]} options[].imageProperties - Property (or all possible properties) of the `nodeMedia` object containing the image url
@@ -90,7 +95,7 @@ async function createFileNode(
 module.exports = async function (
   node,
   nodeMedia,
-  gatsbyActions,
+  gatsbyApi,
   { isImage, imageProperties } = {}
 ) {
   // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
@@ -101,10 +106,10 @@ module.exports = async function (
     nodeMediaArray.forEach(async (media) => {
       if (Array.isArray(node[media])) {
         node.media.forEach(async (_media, idx) => {
-          await createFileNode(node, [media, idx], gatsbyActions, options);
+          await createFileNode(node, [media, idx], gatsbyApi, options);
         });
       } else {
-        await createFileNode(node, media, gatsbyActions, options);
+        await createFileNode(node, media, gatsbyApi, options);
       }
     });
   } catch (err) {

@@ -48,12 +48,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   actions.createTypes(typeDefs);
 };
 
-exports.onCreateNode = async ({
-  actions: { createNode },
-  getCache,
-  createNodeId,
-  node
-}) => {
+exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
   let gatsbySourceFilesystem;
 
   try {
@@ -63,7 +58,7 @@ exports.onCreateNode = async ({
   }
 
   if (gatsbySourceFilesystem) {
-    const gatsbyActions = { createNode, getCache, createNodeId };
+    const gatsbyApi = { actions, getCache, createNodeId };
     const isImage = (nodeMediaEntry) =>
       nodeMediaEntry &&
       nodeMediaEntry.type &&
@@ -73,19 +68,19 @@ exports.onCreateNode = async ({
       await createRemoteImageFileNode(
         node,
         ['featuredMedia', 'media'],
-        gatsbyActions,
+        gatsbyApi,
         { isImage }
       );
     }
 
     if (node.internal.type === 'NacelleCollection') {
-      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
+      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
         isImage
       });
     }
 
     if (node.internal.type === 'NacelleContent') {
-      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyActions, {
+      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
         isImage
       });
     }

@@ -11,18 +11,21 @@ exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
     nacelleSpaceId: Joi.string()
       .required()
-      .description(`Space ID from the Nacelle Dashboard`),
+      .description('Space ID from the Nacelle Dashboard'),
     nacelleGraphqlToken: Joi.string()
       .required()
-      .description(`GraphQL Token from the Nacelle Dashboard`),
+      .description('GraphQL Token from the Nacelle Dashboard'),
     contentfulPreviewSpaceId: Joi.string().description(
-      `Space ID from Contentful Dashboard settings`
+      'Space ID from Contentful Dashboard settings'
     ),
     contentfulPreviewApiToken: Joi.string().description(
-      `Contentful Preview API token from Contentful Dashboard settings`
+      'Contentful Preview API token from Contentful Dashboard settings'
     ),
     cmsPreviewEnabled: Joi.boolean().description(
       `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
+    ),
+    cacheDuration: Joi.number().description(
+      'Max duration in ms that gatsby-source-nacelle caches product, collection, and content data from previous builds'
     )
   });
 };
@@ -85,4 +88,8 @@ exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
       });
     }
   }
+};
+
+exports.onPostBootstrap = async function ({ cache }) {
+  cache.set('nacelle-timestamp', Date.now());
 };

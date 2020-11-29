@@ -1,9 +1,13 @@
 const { nacelleClient } = require('../services');
-const { replaceKey } = require('../utils');
+const {
+  replaceKey,
+  cacheIsInvalid,
+  hasBeenIndexedSinceLastBuild
+} = require('../utils');
 
 module.exports = async function (gatsbyApi, pluginOptions) {
-  const { actions, createNodeId, createContentDigest } = gatsbyApi;
-  const { createNode } = actions;
+  const { actions, createContentDigest, cache } = gatsbyApi;
+  const { createNode, touchNode } = actions;
 
   const { nacelleSpaceId, nacelleGraphqlToken } = pluginOptions;
 
@@ -21,19 +25,46 @@ module.exports = async function (gatsbyApi, pluginOptions) {
       replaceKey(entry, 'id', 'remoteId')
     );
 
+    // handle incremental builds
+    const lastFetched = await cache.get('nacelle-timestamp');
+
+    let newNodeCount = 0;
+
     formattedData.forEach((entry) => {
-      const nodeMeta = {
-        id: createNodeId(`NacelleProduct-${entry.pimSyncSourceProductId}`),
-        parent: null,
-        children: [],
-        internal: {
-          type: 'NacelleProduct',
-          contentDigest: createContentDigest(entry)
-        }
-      };
-      const node = Object.assign({}, entry, nodeMeta);
-      createNode(node);
+      if (
+        hasBeenIndexedSinceLastBuild(entry, lastFetched) ||
+        cacheIsInvalid(lastFetched, pluginOptions)
+      ) {
+        const nodeMeta = {
+          id: `NacelleProduct-${entry.pimSyncSourceProductId}`,
+          parent: null,
+          children: [],
+          internal: {
+            type: 'NacelleProduct',
+            contentDigest: createContentDigest(entry)
+          }
+        };
+
+        const node = Object.assign({}, entry, nodeMeta);
+        createNode(node);
+
+        newNodeCount += 1;
+      } else {
+        touchNode({
+          nodeId: `NacelleProduct-${entry.pimSyncSourceProductId}`
+        });
+      }
     });
+
+    if (newNodeCount) {
+      console.info(
+        `[gatsby-source-nacelle] created ${newNodeCount} new product nodes`
+      );
+    } else {
+      console.info(
+        '[gatsby-source-nacelle] using cached product nodes from previous build'
+      );
+    }
   } catch (err) {
     throw new Error(`Problem sourcing Nacelle product nodes: ${err.message}`);
   }

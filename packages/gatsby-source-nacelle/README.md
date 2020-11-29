@@ -68,7 +68,7 @@ module.exports = {
 
 `@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
 
-Enabling these image processing techniques requires installing [gatsby-source-filesystem](https://www.npmjs.com/package/gatsby-source-filesystem), [`gatsby-plugin sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp), and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
+Enabling these image processing techniques requires installing [gatsby-source-filesystem](https://www.npmjs.com/package/gatsby-source-filesystem), [`gatsby-plugin-sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp), and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
 
 ```
 npm i gatsby-source-filesystem gatsby-plugin-sharp gatsby-transformer-sharp

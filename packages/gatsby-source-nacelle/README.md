@@ -74,7 +74,21 @@ Enabling these image processing techniques requires installing [gatsby-source-fi
 npm i gatsby-source-filesystem gatsby-plugin-sharp gatsby-transformer-sharp
 ```
 
-...as well as either [`gatsby-image`](https://www.npmjs.com/package/gatsby-image) or Gatsby's latest offering, [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image). Please refer to the [example project](../../examples/gatsby) to see how `@nacelle/gatsby-source-nacelle` can be used with [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image).
+Next, register `gatsby-plugin-sharp` and `gatsby-tranformer-sharp` in `gatsby-config.js`. You don't need to register `gatsby-source-filesystem`.
+
+```js
+// gatsby-config.js
+
+module.exports = {
+  plugins: [
+    // ...other plugins,
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp'
+  ]
+};
+```
+
+You'll also need to install either [`gatsby-image`](https://www.npmjs.com/package/gatsby-image) or Gatsby's latest offering, [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image). Please refer to the [example project](../../examples/gatsby) to see how `@nacelle/gatsby-source-nacelle` can be used with [`gatsby-plugin-image`](https://www.npmjs.com/package/gatsby-plugin-image).
 
 ### Previewing Content from Contentful
 

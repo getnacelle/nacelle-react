@@ -64,11 +64,35 @@ module.exports = {
 
 ## Additional Features
 
+### Incremental Builds
+
+`@nacelle/gatsby-source-nacelle` uses [build caching](https://www.gatsbyjs.com/docs/build-caching/) to support [incremental builds](https://www.gatsbyjs.com/blog/2020-04-22-announcing-incremental-builds/). If you'd like to force `@nacelle/gatsby-source-nacelle` to re-source product, collection, and content data from Nacelle's Hail Frequency API after a given interval, you can do so by providing a `cacheDuration` value (in milliseconds).
+
+For example, a build with the following configuration will force a re-fetch of product, collection, and content data after 24 hours, even if that data hasn't changed:
+
+```js
+// gatsby-config.js
+require('dotenv').config();
+
+module.exports = {
+  plugins: [
+    {
+      resolve: '@nacelle/gatsby-source-nacelle',
+      options: {
+        nacelleSpaceId: process.env.NACELLE_SPACE_ID,
+        nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+        cacheDuration: 1000 * 60 * 60 * 24 // 1 day in ms
+      }
+    }
+  ]
+};
+```
+
 ### Gatsby Image
 
 `@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
 
-Enabling these image processing techniques requires installing [gatsby-source-filesystem](https://www.npmjs.com/package/gatsby-source-filesystem), [`gatsby-plugin sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp), and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
+Enabling these image processing techniques requires installing [gatsby-source-filesystem](https://www.npmjs.com/package/gatsby-source-filesystem), [`gatsby-plugin-sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp), and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
 
 ```
 npm i gatsby-source-filesystem gatsby-plugin-sharp gatsby-transformer-sharp

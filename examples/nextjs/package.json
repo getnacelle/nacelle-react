@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
-    "@nacelle/contentful-preview-connector": "^0.1.4",
+    "@nacelle/contentful-preview-connector": "^0.1.5",
     "@nacelle/react-components": "^2.8.0",
     "@nacelle/react-hooks": "^2.9.0-alpha.0",
     "@react-hook/media-query": "^1.1.1",

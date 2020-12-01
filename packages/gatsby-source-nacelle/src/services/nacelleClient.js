@@ -17,7 +17,11 @@ module.exports = function nacelleClient({
   // Initialize the Nacelle Client
   const client = new NacelleClient(clientSettings);
 
-  if (previewMode && contentfulPreviewSpaceId && contentfulPreviewApiToken) {
+  if (
+    previewMode === true &&
+    contentfulPreviewSpaceId &&
+    contentfulPreviewApiToken
+  ) {
     const NacelleContentfulPreviewConnector = require('@nacelle/contentful-preview-connector')
       .default;
 

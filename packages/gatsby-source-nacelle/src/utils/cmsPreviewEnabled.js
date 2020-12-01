@@ -11,7 +11,8 @@ module.exports = function (pluginOptions) {
 
   const previewEnabled =
     typeof cmsPreviewEnabled !== 'undefined'
-      ? cmsPreviewEnabled && contentfulPreviewVariablesExist
+      ? cmsPreviewEnabled.toLowerCase === 'true' &&
+        contentfulPreviewVariablesExist
       : contentfulPreviewVariablesExist;
 
   if (

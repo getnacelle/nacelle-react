@@ -53,7 +53,9 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
     client.data.allProducts(),
     client.data.allCollections(),
     client.data.allContent()
-  ]);
+  ]).catch((err) => {
+    throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
+  });
 
   await Promise.all([
     // use Nacelle data to create Gatsby nodes
@@ -76,7 +78,11 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
       data: contentData,
       uniqueIdProperty: 'cmsSyncSourceContentId'
     })
-  ]);
+  ]).catch((err) => {
+    throw new Error(
+      `Could not create Gatsby nodes from Nacelle data: ${err.message}`
+    );
+  });
 };
 
 exports.createSchemaCustomization = ({ actions }) => {

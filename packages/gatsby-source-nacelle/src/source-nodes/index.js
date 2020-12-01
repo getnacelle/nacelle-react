@@ -13,7 +13,10 @@ module.exports = async function ({
   gatsbyApi,
   pluginOptions,
   data,
-  keyMappings = [{ oldKey: 'id', newKey: 'remoteId' }],
+  keyMappings = [
+    { oldKey: 'id', newKey: 'remoteId' },
+    { oldKey: 'fields', newKey: 'remoteFields' }
+  ],
   uniqueIdProperty = 'remoteId'
 }) {
   const {
@@ -50,9 +53,9 @@ module.exports = async function ({
 
     let newNodeCount = 0;
 
+    // format data for Gatsby by changing the names of reserved properties
     let formattedData;
     if (keyMappings) {
-      // change name of reserved keys
       formattedData = Array.isArray(data)
         ? data.map((entry) => replaceKey(entry, keyMappings))
         : replaceKey(data, keyMappings);
@@ -105,11 +108,11 @@ module.exports = async function ({
     if (Array.isArray(formattedData)) {
       if (newNodeCount) {
         console.info(
-          `[gatsby-source-nacelle] created ${newNodeCount} new content nodes`
+          `[gatsby-source-nacelle] created ${newNodeCount} new ${dataTypeLower} nodes`
         );
       } else {
         console.info(
-          '[gatsby-source-nacelle] using cached content nodes from previous build'
+          `[gatsby-source-nacelle] using cached ${dataTypeLower} nodes from previous build`
         );
       }
     }

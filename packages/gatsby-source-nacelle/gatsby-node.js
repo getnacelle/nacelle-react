@@ -1,6 +1,6 @@
 const sourceNodes = require('./src/source-nodes');
-const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
 const typeDefs = require('./src/type-defs');
+const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
 const { nacelleClient } = require('./src/services');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
@@ -58,20 +58,23 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
   await Promise.all([
     // use Nacelle data to create Gatsby nodes
     sourceNodes({ gatsbyApi, pluginOptions, data: spaceData }),
-    sourceNodes({ gatsbyApi, pluginOptions, data: productData }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: collectionData
+      data: productData,
+      uniqueIdProperty: 'pimSyncSourceProductId'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: collectionData,
+      uniqueIdProperty: 'pimSyncSourceCollectionId'
     }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
       data: contentData,
-      keyMappings: [
-        { oldKey: 'id', newKey: 'remoteId' },
-        { oldKey: 'fields', newKey: 'remoteFields' }
-      ]
+      uniqueIdProperty: 'cmsSyncSourceContentId'
     })
   ]);
 };
@@ -83,15 +86,10 @@ exports.createSchemaCustomization = ({ actions }) => {
 };
 
 exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
-  let gatsbySourceFilesystem;
-
   try {
-    gatsbySourceFilesystem = require('gatsby-source-filesystem');
-  } catch (err) {
-    gatsbySourceFilesystem = null;
-  }
+    // the user can opt into using Gatsby Image by installing `gatsby-source-filesystem`
+    require('gatsby-source-filesystem');
 
-  if (gatsbySourceFilesystem) {
     const gatsbyApi = { actions, getCache, createNodeId };
     const isImage = (nodeMediaEntry) =>
       nodeMediaEntry &&
@@ -118,6 +116,8 @@ exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
         isImage
       });
     }
+  } catch (err) {
+    return null;
   }
 };
 

@@ -9,24 +9,35 @@ const CollectionGrid = ({ fields }) => {
 
   useEffect(() => {
     const fetchCollection = async () => {
-      try {
-        const collection = await $nacelle.data.collection({
+      const collection = await $nacelle.data
+        .collection({
           handle: collectionHandle
-        });
-        const products = await $nacelle.data.products({
-          handles: collection.productLists.find(
-            (listEntry) => listEntry.slug === 'default'
-          ).handles
-        });
+        })
+        .catch(() =>
+          console.warn(
+            `Collection not found with handle: '${collectionHandle}'`
+          )
+        );
+
+      if (collection) {
+        const products = await $nacelle.data
+          .products({
+            handles: collection.productLists.find(
+              (listEntry) => listEntry.slug === 'default'
+            ).handles
+          })
+          .catch((err) => {
+            console.error(
+              `Problem fetching products for CollectionGrid: $${err.message}`
+            );
+          });
         setProducts(products);
-      } catch {
-        console.warn(`Collection not found with handle: '${collectionHandle}'`);
       }
     };
     fetchCollection();
   }, [collectionHandle]);
 
-  return <ProductGallery products={products} />;
+  return products.length && <ProductGallery products={products} />;
 };
 
 export default CollectionGrid;

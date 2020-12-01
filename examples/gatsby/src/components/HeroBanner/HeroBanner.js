@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Image } from '@nacelle/react-components';
 import * as styles from './HeroBanner.styles';

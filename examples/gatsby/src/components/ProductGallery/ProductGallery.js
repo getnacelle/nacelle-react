@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Grid } from '@nacelle/react-components';
 
 import ProductCard from 'components/ProductCard';

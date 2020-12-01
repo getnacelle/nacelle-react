@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'gatsby';
 import { useCart } from '@nacelle/react-hooks';
 import { formatCurrency } from '@nacelle/react-dev-utils';

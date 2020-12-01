@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, Fragment, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextInput, Image } from '@nacelle/react-components';
 import { formatCurrency } from '@nacelle/react-dev-utils';
 import { Link, navigate } from 'gatsby';
@@ -18,7 +17,7 @@ const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <div onClick={hideResults} css={styles.mask} />
       <div css={styles.resultModal}>
         <h2 css={styles.resultTitle}>Search Results</h2>
@@ -50,7 +49,7 @@ const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
           );
         })}
       </div>
-    </Fragment>
+    </>
   );
 };
 
@@ -78,7 +77,7 @@ const SearchBar = () => {
   const resetSearchValue = () => setSearchValue('');
 
   return (
-    <Fragment>
+    <>
       <div css={styles.layout}>
         <TextInput
           styles={styles.input}
@@ -113,7 +112,7 @@ const SearchBar = () => {
         hideResults={hideResults}
         resetSearchValue={resetSearchValue}
       />
-    </Fragment>
+    </>
   );
 };
 

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import $nacelle from 'services/nacelle';
 
 import ProductGallery from 'components/ProductGallery';

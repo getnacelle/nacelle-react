@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useMemo, useContext } from 'react';
+import React, { useMemo, useContext } from 'react';
 import Fuse from 'fuse.js';
 import { useStaticQuery, graphql } from 'gatsby';
 

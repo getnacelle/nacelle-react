@@ -54,14 +54,9 @@ module.exports = async function ({
     let newNodeCount = 0;
 
     // format data for Gatsby by changing the names of reserved properties
-    let formattedData;
-    if (keyMappings) {
-      formattedData = Array.isArray(data)
-        ? data.map((entry) => replaceKey(entry, keyMappings))
-        : replaceKey(data, keyMappings);
-    } else {
-      formattedData = data;
-    }
+    const formattedData = Array.isArray(data)
+      ? data.map((entry) => replaceKey(entry, keyMappings))
+      : replaceKey(data, keyMappings);
 
     if (Array.isArray(formattedData)) {
       formattedData.forEach((entry) => {

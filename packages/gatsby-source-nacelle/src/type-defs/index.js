@@ -1,11 +1,133 @@
 module.exports = `
+"A product that has been indexed by Nacelle"
+  type NacelleProduct implements Node @dontInfer {
+    remoteId: ID!
+    handle: String!
+    locale: String!
+    globalHandle: String!
+    pimSyncSourceDomain: String!
+    pimSyncSource: String
+    pimSyncSourceProductId: String
+    pimSyncSourceLocale: String
+    title: String
+    description: String
+    priceRange: PriceRange
+    productType: String
+    featuredMedia: NacelleMedia
+    availableForSale: Boolean!
+    vendor: String
+    tags: [String!]
+    media: [NacelleMedia!]
+    metafields: [Metafield!]
+    variants: [ProductVariant!]
+    createdAt: Int
+    updatedAt: Int
+    indexedAt: Int!
+  }
+
+  "The price range and currency of a product"
+  type PriceRange @dontInfer {
+    min: String
+    max: String
+    currencyCode: String
+  }
+
   "Details for different media types associated with content & products"
   type NacelleMedia @dontInfer {
-    id: ID
+    remoteId: ID
     type: String!
     src: String!
     thumbnailSrc: String!
     altText: String
+    remoteImage: File @link
+  }
+
+  "A flexible key / value store that can be associated with many other pieces of Nacelle data"
+  type Metafield @dontInfer {
+    id: ID
+    namespace: String
+    key: String!
+    value: String!
+  }
+
+  "A product option that differs from the base product"
+  type ProductVariant @dontInfer {
+    id: ID!
+    title: String
+    price: String
+    priceCurrency: String
+    compareAtPrice: String
+    compareAtPriceCurrency: String
+    priceRules: [ProductPriceRule!]
+    swatchSrc: String
+    selectedOptions: [SelectedProductOption!]
+    featuredMedia: NacelleMedia
+    sku: String
+    availableForSale: Boolean
+    metafields: [Metafield!]
+    weight: Float
+    weightUnit: String
+    quantityAvailable: Int
+  }
+
+  type ProductPriceRule @dontInfer {
+    id: ID
+    handle: String!
+    title: String
+    price: String
+    priceCurrency: String
+    comparedAtPrice: String
+    priceBreaks: [ProductPriceBreaks!]
+    availableTo: [String!]
+    metafields: [Metafield!]
+  }
+
+  type ProductPriceBreaks @dontInfer {
+    quantityMin: Int
+    quantityMax: Int
+    price: String
+    metafields: [Metafield]
+  }
+
+  "Available options for a product variant (i.e. color, size, etc)"
+  type SelectedProductOption @dontInfer {
+    name: String!
+    value: String!
+  }
+
+  "A collection of products that has been indexed by Nacelle"
+  type NacelleCollection implements Node @dontInfer {
+    remoteId: ID!
+    handle: String!
+    locale: String!
+    globalHandle: String!
+    pimSyncSourceDomain: String!
+    pimSyncSource: String
+    pimSyncSourceCollectionId: String
+    pimSyncSourceLocale: String
+    title: String
+    description: String
+    featuredMedia: NacelleMedia
+    productLists: [NacelleProductList!]
+    createdAt: Int
+    updatedAt: Int
+    metafields: [NacelleCollectionMetafield!]
+  }
+
+  type NacelleCollectionMetafield @dontInfer {
+    id: ID
+    namespace: String
+    key: String!
+    value: String!
+    source: String
+  }
+
+  "A list of products by handle"
+  type NacelleProductList @dontInfer {
+    title: String!
+    slug: String!
+    locale: String
+    handles: [String!]
   }
 
   "Content from a CMS that has been indexed by Nacelle"
@@ -70,5 +192,78 @@ module.exports = `
     author: ContentAuthor
     featuredMedia: NacelleMedia
     publishDate: Int
+  }
+
+  type OptionalMetafield @dontInfer {
+    key: String
+    value: String
+  }
+
+  input MetafieldInput @dontInfer {
+    namespace: String
+    key: String
+    value: String
+    source: String
+  }
+
+  "A sapce that has been created in the Nacelle dashboard"
+  type NacelleSpace implements Node @dontInfer {
+    remoteId: ID!
+    type: String
+    name: String
+    domain: String
+    token: String
+    buildHook: String
+      @deprecated(
+        reason: "Features for this field were never implemented; it is currently a no-op"
+      )
+    privateToken: String
+    publicToken: String
+    pimSyncSourceDomain: String!
+    cmsSyncSourceDomain: String
+    linklists: [SpaceLinkList!]
+    affinityLinklists: [SpaceAffinityLinkList!]
+    metafields: [Metafield!]
+    users: [SpaceUser!]
+    featureFlags: [String]
+  }
+
+  input SpaceInput @dontInfer {
+    id: String!
+    domain: String
+    name: String
+    token: String
+    privateToken: String
+    publicToken: String
+    type: String
+    buildHook: String
+    pimSyncSourceDomain: String
+    cmsSyncSourceDomain: String
+  }
+
+  "A user who has access to a space"
+  type SpaceUser @dontInfer {
+    id: ID!
+    email: String
+    role: String
+  }
+
+  type SpaceAffinityLinkList @dontInfer {
+    affinityGroupSlug: String!
+    linklists: [SpaceLinkList!]!
+  }
+
+  "A list of links that can be used to generate pages & routes in a headless app"
+  type SpaceLinkList @dontInfer {
+    handle: String!
+    links: [Link!]
+  }
+
+  "A link used to generate pages & routes in a headless app"
+  type Link @dontInfer {
+    title: String!
+    to: String!
+    type: String
+    links: [Link!]
   }
 `;

@@ -1,12 +1,11 @@
 const NacelleClient = require('@nacelle/client-js-sdk').default;
-const NacelleContentfulPreviewConnector = require('@nacelle/contentful-preview-connector')
-  .default;
 
 module.exports = function nacelleClient({
   nacelleSpaceId = '',
   nacelleGraphqlToken = '',
   contentfulPreviewSpaceId = '',
-  contentfulPreviewApiToken = ''
+  contentfulPreviewApiToken = '',
+  previewMode = false
 }) {
   const clientSettings = {
     id: nacelleSpaceId || process.env.NACELLE_SPACE_ID,
@@ -18,19 +17,32 @@ module.exports = function nacelleClient({
   // Initialize the Nacelle Client
   const client = new NacelleClient(clientSettings);
 
-  // Initialize the Preview Connector
-  // Note: the Contentful Preview API token is not the same as your Content Delivery API token
-  const previewConnector = new NacelleContentfulPreviewConnector({
-    contentfulSpaceID: contentfulPreviewSpaceId,
-    contentfulToken: contentfulPreviewApiToken
-  });
+  if (
+    previewMode === true &&
+    contentfulPreviewSpaceId &&
+    contentfulPreviewApiToken
+  ) {
+    const NacelleContentfulPreviewConnector = require('@nacelle/contentful-preview-connector')
+      .default;
 
-  // Update the data module with the new connector
-  client.data.update({
-    connector: previewConnector
-  });
+    // Initialize the Preview Connector
+    // Note: the Contentful Preview API token is not the same as your Content Delivery API token
+    const previewConnector = new NacelleContentfulPreviewConnector({
+      contentfulSpaceID: contentfulPreviewSpaceId,
+      contentfulToken: contentfulPreviewApiToken
+    });
 
-  console.info('[Nacelle] sourcing PREVIEW content from Contentful');
+    // Update the data module with the new connector
+    client.data.content = (params) => previewConnector.content(params);
+    client.data.page = (params) => previewConnector.page(params);
+    client.data.pages = (params) => previewConnector.pages(params);
+    client.data.article = (params) => previewConnector.article(params);
+    client.data.articles = (params) => previewConnector.articles(params);
+    client.data.blog = (params) => previewConnector.blog(params);
+    client.data.allContent = (params) => previewConnector.allContent(params);
+
+    console.info('[gatsby-source-nacelle] Contentful preview mode activated');
+  }
 
   return client;
 };

@@ -5,7 +5,7 @@
     "build": "lerna run build",
     "test:ci": "jest --clearCache && lerna run test:ci",
     "lint": "lerna run lint",
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap --hoist --nohoist=@nacelle/client-js*",
     "publish": "npm run build && lerna publish",
     "create": "node ./scripts/create"
   },
@@ -39,8 +39,7 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "fs-extra": "^9.0.1",
-    "gatsby": "^2.24.63",
-    "graphql": "^14.6.0",
+    "graphql": "^14.7.0",
     "husky": "^4.2.5",
     "jest": "^26.3.0",
     "jest-watch-typeahead": "^0.6.0",

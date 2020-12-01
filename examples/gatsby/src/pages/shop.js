@@ -1,44 +1,78 @@
-import * as React from 'react';
-import { Link, graphql, useStaticQuery } from 'gatsby';
+import React from 'react';
+import { graphql } from 'gatsby';
 
-const AllProducts = () => {
-  const productsData = useStaticQuery(graphql`
-    query ProductsQuery {
-      allNacelleProduct {
-        edges {
-          node {
-            handle
+import ContentSections from 'components/ContentSections';
+import ProductGallery from 'components/ProductGallery';
+
+const Collection = ({ data }) => {
+  const products = data.allNacelleProduct.edges.map((edge) => edge.node);
+  const page = data.nacelleContent;
+  return (
+    <>
+      {page && <ContentSections sections={page.sections} />}
+      <ProductGallery products={products} />
+    </>
+  );
+};
+
+export default Collection;
+
+export const query = graphql`
+  query {
+    allNacelleProduct {
+      edges {
+        node {
+          remoteId
+          handle
+          title
+          featuredMedia {
+            remoteImage {
+              childImageSharp {
+                gatsbyImageData(
+                  maxWidth: 320
+                  layout: FLUID
+                  placeholder: TRACED_SVG
+                )
+              }
+            }
+            src
+            altText
+          }
+          variants {
+            id
+            availableForSale
+            compareAtPrice
+            compareAtPriceCurrency
+            price
+            priceCurrency
+            metafields {
+              key
+              namespace
+              value
+            }
+            sku
+            swatchSrc
             title
             featuredMedia {
               src
+              thumbnailSrc
               altText
+              remoteImage {
+                childImageSharp {
+                  gatsbyImageData(
+                    maxWidth: 320
+                    layout: FLUID
+                    placeholder: TRACED_SVG
+                  )
+                }
+              }
             }
           }
         }
       }
     }
-  `);
-  return (
-    <>
-      <h1>All Products</h1>
-      <ul style={{ listStyleType: 'none', padding: '0' }}>
-        {productsData.allNacelleProduct.edges.map((product) => (
-          <li key={product.node.handle}>
-            <h2>
-              <Link to={`/products/${product.node.handle}`}>
-                {product.node.title}
-              </Link>
-            </h2>
-            <img
-              src={product.node.featuredMedia.src}
-              alt={product.node.title}
-              style={{ width: '100%' }}
-            />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-};
-
-export default AllProducts;
+    nacelleContent(type: { eq: "page" }, handle: { eq: "shop" }) {
+      sections
+    }
+  }
+`;

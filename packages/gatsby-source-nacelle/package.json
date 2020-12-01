@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/gatsby-source-nacelle",
-  "version": "2.8.1-alpha.0",
+  "version": "2.9.0-alpha.0",
   "description": "A Gatsby plugin for sourcing data from Nacelle's Hail Frequency API",
   "keywords": [
     "gatsby",
@@ -23,17 +23,19 @@
   "dependencies": {
     "@nacelle/client-js-sdk": "^3.1.0",
     "@nacelle/contentful-preview-connector": "^0.1.5",
-    "fs-extra": "^9.0.1",
-    "gatsby-graphql-source-toolkit": "^0.6.3",
-    "lodash.isobject": "^3.0.2",
-    "lodash.transform": "^4.6.0"
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2"
   },
   "peerDependencies": {
-    "gatsby": "^2.0.32"
+    "gatsby": "^2.0.32",
+    "graphql": "^14.7.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
-    "lint-staged": "^10.5.1"
+    "lint-staged": "^10.2.11"
+  },
+  "optionalDependencies": {
+    "gatsby-source-filesystem": "^2.6.1"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "nacelle-klaviyo-example",
-  "version": "2.8.1-alpha.0",
+  "version": "2.9.0-alpha.0",
   "private": true,
   "scripts": {
     "lint": "eslint ./",
@@ -16,7 +16,7 @@
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@nacelle/react-klaviyo": "^2.8.1-alpha.0",
+    "@nacelle/react-klaviyo": "^2.9.0-alpha.0",
     "eslint": "^7.6.0",
     "lint-staged": "^10.2.11"
   },

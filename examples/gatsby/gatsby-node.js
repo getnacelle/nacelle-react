@@ -31,7 +31,6 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
         edges {
           node {
             handle
-            title
             productLists {
               slug
               handles
@@ -42,19 +41,23 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
     }
   `);
   collections.data.allNacelleCollection.edges.forEach((collection) => {
-    const { title, handle, productLists, featuredMedia } = collection.node;
+    const { handle, productLists } = collection.node;
     createPage({
       // Build a Product Loading Page (PLP) for each collection
       path: `/collections/${collection.node.handle}`,
       component: path.resolve('./src/templates/collection.js'),
       context: {
-        title,
         handle,
         handles: productLists.find(
           (productList) => productList.slug === 'default'
-        ).handles,
-        imageSrc: featuredMedia && featuredMedia.src
+        ).handles
       }
     });
+  });
+};
+
+exports.onCreateBabelConfig = ({ actions }) => {
+  actions.setBabelPlugin({
+    name: require.resolve('@babel/plugin-proposal-optional-chaining')
   });
 };

@@ -1,2 +1,5 @@
+exports.cacheIsInvalid = require('./cacheIsInvalid');
 exports.cmsPreviewEnabled = require('./cmsPreviewEnabled');
-exports.replaceKeys = require('./replaceKeys');
+exports.createRemoteImageFileNode = require('./createRemoteImageFileNode');
+exports.hasBeenIndexedSinceLastBuild = require('./checkIndexTimestamp');
+exports.replaceKey = require('./replaceKey');

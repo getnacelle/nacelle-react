@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-klaviyo",
-  "version": "2.9.0-alpha.0",
+  "version": "2.9.0",
   "description": "React integration for Klaviyo",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -31,7 +31,7 @@
     "react-dom": ">=16.12.0"
   },
   "devDependencies": {
-    "@nacelle/react-dev-utils": "^2.9.0-alpha.0",
+    "@nacelle/react-dev-utils": "^2.9.0",
     "@nacelle/types": "^3.0.0",
     "@storybook/react": "^6.0.5",
     "eslint": "^7.6.0",

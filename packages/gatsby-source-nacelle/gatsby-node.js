@@ -1,11 +1,7 @@
-const {
-  sourceProductNodes,
-  sourceCollectionNodes,
-  sourceContentNodes,
-  sourceSpaceNodes
-} = require('./src/source-nodes');
-const { createRemoteImageFileNode } = require('./src/utils');
+const sourceNodes = require('./src/source-nodes');
+const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
 const typeDefs = require('./src/type-defs');
+const { nacelleClient } = require('./src/services');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
@@ -31,17 +27,52 @@ exports.pluginOptionsSchema = ({ Joi }) => {
 };
 
 exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
+  const {
+    nacelleSpaceId,
+    nacelleGraphqlToken,
+    contentfulPreviewSpaceId,
+    contentfulPreviewApiToken
+  } = pluginOptions;
+
+  const client = nacelleClient({
+    previewMode: cmsPreviewEnabled(pluginOptions),
+    nacelleSpaceId,
+    nacelleGraphqlToken,
+    contentfulPreviewSpaceId,
+    contentfulPreviewApiToken
+  });
+
+  const [
+    spaceData,
+    productData,
+    collectionData,
+    contentData
+  ] = await Promise.all([
+    // fetch data from Nacelle's Hail Frequency API
+    client.data.space(),
+    client.data.allProducts(),
+    client.data.allCollections(),
+    client.data.allContent()
+  ]);
+
   await Promise.all([
-    // source Nacelle space data from Nacelle's Hail Frequency API & convert to Gatsby node
-    sourceSpaceNodes(gatsbyApi, pluginOptions),
-
-    // source products & collections from Nacelle's Hail Frequency API & convert to Gatsby nodes
-    sourceProductNodes(gatsbyApi, pluginOptions),
-    sourceCollectionNodes(gatsbyApi, pluginOptions),
-
-    // if Contentful preview is enabled, source content from Contentful Preview API,
-    // otherwise source content from Nacelle's Hail Frequency API, then convert to Gatsby nodes
-    sourceContentNodes(gatsbyApi, pluginOptions)
+    // use Nacelle data to create Gatsby nodes
+    sourceNodes({ gatsbyApi, pluginOptions, data: spaceData }),
+    sourceNodes({ gatsbyApi, pluginOptions, data: productData }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: collectionData
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: contentData,
+      keyMappings: [
+        { oldKey: 'id', newKey: 'remoteId' },
+        { oldKey: 'fields', newKey: 'remoteFields' }
+      ]
+    })
   ]);
 };
 

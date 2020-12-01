@@ -29,9 +29,13 @@ module.exports = function nacelleClient({
     });
 
     // Update the data module with the new connector
-    client.data.update({
-      connector: previewConnector
-    });
+    client.data.content = (params) => previewConnector.content(params);
+    client.data.page = (params) => previewConnector.page(params);
+    client.data.pages = (params) => previewConnector.pages(params);
+    client.data.article = (params) => previewConnector.article(params);
+    client.data.articles = (params) => previewConnector.articles(params);
+    client.data.blog = (params) => previewConnector.blog(params);
+    client.data.allContent = (params) => previewConnector.allContent(params);
 
     console.info('[gatsby-source-nacelle] Contentful preview mode activated');
   }

@@ -28,14 +28,12 @@
   },
   "peerDependencies": {
     "gatsby": "^2.0.32",
-    "graphql": "^14.7.0"
+    "graphql": "^14.7.0",
+    "gatsby-source-filesystem": "^2.6.1"
   },
   "devDependencies": {
     "eslint": "^7.6.0",
     "lint-staged": "^10.2.11"
-  },
-  "optionalDependencies": {
-    "gatsby-source-filesystem": "^2.6.1"
   },
   "repository": {
     "type": "git",

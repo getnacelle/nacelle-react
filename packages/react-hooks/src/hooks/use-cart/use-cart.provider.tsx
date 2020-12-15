@@ -1,7 +1,7 @@
 import React, { useReducer, useMemo, useContext, FC, ReactNode } from 'react';
-import { ShopifyItem } from '@nacelle/react-dev-utils';
+import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
-import { CartState, CartItem, CheckoutStatus } from './use-cart.types';
+import { CartState, CheckoutStatus } from './use-cart.types';
 import cartReducer, {
   initialState,
   ADD_TO_CART,
@@ -14,10 +14,10 @@ import cartReducer, {
 } from './use-cart.reducer';
 
 export type CartActions = {
-  addToCart: (payload: ShopifyItem) => void;
-  removeFromCart: (payload: ShopifyItem | CartItem) => void;
-  incrementItem: (payload: ShopifyItem | CartItem) => void;
-  decrementItem: (payload: ShopifyItem | CartItem) => void;
+  addToCart: (payload: NacelleShopProduct) => void;
+  removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
+  incrementItem: (payload: NacelleShopProduct | CartItem) => void;
+  decrementItem: (payload: NacelleShopProduct | CartItem) => void;
   setCheckoutStatus: (payload: CheckoutStatus) => void;
   toggleCart: () => void;
   clearCart: () => void;
@@ -51,13 +51,13 @@ export const CartProvider: FC<CartProviderProps> = ({
 
   const cartActions: CartActions = useMemo(
     () => ({
-      addToCart: (payload: ShopifyItem): void =>
+      addToCart: (payload: NacelleShopProduct): void =>
         dispatch({ type: ADD_TO_CART, payload }),
-      removeFromCart: (payload: ShopifyItem | CartItem) =>
+      removeFromCart: (payload: NacelleShopProduct | CartItem) =>
         dispatch({ type: REMOVE_FROM_CART, payload }),
-      incrementItem: (payload: ShopifyItem | CartItem): void =>
+      incrementItem: (payload: NacelleShopProduct | CartItem): void =>
         dispatch({ type: INCREMENT_ITEM, payload }),
-      decrementItem: (payload: ShopifyItem | CartItem): void =>
+      decrementItem: (payload: NacelleShopProduct | CartItem): void =>
         dispatch({ type: DECREMENT_ITEM, payload }),
       toggleCart: () => dispatch({ type: TOGGLE_CART }),
       setCheckoutStatus: (payload: CheckoutStatus): void =>

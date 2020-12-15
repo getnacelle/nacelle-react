@@ -1,6 +1,6 @@
-import { ShopifyItem } from '@nacelle/react-dev-utils';
+import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
-import { CartState, CartReducerAction, CartItem } from './use-cart.types';
+import { CartState, CartReducerAction } from './use-cart.types';
 
 export const ADD_TO_CART = 'cart/add-to-cart';
 export const INCREMENT_ITEM = 'cart/increment-item';
@@ -119,13 +119,13 @@ const cartReducer = (
 };
 
 /**
- * Formats a shopify item to allow easier interaction within the cart
+ * Formats a Shopify item to allow easier interaction within the cart
  *
  * @param item a Shopify item object
  *
  * @returns a formatted cart item
  */
-export function formatCartItem(item: ShopifyItem): CartItem {
+export function formatCartItem(item: NacelleShopProduct): CartItem {
   const { title, vendor, tags, handle, locale, id: productId } = item;
   const { featuredMedia: image, ...variant } = item.variant;
 
@@ -146,11 +146,14 @@ export function formatCartItem(item: ShopifyItem): CartItem {
  * A utility function which will return true if the item is already in the cart
  *
  * @param cart the current cart state
- * @param payload a shopify item
+ * @param payload a Shopify item
  *
  * @returns a boolean indiciating if the item is already in the cart
  */
-export function isInCart(cart: CartItem[], payload: ShopifyItem): boolean {
+export function isInCart(
+  cart: CartItem[],
+  payload: NacelleShopProduct
+): boolean {
   return cart.findIndex((item) => item.id === payload.variant.id) > -1;
 }
 
@@ -158,11 +161,14 @@ export function isInCart(cart: CartItem[], payload: ShopifyItem): boolean {
  * A utility function to build the cart with a new added item
  *
  * @param cart the current cart state
- * @param payload a shopify item
+ * @param payload a Shopify item
  *
  * @returns a cart object containing the new added product
  */
-export function buildCart(cart: CartItem[], payload: ShopifyItem): CartItem[] {
+export function buildCart(
+  cart: CartItem[],
+  payload: NacelleShopProduct
+): CartItem[] {
   return isInCart(cart, payload)
     ? cart.map((item) => {
         const payloadId =

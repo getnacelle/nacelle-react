@@ -1,34 +1,4 @@
-import {
-  Metafield,
-  Media,
-  ShopifyItem,
-  PriceRule,
-  SelectedOption
-} from '@nacelle/react-dev-utils';
-
-export type CartItem = {
-  availableForSale: boolean;
-  compareAtPrice?: string;
-  compareAtPriceCurrency?: string;
-  handle: string;
-  id: string;
-  image: Media;
-  metafields?: Metafield[];
-  price?: string;
-  priceCurrency?: string;
-  priceRules?: PriceRule[];
-  productId: string;
-  quantity: number;
-  selectedOptions: SelectedOption[];
-  sku?: string;
-  swatchSrc?: string;
-  tags: string[];
-  title: string;
-  vendor: string;
-  weight?: number;
-  weightUnit?: string;
-  locale: string;
-};
+import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
 export type CartState = {
   cart: CartItem[];
@@ -44,10 +14,10 @@ export type CheckoutStatus = {
 };
 
 export type CartReducerAction =
-  | { type: 'cart/add-to-cart'; payload: ShopifyItem }
-  | { type: 'cart/increment-item'; payload: ShopifyItem | CartItem }
-  | { type: 'cart/decrement-item'; payload: ShopifyItem | CartItem }
-  | { type: 'cart/remove-from-cart'; payload: ShopifyItem | CartItem }
+  | { type: 'cart/add-to-cart'; payload: NacelleShopProduct }
+  | { type: 'cart/increment-item'; payload: NacelleShopProduct | CartItem }
+  | { type: 'cart/decrement-item'; payload: NacelleShopProduct | CartItem }
+  | { type: 'cart/remove-from-cart'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/toggle-visibility'; payload?: null }
   | { type: 'cart/set-status'; payload: CheckoutStatus }
   | { type: 'cart/clear'; payload?: null };

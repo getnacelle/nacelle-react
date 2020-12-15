@@ -1,14 +1,18 @@
-import * as React from 'react';
+import React from 'react';
+import { graphql } from 'gatsby';
 
-export default function HomePage() {
-  return (
-    <>
-      <h2>Welcome!</h2>
-      <p>
-        Use the links in the navigation bar to navigate to Product Loading Pages
-        and Product Detail Pages created with data sourced with
-        &apos;gatsby-source-nacelle&apos;
-      </p>
-    </>
-  );
-}
+import ContentSections from 'components/ContentSections';
+
+const HomePage = ({ data }) => (
+  <ContentSections sections={data.nacelleContent.sections} />
+);
+
+export default HomePage;
+
+export const query = graphql`
+  query {
+    nacelleContent(type: { eq: "page" }, handle: { eq: "homepage" }) {
+      sections
+    }
+  }
+`;

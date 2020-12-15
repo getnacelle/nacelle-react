@@ -1,244 +1,132 @@
-const { ensureDir } = require('fs-extra');
-const { print } = require('gatsby/graphql');
-const {
-  sourceAllNodes,
-  createSchemaCustomization,
-  compileNodeQueries,
-  readOrGenerateDefaultFragments,
-  buildNodeDefinitions,
-  loadSchema,
-  createDefaultQueryExecutor
-} = require('gatsby-graphql-source-toolkit');
-require('dotenv').config();
+const sourceNodes = require('./src/source-nodes');
+const typeDefs = require('./src/type-defs');
+const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
+const { nacelleClient } = require('./src/services');
 
-const CHUNK_SIZE = 100;
-const fragmentsDir = process.cwd() + `/gql-fragments`;
+exports.pluginOptionsSchema = ({ Joi }) => {
+  return Joi.object({
+    nacelleSpaceId: Joi.string()
+      .required()
+      .description('Space ID from the Nacelle Dashboard'),
+    nacelleGraphqlToken: Joi.string()
+      .required()
+      .description('GraphQL Token from the Nacelle Dashboard'),
+    contentfulPreviewSpaceId: Joi.string().description(
+      'Space ID from Contentful Dashboard settings'
+    ),
+    contentfulPreviewApiToken: Joi.string().description(
+      'Contentful Preview API token from Contentful Dashboard settings'
+    ),
+    cmsPreviewEnabled: Joi.boolean().description(
+      `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
+    ),
+    cacheDuration: Joi.number().description(
+      'Max duration in ms that gatsby-source-nacelle caches product, collection, and content data from previous builds'
+    )
+  });
+};
 
-const PaginateNacelle = {
-  name: 'NacellePagination',
-  expectedVariableNames: ['first', 'after'],
-  start() {
-    return {
-      variables: { first: CHUNK_SIZE, after: undefined },
-      hasNextPage: true
-    };
-  },
-  next(state, page) {
-    return {
-      variables: { first: CHUNK_SIZE, after: page.nextToken },
-      hasNextPage: Boolean(page.nextToken && page.items.length === CHUNK_SIZE)
-    };
-  },
-  concat(acc, page) {
-    return {
-      ...acc,
-      items: {
-        ...acc.items,
-        ...page.items
-      },
-      nextToken: page.nextToken
-    };
-  },
-  getItems(pageOrResult) {
-    return pageOrResult.items;
+exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
+  const {
+    nacelleSpaceId,
+    nacelleGraphqlToken,
+    contentfulPreviewSpaceId,
+    contentfulPreviewApiToken
+  } = pluginOptions;
+
+  const client = nacelleClient({
+    previewMode: cmsPreviewEnabled(pluginOptions),
+    nacelleSpaceId,
+    nacelleGraphqlToken,
+    contentfulPreviewSpaceId,
+    contentfulPreviewApiToken
+  });
+
+  const [
+    spaceData,
+    productData,
+    collectionData,
+    contentData
+  ] = await Promise.all([
+    // fetch data from Nacelle's Hail Frequency API
+    client.data.space(),
+    client.data.allProducts(),
+    client.data.allCollections(),
+    client.data.allContent()
+  ]).catch((err) => {
+    throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
+  });
+
+  await Promise.all([
+    // use Nacelle data to create Gatsby nodes
+    sourceNodes({ gatsbyApi, pluginOptions, data: spaceData }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: productData,
+      uniqueIdProperty: 'pimSyncSourceProductId'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: collectionData,
+      uniqueIdProperty: 'pimSyncSourceCollectionId'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: contentData,
+      uniqueIdProperty: 'cmsSyncSourceContentId'
+    })
+  ]).catch((err) => {
+    throw new Error(
+      `Could not create Gatsby nodes from Nacelle data: ${err.message}`
+    );
+  });
+};
+
+exports.createSchemaCustomization = ({ actions }) => {
+  // create custom type definitions to maintain data shape
+  // in both preview and production settings
+  actions.createTypes(typeDefs);
+};
+
+exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
+  try {
+    // the user can opt into using Gatsby Image by installing `gatsby-source-filesystem`
+    require('gatsby-source-filesystem');
+
+    const gatsbyApi = { actions, getCache, createNodeId };
+    const isImage = (nodeMediaEntry) =>
+      nodeMediaEntry &&
+      nodeMediaEntry.type &&
+      nodeMediaEntry.type.startsWith('image');
+
+    if (node.internal.type === 'NacelleProduct') {
+      await createRemoteImageFileNode(
+        node,
+        ['featuredMedia', 'media'],
+        gatsbyApi,
+        { isImage }
+      );
+    }
+
+    if (node.internal.type === 'NacelleCollection') {
+      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
+        isImage
+      });
+    }
+
+    if (node.internal.type === 'NacelleContent') {
+      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
+        isImage
+      });
+    }
+  } catch (err) {
+    return null;
   }
 };
 
-async function createSourcingConfig(gatsbyApi, pluginOptions) {
-  const { verbose } = pluginOptions;
-
-  function getPluginOption(option) {
-    // Accepts any camelCase, PascalCase, kebab-case, or snake_case option
-    const sanitize = (str) => str.replace(/[-_]/g, '').toLowerCase();
-    return pluginOptions[
-      Object.keys(pluginOptions).find(
-        (key) => sanitize(key) === sanitize(option)
-      )
-    ];
-  }
-
-  // Extract credentials from plugin options
-  const nacelleSpaceId = getPluginOption('nacellespaceid');
-  if (!nacelleSpaceId) {
-    throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
-
-      {
-        resolve: 'gatsby-source-nacelle',
-        options: {
-          nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-          nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
-        }
-      }
-    `);
-  }
-
-  const nacelleGraphqlToken = getPluginOption('nacellegraphqltoken');
-  if (!nacelleGraphqlToken) {
-    throw new Error(`Please provide a Nacelle Space ID to 'gatsby-source-nacelle'. For example:
-
-        {
-          resolve: 'gatsby-source-nacelle',
-          options: {
-            nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-            nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
-          }
-        }
-      `);
-  }
-
-  // Set up remote schema:
-  const defaultExecute = createDefaultQueryExecutor(
-    'https://hailfrequency.com/v2/graphql',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-nacelle-space-id': nacelleSpaceId,
-        'x-nacelle-space-token': nacelleGraphqlToken
-      }
-    }
-  );
-
-  const execute = (args) => {
-    if (verbose) {
-      console.log(args.operationName, args.variables);
-    }
-
-    return defaultExecute(args);
-  };
-
-  const schema = await loadSchema(execute);
-
-  // Configure Gatsby node types
-  // Note:
-  //  Queries with LIST_ prefix are automatically executed in sourceAllNodes
-  //  Queries with NODE_ prefix are executed in sourceNodeChanges for updated nodes
-  const gatsbyNodeTypes = [
-    {
-      remoteTypeName: 'Product',
-      queries: `
-        query LIST_PRODUCTS {
-          getProducts(first: $first, after: $after) {
-            nextToken
-            items { ..._ProductId_ }
-          }
-        }
-        query NODE_PRODUCT {
-          getProductByHandle(handle: $handle, locale: $locale) {
-            ..._ProductId_
-          }
-        }
-        fragment _ProductId_ on Product { __typename handle locale }
-      `
-    },
-    {
-      remoteTypeName: 'Collection',
-      queries: `
-        query LIST_COLLECTION {
-          getCollections(first: $first, after: $after) {
-            nextToken
-            items { ..._CollectionId_ }
-          }
-        }
-        query NODE_COLLECTION {
-          getCollectionByHandle(handle: $handle, locale: $locale) {
-            ..._CollectionId_
-          }
-        }
-        fragment _CollectionId_ on Collection { __typename handle locale }
-      `
-    },
-    {
-      remoteTypeName: 'Content',
-      queries: `
-        query LIST_CONTENT {
-          getContent(first: $first, after: $after) {
-            nextToken
-            items { ..._ContentId_ }
-          }
-        }
-        query NODE_CONTENT {
-          getContentByHandle(
-            type: $type
-            handle: $handle
-            locale: $locale
-          ) {
-            ..._ContentId_
-          }
-        }
-        fragment _ContentId_ on Content {
-          __typename
-          type
-          handle
-          locale
-        }
-      `
-    },
-    {
-      remoteTypeName: 'Space',
-      queries: `
-        query NODE_SPACE {
-          getSpace {
-            ..._SpaceId_
-          }
-        }
-        fragment _SpaceId_ on Space { __typename id }
-      `
-    }
-  ];
-
-  // Provide (or generate) fragments with fields to be fetched
-  ensureDir(fragmentsDir);
-  const fragments = await readOrGenerateDefaultFragments(fragmentsDir, {
-    schema,
-    gatsbyNodeTypes
-  });
-
-  // Compile sourcing queries
-  const documents = compileNodeQueries({
-    schema,
-    gatsbyNodeTypes,
-    customFragments: fragments
-  });
-
-  return {
-    gatsbyApi,
-    schema,
-    execute,
-    gatsbyTypePrefix: 'nacelle',
-    gatsbyNodeDefs: buildNodeDefinitions({ gatsbyNodeTypes, documents }),
-    paginationAdapters: [PaginateNacelle]
-  };
-}
-
-async function sourceSpaceNode(config) {
-  const remoteTypeName = 'Space';
-  const document = config.gatsbyNodeDefs.get(remoteTypeName).document;
-  const result = await config.execute({
-    query: print(document),
-    operationName: `NODE_SPACE`,
-    variables: {}
-  });
-
-  await config.gatsbyApi.actions.createNode({
-    id: `${remoteTypeName}${result.data.getSpace.remoteId}`,
-    ...result.data.getSpace,
-    internal: {
-      type: `${config.gatsbyTypePrefix}${remoteTypeName}`,
-      contentDigest: config.gatsbyApi.createContentDigest(result.data.getSpace)
-    }
-  });
-}
-
-exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
-  const config = await createSourcingConfig(gatsbyApi, pluginOptions);
-
-  // Add explicit types to gatsby schema
-  await createSchemaCustomization(config);
-
-  // Source nodes
-  await sourceAllNodes(config);
-
-  // Source the Space node manually (as it is not sourced automatically yet):
-  await sourceSpaceNode(config);
+exports.onPostBootstrap = async function ({ cache }) {
+  cache.set('nacelle-timestamp', Date.now());
 };

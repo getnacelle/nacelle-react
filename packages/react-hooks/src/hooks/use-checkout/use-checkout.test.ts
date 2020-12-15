@@ -1,4 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks';
+
+import { shopifyItem } from '@nacelle/react-dev-utils';
 import { useCheckout } from './use-checkout';
 
 const checkoutResponse = {
@@ -14,14 +16,18 @@ const checkoutResponse = {
   }
 };
 
-const items = [
-  {
-    variant: {
-      id: 'my-variant-id',
-      qty: 1
-    }
-  }
-];
+const cartItem = {
+  ...shopifyItem.variant,
+  productId: shopifyItem.id,
+  image: shopifyItem.variant.featuredMedia,
+  quantity: 1,
+  tags: [],
+  handle: shopifyItem.handle,
+  vendor: shopifyItem.vendor,
+  locale: shopifyItem.locale
+};
+
+const items = [cartItem];
 
 const credentials = {
   nacelleSpaceId: 'my-space-id',

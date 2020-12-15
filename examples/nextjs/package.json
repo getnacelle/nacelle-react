@@ -1,6 +1,6 @@
 {
   "name": "nacelle-nextjs-example",
-  "version": "2.7.1",
+  "version": "2.9.0",
   "private": true,
   "scripts": {
     "lint": "eslint ./",
@@ -11,19 +11,19 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
-    "@nacelle/contentful-preview-connector": "^0.1.4",
-    "@nacelle/react-components": "^2.7.1",
-    "@nacelle/react-hooks": "^2.6.0",
+    "@nacelle/contentful-preview-connector": "^0.1.5",
+    "@nacelle/react-components": "^2.9.0",
+    "@nacelle/react-hooks": "^2.9.0",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
-    "next": "9.5.1",
+    "next": "^9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@nacelle/client-js-sdk": "^2.0.2",
-    "@nacelle/react-dev-utils": "^2.6.0",
+    "@nacelle/react-dev-utils": "^2.9.0",
     "eslint": "^7.6.0",
     "lint-staged": "^10.2.11"
   },

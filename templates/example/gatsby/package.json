@@ -1,0 +1,49 @@
+{
+  "name": "template-gatsby-example",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "lint": "eslint ./",
+    "precommit": "lint-staged",
+    "dev": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
+  },
+  "keywords": [
+    "react",
+    "nacelle",
+    "jamstack",
+    "gatsby"
+  ],
+  "author": "Nacelle Dev Team",
+  "license": "ISC",
+  "dependencies": {
+    "gatsby": "0.0.0",
+    "react": "0.0.0",
+    "react-dom": "0.0.0"
+  },
+  "devDependencies": {
+    "eslint": "0.0.0",
+    "graphql": "0.0.0",
+    "lint-staged": "0.0.0"
+  },
+  "lint-staged": {
+    "**/**/*.(js|ts|tsx)": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  }
+}

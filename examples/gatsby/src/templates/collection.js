@@ -1,48 +1,70 @@
-import * as React from 'react';
-import { Link, graphql } from 'gatsby';
+import React from 'react';
+import { graphql } from 'gatsby';
 
-export default function Collection({ data, pageContext }) {
-  const { title } = pageContext;
-  const products = data.allNacelleProduct.edges;
+import ContentSections from 'components/ContentSections';
+import ProductGallery from 'components/ProductGallery';
+
+const Collection = ({ data }) => {
+  const products = data.allNacelleProduct.edges.map((edge) => edge.node);
+  const page = data.nacelleContent;
   return (
     <>
-      <h1>{title}</h1>
-      <ul style={{ listStyleType: 'none', padding: '0' }}>
-        {products.map((el) => (
-          <li key={el.node.handle}>
-            <h2>
-              <Link to={`/products/${el.node.handle}`}>{el.node.title}</Link>
-            </h2>
-            <img
-              src={el.node.featuredMedia.src}
-              alt={el.node.title}
-              style={{ width: '100%' }}
-            />
-          </li>
-        ))}
-      </ul>
+      {page && <ContentSections sections={page.sections} />}
+      <ProductGallery products={products} />
     </>
   );
-}
+};
+
+export default Collection;
 
 export const query = graphql`
-  query FilteredProductsQuery($handles: [String]) {
+  query ProductInCollection($handles: [String], $handle: String) {
     allNacelleProduct(filter: { handle: { in: $handles } }) {
       edges {
         node {
+          remoteId
           handle
           title
-          priceRange {
-            currencyCode
-            min
-            max
-          }
           featuredMedia {
+            remoteImage {
+              childImageSharp {
+                gatsbyImageData(maxWidth: 320, layout: FLUID)
+              }
+            }
             src
             altText
           }
+          variants {
+            id
+            availableForSale
+            compareAtPrice
+            compareAtPriceCurrency
+            price
+            priceCurrency
+            metafields {
+              key
+              namespace
+              value
+            }
+            sku
+            swatchSrc
+            title
+            featuredMedia {
+              src
+              thumbnailSrc
+              altText
+              remoteImage {
+                childImageSharp {
+                  gatsbyImageData(maxWidth: 320, layout: FLUID)
+                }
+              }
+            }
+          }
         }
       }
+    }
+    nacelleContent(type: { eq: "page" }, handle: { eq: $handle }) {
+      sections
     }
   }
 `;

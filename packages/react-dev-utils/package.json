@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-dev-utils",
-  "version": "2.6.0",
+  "version": "2.9.0",
   "description": "Development utilities for Nacelle React projects",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -10,11 +10,10 @@
   "scripts": {
     "prebuild": "rimraf ./build",
     "precommit": "lint-staged",
-    "build": "npm run generate && rollup -c",
+    "build": "rollup -c",
     "test": "jest ./src --watch",
     "test:ci": "jest ./src --runInBand --coverage",
-    "lint": "eslint ./src",
-    "generate": "DEBUG=1 graphql-codegen --config codegen.yml -r dotenv/config"
+    "lint": "eslint ./src"
   },
   "keywords": [
     "react",
@@ -23,14 +22,12 @@
   "author": "Nacelle Dev Team",
   "license": "ISC",
   "devDependencies": {
-    "@graphql-codegen/cli": "1.17.8",
+    "@nacelle/types": "^3.0.0",
     "eslint": "^7.6.0",
-    "graphql": "^14.6.0",
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.1",
-    "@graphql-codegen/typescript": "1.17.8"
+    "rollup": "^2.23.1"
   },
   "repository": {
     "type": "git",

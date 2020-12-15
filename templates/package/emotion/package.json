@@ -1,0 +1,60 @@
+{
+  "name": "template-package",
+  "version": "0.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "prebuild": "rimraf ./build",
+    "precommit": "lint-staged",
+    "build": "rollup -c",
+    "test": "jest ./src --watch",
+    "test:ci": "jest ./src --runInBand --coverage",
+    "lint": "eslint ./src",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "keywords": [
+    "react",
+    "nacelle",
+    "jamstack"
+  ],
+  "author": "Nacelle Dev Team",
+  "license": "ISC",
+  "peerDependencies": {
+    "@emotion/core": "0.0.0",
+    "react": "0.0.0",
+    "react-dom": "0.0.0"
+  },
+  "devDependencies": {
+    "@storybook/react": "0.0.0",
+    "eslint": "0.0.0",
+    "jest": "0.0.0",
+    "lint-staged": "0.0.0",
+    "rimraf": "0.0.0",
+    "rollup": "0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getnacelle/nacelle-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/getnacelle/nacelle-react/issues"
+  },
+  "lint-staged": {
+    "src/**/*.(js|ts|tsx)": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ],
+    "*{json, md}": [
+      "prettier --write"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

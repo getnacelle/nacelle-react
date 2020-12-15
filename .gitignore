@@ -5,6 +5,7 @@ coverage/
 
 .vscode/
 .cache/
+.DS_Store
 
 # Log files
 lerna-debug.log
@@ -12,3 +13,4 @@ lerna-debug.log
 # Environment Variables
 .env
 .env.production
+package-lock.json

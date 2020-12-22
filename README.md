@@ -20,7 +20,7 @@ This will install dependencies for all of the packages, and Lerna will hoist any
 
 ### Adding a New Dependency
 
-In general, it's best to use [`lerna add`](https://github.com/lerna/lerna/tree/master/commands/add#readme) to add new packages to a specific repository. This ensures that local packages do not get out of sync. If you accidentally `npm install` a dependency within one of the packages, you may have to subsequently run `npm run bootstrap` in the project root so that Lerna will re-establish any symlinks. This happens because running `npm install` will overwrite any local symmlinks with the version of the package from the NPM repository.
+In general, it's best to use [`lerna add`](https://github.com/lerna/lerna/tree/main/commands/add#readme) to add new packages to a specific repository. This ensures that local packages do not get out of sync. If you accidentally `npm install` a dependency within one of the packages, you may have to subsequently run `npm run bootstrap` in the project root so that Lerna will re-establish any symlinks. This happens because running `npm install` will overwrite any local symmlinks with the version of the package from the NPM repository.
 
 Here are some examples:
 
@@ -53,16 +53,16 @@ In the root project, the following global commands are available:
 npm run publish
 ```
 
-This will update and publish all packages that have changed since the last release (it will show you which packages and the versions that will be published). This makes it easy for making changes across interdependent packages. More info [here](https://github.com/lerna/lerna/tree/master/commands/publish#readme).
+This will update and publish all packages that have changed since the last release (it will show you which packages and the versions that will be published). This makes it easy for making changes across interdependent packages. More info [here](https://github.com/lerna/lerna/tree/main/commands/publish#readme).
 
 ## Packages
 
-- [`react-hooks`](https://github.com/getnacelle/nacelle-react/tree/master/packages/react-hooks): Convenience hooks for use in React applications with Nacelle
-- [`component-library`](https://github.com/getnacelle/nacelle-react/tree/master/packages/component-library): Atomic UI components that can be used to create React applications with Nacelle
-- [`gatsby-source-nacelle`](https://github.com/getnacelle/nacelle-react/tree/master/packages/gatsby-source-nacelle): A Gatsby source plugin that integrates with the Nacelle SDK
-- [`react-klaviyo`](https://github.com/getnacelle/nacelle-react/tree/master/packages/react-klaviyo): Klaviyo components for integrating with Shopify
-- [`react-recharge`](https://github.com/getnacelle/nacelle-react/tree/master/packages/react-recharge): Recharge components for integrating with Shopify
-- [`react-yotpo`](https://github.com/getnacelle/nacelle-react/tree/master/packages/react-yotpo): Yotpo components for integrating with Shopify
+- [`react-hooks`](https://github.com/getnacelle/nacelle-react/tree/main/packages/react-hooks): Convenience hooks for use in React applications with Nacelle
+- [`component-library`](https://github.com/getnacelle/nacelle-react/tree/main/packages/component-library): Atomic UI components that can be used to create React applications with Nacelle
+- [`gatsby-source-nacelle`](https://github.com/getnacelle/nacelle-react/tree/main/packages/gatsby-source-nacelle): A Gatsby source plugin that integrates with the Nacelle SDK
+- [`react-klaviyo`](https://github.com/getnacelle/nacelle-react/tree/main/packages/react-klaviyo): Klaviyo components for integrating with Shopify
+- [`react-recharge`](https://github.com/getnacelle/nacelle-react/tree/main/packages/react-recharge): Recharge components for integrating with Shopify
+- [`react-yotpo`](https://github.com/getnacelle/nacelle-react/tree/main/packages/react-yotpo): Yotpo components for integrating with Shopify
 
 ### Creating a New Package
 
@@ -80,11 +80,11 @@ If your package is scoped (i.e. `@nacelle/package-name`), be sure to include the
 
 ## Example Projects
 
-- [`gatsby`](https://github.com/getnacelle/nacelle-react/tree/master/examples/gatsby): A simple Gatsby implementation that uses `gatsby-source-nacelle`
-- [`nextjs`](https://github.com/getnacelle/nacelle-react/tree/master/examples/nextjs): An e-commerce store exmaple that uses the Nacelle `component-library` and `react-hooks`
-- [`withKlaviyo`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withKlaviyo): An example of integrating Klaviyo with Next.js using `react-klaviyo`
-- [`withRecharge`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withRecharge): An example of integrating ReCharge with Next.js using `react-recharge`
-- [`withYotpo`](https://github.com/getnacelle/nacelle-react/tree/master/examples/withYotpo): An example of integrating Yotpo with Next.js using `react-yotpo`
+- [`gatsby`](https://github.com/getnacelle/nacelle-react/tree/main/examples/gatsby): A simple Gatsby implementation that uses `gatsby-source-nacelle`
+- [`nextjs`](https://github.com/getnacelle/nacelle-react/tree/main/examples/nextjs): An e-commerce store exmaple that uses the Nacelle `component-library` and `react-hooks`
+- [`withKlaviyo`](https://github.com/getnacelle/nacelle-react/tree/main/examples/withKlaviyo): An example of integrating Klaviyo with Next.js using `react-klaviyo`
+- [`withRecharge`](https://github.com/getnacelle/nacelle-react/tree/main/examples/withRecharge): An example of integrating ReCharge with Next.js using `react-recharge`
+- [`withYotpo`](https://github.com/getnacelle/nacelle-react/tree/main/examples/withYotpo): An example of integrating Yotpo with Next.js using `react-yotpo`
 
 ### Creating a New Example
 

@@ -16,7 +16,7 @@
     "@nacelle/react-hooks": "^2.9.0",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
-    "next": "^9.5.1",
+    "next": "^10.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

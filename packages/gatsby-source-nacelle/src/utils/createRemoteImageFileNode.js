@@ -104,15 +104,19 @@ module.exports = async function (
     const nodeMediaArray = Array.isArray(nodeMedia) ? nodeMedia : [nodeMedia];
     const options = { isImage, imageProperties };
 
-    nodeMediaArray.forEach(async (media) => {
-      if (Array.isArray(node[media])) {
-        node.media.forEach(async (_media, idx) => {
-          await createFileNode(node, [media, idx], gatsbyApi, options);
-        });
-      } else {
-        await createFileNode(node, media, gatsbyApi, options);
-      }
-    });
+    await Promise.all(
+      nodeMediaArray.map((media) => {
+        if (Array.isArray(node[media])) {
+          return Promise.all(
+            node.media.map((_media, idx) =>
+              createFileNode(node, [media, idx], gatsbyApi, options)
+            )
+          );
+        } else {
+          return createFileNode(node, media, gatsbyApi, options);
+        }
+      })
+    );
   } catch (err) {
     throw new Error(
       `Problem creating file node for remote image: ${err.message}`

@@ -1,7 +1,8 @@
 import React, { useState, Fragment, useEffect } from 'react';
-import { Button, TextInput, Image } from '@nacelle/react-components';
+import { Button, TextInput } from '@nacelle/react-components';
 import { formatCurrency } from '@nacelle/react-dev-utils';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { useProductSearch } from 'providers/ProductSearch';
@@ -37,8 +38,9 @@ const SearchResults = ({ show, results, hideResults, resetSearchValue }) => {
                 <div css={styles.resultCard}>
                   <Image
                     src={item.variants[0].featuredMedia.src}
-                    width={148}
-                    styles={styles.productImage}
+                    width="100"
+                    height="100"
+                    css={styles.productImage}
                   />
                   <h4 css={styles.productTitle}>{item.title}</h4>
                   <span>{formatPrice(item.variants[0].price)}</span>

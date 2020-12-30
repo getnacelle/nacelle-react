@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCart } from '@nacelle/react-hooks';
-import { Button, Image } from '@nacelle/react-components';
+import { Button } from '@nacelle/react-components';
 
 import SearchBar from 'components/SearchBar';
 import * as styles from './Header.styles';
@@ -20,8 +21,10 @@ const MobileNav = ({ show, navItems, toggleNav, title }) => {
       <div css={styles.mobileNavHeader}>
         <Button styles={styles.closeButton} onClick={toggleNav}>
           <Image
-            styles={styles.closeIcon}
             src="https://nacelle-assets.s3-us-west-2.amazonaws.com/default-close-icon.svg"
+            width="100"
+            height="100"
+            css={styles.closeIcon}
           />
         </Button>
         <strong>{title}</strong>

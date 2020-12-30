@@ -18,5 +18,6 @@ export const bannerTitle = {
   position: 'absolute',
   color: '#fff',
   fontSize: '4em',
+  textAlign: 'center',
   textShadow: '1px 2px darkslategray'
 };

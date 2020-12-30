@@ -1,20 +1,21 @@
 import React from 'react';
+import Image from 'next/image';
 
-import { Image } from '@nacelle/react-components';
 import * as styles from './HeroBanner.styles';
 
-const IMAGE_FORMATS = ['webp', 'jpg'];
-
 const HeroBanner = ({ fields }) => {
-  const image = fields.featuredMedia.fields;
+  const fileUrl = fields?.featuredMedia?.fields?.file?.url;
+  const alt = fields?.backgroundAltTag;
+  const src = fileUrl?.startsWith('https:') ? fileUrl : `https:${fileUrl}`;
 
   return (
     <div css={styles.block}>
       <Image
-        src={image.file.url}
-        width={1800}
+        src={src}
+        alt={alt}
+        width="1600"
+        height="1200"
         css={styles.image}
-        format={IMAGE_FORMATS}
       />
       <h1 css={styles.bannerTitle}>{fields.title}</h1>
     </div>

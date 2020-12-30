@@ -3,7 +3,7 @@
   "packages": ["packages/*", "examples/*"],
   "version": "2.9.0",
   "publish": {
-    "allowBranch": "main",
+    "allowBranch": "master",
     "ignoreChanges": [
       "*.md",
       ".gitignore",

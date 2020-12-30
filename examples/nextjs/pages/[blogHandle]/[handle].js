@@ -21,7 +21,9 @@ export async function getStaticPaths() {
     const allContent = await $nacelle.data.allContent();
     const blogs = allContent.filter((entry) => entry.type === 'blog');
     const paths = blogs.flatMap((blog) =>
-      blog.articleLists[0].handles.map((handle) => ({ params: { handle } }))
+      blog.articleLists[0].handles.map((handle) => ({
+        params: { handle, blogHandle: blog.handle }
+      }))
     );
 
     return {

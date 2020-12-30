@@ -74,4 +74,4 @@ const getCartMetafields = (cartMetafields) => {
 
 ### Example
 
-An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/main/examples/withRecharge).
+An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/master/examples/withRecharge).

@@ -73,4 +73,4 @@ Methods:
 
 ### Example
 
-An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/main/examples/withKlaviyo).
+An example integration with Nextjs can be found [here](https://github.com/getnacelle/nacelle-react/tree/master/examples/withKlaviyo).

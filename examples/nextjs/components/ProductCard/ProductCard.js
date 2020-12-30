@@ -16,7 +16,7 @@ const LinkPDP = ({ pdpLink, children }) => {
   }
 
   return (
-    <Link href="/products/[handle]" as={pdpLink}>
+    <Link href="/products/[handle]">
       <a css={styles.pdpLink}>{children}</a>
     </Link>
   );

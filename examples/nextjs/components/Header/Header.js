@@ -29,10 +29,10 @@ const MobileNav = ({ show, navItems, toggleNav, title }) => {
       <div css={styles.mobileNavItems}>
         {navItems.map((link, idx) => {
           const isCurrentPage = router.asPath === link.to;
-          const { href, to } = createLinkHref(link);
+          const { href } = createLinkHref(link);
 
           return (
-            <Link href={href} as={to} key={`${link.title}-${idx}`}>
+            <Link href={href} key={`${link.title}-${idx}`}>
               <a
                 onClick={toggleNav}
                 css={[
@@ -57,10 +57,10 @@ const DesktopNav = ({ navItems }) => {
     <nav css={styles.nav}>
       {navItems.map((link, idx) => {
         const isCurrentPage = router.asPath === link.to;
-        const { href, to } = createLinkHref(link);
+        const { href } = createLinkHref(link);
 
         return (
-          <Link href={href} as={to} key={`${link.title}-${idx}`}>
+          <Link href={href} key={`${link.title}-${idx}`}>
             <a css={[styles.navLink, isCurrentPage && { color: '#ee7acb' }]}>
               {link.title}
             </a>

@@ -1,9 +1,9 @@
 export const block = {
+  position: 'relative',
   display: 'flex',
-  placeItems: 'center',
   justifyContent: 'center',
-  marginBottom: '-0.33em',
-  width: '100%'
+  alignItems: 'center',
+  height: '90vh'
 };
 
 export const image = {

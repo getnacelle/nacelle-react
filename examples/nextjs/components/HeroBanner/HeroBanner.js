@@ -10,13 +10,7 @@ const HeroBanner = ({ fields }) => {
 
   return (
     <div css={styles.block}>
-      <Image
-        src={src}
-        alt={alt}
-        width="1600"
-        height="1200"
-        css={styles.image}
-      />
+      <Image src={src} alt={alt} layout="fill" css={styles.image} />
       <h1 css={styles.bannerTitle}>{fields.title}</h1>
     </div>
   );

@@ -1,39 +1,36 @@
-import React from 'react'
-import $nacelle from 'services/nacelle.js'
+import React from 'react';
+import $nacelle from 'services/nacelle.js';
 
 const Page = ({ page }) => {
-  return page && <pre>{JSON.stringify(page)}</pre>;
+  return page && <pre>{JSON.stringify(page, null, 2)}</pre>;
 };
 
-export default Page
+export default Page;
 
 export async function getStaticPaths() {
   try {
-    const allContent = await $nacelle.data.allContent()
-    const pages = allContent.filter(entry => entry.type === "page")
+    const allContent = await $nacelle.data.allContent();
+    const pages = allContent.filter((entry) => entry.type === 'page');
+    const paths = pages.map((page) => {
+      const { handle } = page;
+      return { params: { handle } };
+    });
+
     return {
-      paths: pages.map(page => {
-        const { handle } = page
-        return { params: { handle } }
-      }),
-      fallback: false // See the "fallback" section below
+      paths,
+      fallback: false
     };
   } catch (err) {
-    console.error(`Error fetching page:\n${err}`)
+    throw new Error(`could not fetch content:\n${err.message}`);
   }
 }
 
 export async function getStaticProps({ params }) {
-  try {
-    const page = await $nacelle.data.page({
-      handle: params.handle
-    });
+  const { handle } = params;
+  const page = await $nacelle.data.page({ handle }).catch(() => {
+    console.warn(`no page with handle '${handle}' found.`);
+    return null;
+  });
 
-    return {
-      props: { page }, // will be passed to the page component as props
-    }
-  } catch {
-    console.warn(`Problem fetching page data for page with handle '${params.handle}'`)
-    return { props: { page: null }}
-  }
+  return { props: { page } };
 }

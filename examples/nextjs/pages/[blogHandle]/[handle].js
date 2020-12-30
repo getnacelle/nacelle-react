@@ -1,39 +1,41 @@
-import React from 'react'
-import $nacelle from 'services/nacelle.js'
+import React from 'react';
+import $nacelle from 'services/nacelle.js';
 
 const Blog = ({ articles }) => {
-  return <pre>{JSON.stringify(articles)}</pre>;
+  return <pre>{JSON.stringify(articles, null, 2)}</pre>;
 };
 
-export default Blog
+export default Blog;
 
 export async function getStaticPaths() {
   try {
-    const allContent = await $nacelle.data.allContent()
-    const blogs = allContent.filter(entry => entry.type === "blog")
+    const allContent = await $nacelle.data.allContent();
+    const blogs = allContent.filter((entry) => entry.type === 'blog');
+    const paths = blogs.flatMap((blog) =>
+      blog.articleLists[0].handles.map((handle) => ({ params: { handle } }))
+    );
+
     return {
-      paths: blogs.flatMap(
-        blog => blog.articleLists[0].handles.map(
-          handle => {
-            return { params: { blogHandle: blog.handle, handle }}
-          }
-        )
-      ),
-      fallback: false // See the "fallback" section below
+      paths,
+      fallback: false
     };
-  } catch(err) {
-    console.error(`Error fetching blogs & articles:\n${err}`)
-  }  
+  } catch (err) {
+    throw new Error(`could not fetch content: ${err.message}`);
+  }
 }
 
 export async function getStaticProps({ params }) {
-  const articles = await $nacelle.data.blogPage({
-    handle: params.blogHandle,
-    paginate: true,
-    itemsPerPage: 6
-  });
-  
-  return {
-    props: { articles }, // will be passed to the page component as props
-  }
+  const { handle } = params;
+  const articles = await $nacelle.data
+    .blogPage({
+      handle,
+      paginate: true,
+      itemsPerPage: 6
+    })
+    .catch(() => {
+      console.warn(`no articles found for blog with handle: '${handle}'`);
+      return null;
+    });
+
+  return { props: { articles } };
 }

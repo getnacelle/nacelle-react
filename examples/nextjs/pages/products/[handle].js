@@ -50,6 +50,7 @@ export default ProductDetail;
 export async function getStaticPaths() {
   try {
     const products = await $nacelle.data.allProducts();
+
     return {
       paths: products.map((product) => ({
         params: { handle: product.handle }
@@ -57,12 +58,16 @@ export async function getStaticPaths() {
       fallback: false
     };
   } catch (err) {
-    throw new Error(`Error fetching products on homepage:\n${err}`);
+    throw new Error(`could not fetch products on homepage:\n${err}`);
   }
 }
 
 export async function getStaticProps({ params }) {
-  const product = await $nacelle.data.product({ handle: params.handle });
+  const { handle } = params;
+  const product = await $nacelle.data.product({ handle }).catch(() => {
+    console.warn(`no product with handle '${handle}' found.`);
+    return null;
+  });
 
   return { props: { product } };
 }

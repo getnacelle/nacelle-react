@@ -27,16 +27,8 @@ const ProductCard = ({
   showDescription = false,
   constrainImages = true,
   isPDP = false,
-  dimensions = {
-    plp: {
-      width: 320,
-      height: 240
-    },
-    pdp: {
-      width: 530,
-      height: 350
-    }
-  },
+  height,
+  width,
   children
 }) => {
   const [quantity, setQuantity] = useState(0);
@@ -57,7 +49,6 @@ const ProductCard = ({
     return toggleCart();
   };
 
-  const imageDimensions = isPDP ? dimensions.pdp : dimensions.plp;
   const imageStyles = constrainImages ? styles.productImage : styles.pdpImage;
 
   const incrementQty = () => setQuantity((qty) => qty + 1);
@@ -74,8 +65,8 @@ const ProductCard = ({
             <Image
               src={product.featuredMedia.src}
               alt={product.featuredMedia.altText}
-              width={imageDimensions.width}
-              height={imageDimensions.height}
+              width={width}
+              height={height}
               css={imageStyles}
             />
           </LinkPDP>

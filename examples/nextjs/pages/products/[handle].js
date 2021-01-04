@@ -22,6 +22,8 @@ const ProductDetail = ({ product }) => {
         showDescription
         isPDP
         constrainImages={false}
+        width={530}
+        height={350}
       >
         <section css={styles.detailGridLayout}>
           <div css={styles.gettingLayout}>

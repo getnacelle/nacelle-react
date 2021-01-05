@@ -99,31 +99,27 @@ module.exports = async function (
   gatsbyApi,
   { isImage, imageProperties } = {}
 ) {
+  // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
   try {
-    // ensure that `gatsby-source-filesystem` is installed
-    require('gatsby-source-filesystem').createRemoteFileNode;
+    const nodeMediaArray = Array.isArray(nodeMedia) ? nodeMedia : [nodeMedia];
+    const options = { isImage, imageProperties };
 
-    // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
-    try {
-      const nodeMediaArray = Array.isArray(nodeMedia) ? nodeMedia : [nodeMedia];
-      const options = { isImage, imageProperties };
-
-      nodeMediaArray.forEach(async (media) => {
+    await Promise.all(
+      nodeMediaArray.map((media) => {
         if (Array.isArray(node[media])) {
-          node.media.forEach(async (_media, idx) => {
-            await createFileNode(node, [media, idx], gatsbyApi, options);
-          });
+          return Promise.all(
+            node.media.map((_media, idx) =>
+              createFileNode(node, [media, idx], gatsbyApi, options)
+            )
+          );
         } else {
-          await createFileNode(node, media, gatsbyApi, options);
+          return createFileNode(node, media, gatsbyApi, options);
         }
-      });
-    } catch (err) {
-      throw new Error(
-        `Problem creating file node for remote image: ${err.message}`
-      );
-    }
+      })
+    );
   } catch (err) {
-    // if the user hasn't opted in to using Gatsby image by installing `gatsby-source-filesystem`, exit
-    return null;
+    throw new Error(
+      `Problem creating file node for remote image: ${err.message}`
+    );
   }
 };

@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-components",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -57,7 +57,7 @@
       "prettier --write"
     ]
   },
-  "gitHead": "1450cacb61bf460e1bb1111e2a2a5f11c7dc3960",
+  "gitHead": "3153c14f529fa9f691e7cd2e6c44cee74d1a78db",
   "publishConfig": {
     "access": "public"
   }

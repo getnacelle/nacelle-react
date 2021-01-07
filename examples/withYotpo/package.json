@@ -1,6 +1,6 @@
 {
   "name": "nacelle-yotpo-example",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "private": true,
   "scripts": {
     "lint": "eslint ./",
@@ -10,13 +10,13 @@
     "start": "next start"
   },
   "dependencies": {
-    "@nacelle/react-components": "^2.10.0",
+    "@nacelle/react-components": "^2.10.1",
     "next": "^10.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@nacelle/react-yotpo": "^2.10.0",
+    "@nacelle/react-yotpo": "^2.10.1",
     "eslint": "^7.6.0",
     "lint-staged": "^10.2.11"
   },

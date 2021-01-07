@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-dev-utils",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "Development utilities for Nacelle React projects",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -46,7 +46,7 @@
       "prettier --write"
     ]
   },
-  "gitHead": "035c19eae87a2fa022d2649bd6a829bef55709f3",
+  "gitHead": "3153c14f529fa9f691e7cd2e6c44cee74d1a78db",
   "publishConfig": {
     "access": "public"
   }

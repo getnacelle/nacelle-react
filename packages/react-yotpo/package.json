@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-yotpo",
-  "version": "2.10.0",
+  "version": "2.10.1",
   "description": "React integration for Yotpo",
   "main": "build/index.js",
   "module": "build/index.es.js",
@@ -31,7 +31,7 @@
     "react-dom": ">=16.12.0"
   },
   "devDependencies": {
-    "@nacelle/react-dev-utils": "^2.10.0",
+    "@nacelle/react-dev-utils": "^2.10.1",
     "@nacelle/types": "^3.0.0",
     "@storybook/react": "^6.0.5",
     "eslint": "^7.6.0",
@@ -60,5 +60,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "1450cacb61bf460e1bb1111e2a2a5f11c7dc3960"
+  "gitHead": "3153c14f529fa9f691e7cd2e6c44cee74d1a78db"
 }

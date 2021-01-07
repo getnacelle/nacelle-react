@@ -12,7 +12,12 @@ const ProductGallery = ({ products }) => {
       styles={styles.grid}
     >
       {products.map((product) => (
-        <ProductCard product={product} key={product.id} />
+        <ProductCard
+          product={product}
+          key={product.id}
+          width={320}
+          height={240}
+        />
       ))}
     </Grid>
   );

@@ -9,7 +9,8 @@ export const column = {
   },
   maxWidth: '50%',
   minHeight: '25em',
-  display: 'flex'
+  display: 'flex',
+  zIndex: 0
 };
 
 export const image = {

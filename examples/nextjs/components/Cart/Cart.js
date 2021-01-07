@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCheckout, useCart } from '@nacelle/react-hooks';
-import { Button, Image } from '@nacelle/react-components';
+import { Button } from '@nacelle/react-components';
 import { formatCurrency } from '@nacelle/react-dev-utils';
 
 import ItemQuantity from 'components/ItemQuantity';
@@ -36,8 +37,11 @@ const Cart = () => {
         <h3 css={styles.cartTitle}>Your Cart</h3>
         <Button styles={styles.closeButton} onClick={cartActions.toggleCart}>
           <Image
-            styles={styles.closeIcon}
+            alt="cross for closing the cart"
             src="https://nacelle-assets.s3-us-west-2.amazonaws.com/default-close-icon.svg"
+            width="15"
+            height="25"
+            css={styles.closeIcon}
           />
         </Button>
       </header>
@@ -99,8 +103,10 @@ const CartItem = ({ item, cartActions, isMobile }) => {
       <Link href={`/products/${item.handle}`}>
         <a css={[styles.thumbnailContainer, isMobile && { paddingLeft: 0 }]}>
           <Image
-            styles={styles.cartItemThumbnail}
             src={item.image.thumbnailSrc}
+            width="100"
+            height="70"
+            css={styles.cartItemThumbnail}
           />
         </a>
       </Link>

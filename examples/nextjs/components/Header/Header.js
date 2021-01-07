@@ -1,12 +1,39 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useCart } from '@nacelle/react-hooks';
-import { Button, Image } from '@nacelle/react-components';
+import { Button } from '@nacelle/react-components';
 
 import SearchBar from 'components/SearchBar';
 import * as styles from './Header.styles';
+
+const NavLink = ({ link, currentPath, toggleNav }) => {
+  const isExternal =
+    link.type.toLowerCase() === 'external' && link.to.startsWith('https:');
+
+  if (isExternal) {
+    return (
+      <a href={link.to} css={[styles.mobileNavLink]}>
+        {link.title}
+      </a>
+    );
+  }
+
+  const isCurrentPage = currentPath === link.to;
+
+  return (
+    <Link href={link.to}>
+      <a
+        onClick={toggleNav}
+        css={[styles.mobileNavLink, isCurrentPage && { color: '#ee7acb' }]}
+      >
+        {link.title}
+      </a>
+    </Link>
+  );
+};
 
 const MobileNav = ({ show, navItems, toggleNav, title }) => {
   const router = useRouter();
@@ -20,31 +47,23 @@ const MobileNav = ({ show, navItems, toggleNav, title }) => {
       <div css={styles.mobileNavHeader}>
         <Button styles={styles.closeButton} onClick={toggleNav}>
           <Image
-            styles={styles.closeIcon}
             src="https://nacelle-assets.s3-us-west-2.amazonaws.com/default-close-icon.svg"
+            width="100"
+            height="100"
+            css={styles.closeIcon}
           />
         </Button>
         <strong>{title}</strong>
       </div>
       <div css={styles.mobileNavItems}>
-        {navItems.map((link, idx) => {
-          const isCurrentPage = router.asPath === link.to;
-          const { href, to } = createLinkHref(link);
-
-          return (
-            <Link href={href} as={to} key={`${link.title}-${idx}`}>
-              <a
-                onClick={toggleNav}
-                css={[
-                  styles.mobileNavLink,
-                  isCurrentPage && { color: '#ee7acb' }
-                ]}
-              >
-                {link.title}
-              </a>
-            </Link>
-          );
-        })}
+        {navItems.map((link, idx) => (
+          <NavLink
+            link={link}
+            currentPath={router.asPath}
+            toggleNav={toggleNav}
+            key={`${link.to}-${idx}`}
+          />
+        ))}
       </div>
     </nav>
   );
@@ -55,18 +74,13 @@ const DesktopNav = ({ navItems }) => {
 
   return (
     <nav css={styles.nav}>
-      {navItems.map((link, idx) => {
-        const isCurrentPage = router.asPath === link.to;
-        const { href, to } = createLinkHref(link);
-
-        return (
-          <Link href={href} as={to} key={`${link.title}-${idx}`}>
-            <a css={[styles.navLink, isCurrentPage && { color: '#ee7acb' }]}>
-              {link.title}
-            </a>
-          </Link>
-        );
-      })}
+      {navItems.map((link, idx) => (
+        <NavLink
+          link={link}
+          currentPath={router.asPath}
+          key={`${link.to}-${idx}`}
+        />
+      ))}
     </nav>
   );
 };
@@ -126,18 +140,5 @@ const Header = ({ space }) => {
     </header>
   );
 };
-
-function createLinkHref(link) {
-  if (link.type.toLowerCase() === 'page') {
-    return { href: link.to, to: link.to };
-  }
-
-  const base = `/${link.type.toLowerCase()}s`;
-
-  return {
-    href: `${base}/[handle]`,
-    to: `${base}/${link.title.replace("'", '').toLowerCase()}`
-  };
-}
 
 export default Header;

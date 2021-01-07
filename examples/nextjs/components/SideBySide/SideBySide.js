@@ -1,17 +1,18 @@
 import React from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Image, Button } from '@nacelle/react-components';
+import { Button } from '@nacelle/react-components';
 
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './SideBySide.styles';
-
-const IMAGE_FORMATS = ['webp', 'jpg'];
 
 const SideBySide = ({ fields }) => {
   const router = useRouter();
   const device = useDetectDevice();
   const textContent = findTextContent(fields.content.content);
-  const imageSrc = fields.featuredMedia.fields.file.url;
+  const fileUrl = fields?.featuredMedia?.fields?.file?.url;
+  const src = fileUrl?.startsWith('https:') ? fileUrl : `https:${fileUrl}`;
+  const alt = fields?.featuredMedia?.fields?.title;
 
   const flexDirection = determineFlexDirection(device, fields);
   const routeToCtaPage = () => router.push(fields.ctaUrl);
@@ -22,10 +23,11 @@ const SideBySide = ({ fields }) => {
     <div css={layoutStyles}>
       <section css={styles.column}>
         <Image
-          src={imageSrc}
+          src={src}
+          alt={alt}
+          width="1200"
+          height="900"
           css={styles.image}
-          width={1000}
-          format={IMAGE_FORMATS}
         />
       </section>
       <section

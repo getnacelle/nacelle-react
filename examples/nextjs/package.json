@@ -16,11 +16,12 @@
     "@nacelle/react-hooks": "^2.9.0",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
-    "next": "^9.5.1",
+    "next": "^10.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.1",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@nacelle/client-js-sdk": "^2.0.2",
     "@nacelle/react-dev-utils": "^2.9.0",

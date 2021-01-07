@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '@nacelle/react-hooks';
-import { Image, Button, Grid } from '@nacelle/react-components';
+import { Button, Grid } from '@nacelle/react-components';
 import { formatCurrency } from '@nacelle/react-dev-utils';
 
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './ProductCard.styles';
-
-const IMAGE_FORMATS = ['webp', 'jpg'];
 
 const LinkPDP = ({ pdpLink, children }) => {
   if (!pdpLink) {
@@ -16,7 +15,7 @@ const LinkPDP = ({ pdpLink, children }) => {
   }
 
   return (
-    <Link href="/products/[handle]" as={pdpLink}>
+    <Link href={pdpLink}>
       <a css={styles.pdpLink}>{children}</a>
     </Link>
   );
@@ -28,6 +27,8 @@ const ProductCard = ({
   showDescription = false,
   constrainImages = true,
   isPDP = false,
+  height,
+  width,
   children
 }) => {
   const [quantity, setQuantity] = useState(0);
@@ -64,9 +65,9 @@ const ProductCard = ({
             <Image
               src={product.featuredMedia.src}
               alt={product.featuredMedia.altText}
-              width={320}
-              format={IMAGE_FORMATS}
-              styles={imageStyles}
+              width={width}
+              height={height}
+              css={imageStyles}
             />
           </LinkPDP>
 

@@ -1,12 +1,9 @@
 {
   "npmClient": "npm",
-  "packages": [
-    "packages/*",
-    "examples/*"
-  ],
+  "packages": ["packages/*", "examples/*"],
   "version": "2.10.1",
   "publish": {
-    "allowBranch": "master",
+    "allowBranch": "main",
     "ignoreChanges": [
       "*.md",
       ".gitignore",
@@ -18,9 +15,7 @@
   },
   "command": {
     "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
+      "npmClientArgs": ["--no-package-lock"]
     }
   }
 }

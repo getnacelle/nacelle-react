@@ -3,7 +3,7 @@
 </h1>
 
 <!-- [![npm version](https://img.shields.io/npm/v/@nacelle/gatsby-source-nacelle.svg)](https://www.npmjs.com/package/@nacelle/gatsby-source-nacelle) -->
-<!-- [![GitHub license](https://img.shields.io/github/license/getnacelle/nacelle-react/tree/master/packages/gatsby-source-nacelle)](https://github.com/getnacelle/nacelle-react/tree/master/packages/gatsby-source-nacelle/blob/master/LICENSE) -->
+<!-- [![GitHub license](https://img.shields.io/github/license/getnacelle/nacelle-react/tree/main/packages/gatsby-source-nacelle)](https://github.com/getnacelle/nacelle-react/tree/main/packages/gatsby-source-nacelle/blob/master/LICENSE) -->
 
 This plugin connects Gatsby to [Nacelle's](https://www.getnacelle.com) Hail Frequency API, which gives you access to the product data (individual products, collections, etc.) and content data (blog posts, articles, etc.) needed to build an eCommerce storefront.
 

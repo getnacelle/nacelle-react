@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/gatsby-source-nacelle",
-  "version": "2.9.0",
+  "version": "2.10.0",
   "description": "A Gatsby plugin for sourcing data from Nacelle's Hail Frequency API",
   "keywords": [
     "gatsby",
@@ -28,8 +28,8 @@
   },
   "peerDependencies": {
     "gatsby": "^2.0.32",
-    "graphql": "^14.7.0",
-    "gatsby-source-filesystem": "^2.6.1"
+    "gatsby-source-filesystem": "^2.6.1",
+    "graphql": "^14.7.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import $nacelle from 'services/nacelle.js';
+import { dataToPaths } from 'utils';
 
 const Blog = ({ articles }) => {
   const router = useRouter();
@@ -19,12 +20,11 @@ export default Blog;
 export async function getStaticPaths() {
   try {
     const allContent = await $nacelle.data.allContent();
-    const blogs = allContent.filter((entry) => entry.type === 'blog');
-    const paths = blogs.flatMap((blog) =>
-      blog.articleLists[0].handles.map((handle) => ({
-        params: { handle, blogHandle: blog.handle }
-      }))
-    );
+    const articles = allContent.filter((entry) => entry.type === 'article');
+    const paths = dataToPaths({
+      data: articles,
+      dataProperties: ['handle', 'blogHandle']
+    });
 
     return {
       paths,
@@ -35,16 +35,16 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }) {
-  const { handle } = params;
+export async function getStaticProps({ params: { handle, blogHandle } }) {
   const articles = await $nacelle.data
-    .blogPage({
+    .article({
       handle,
-      paginate: true,
-      itemsPerPage: 6
+      blogHandle
     })
     .catch(() => {
-      console.warn(`no articles found for blog with handle: '${handle}'`);
+      console.warn(
+        `no article with handle '${handle}' found for blog with handle: '${blogHandle}'`
+      );
       return null;
     });
 

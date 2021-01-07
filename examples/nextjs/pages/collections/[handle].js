@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { useRouter } from 'next/router';
 
 import $nacelle from 'services/nacelle.js';
+import { dataToPaths } from 'utils';
 import ContentSections from 'components/ContentSections';
 import ProductGallery from 'components/ProductGallery';
 
@@ -27,10 +28,7 @@ export default Collection;
 export async function getStaticPaths() {
   try {
     const collections = await $nacelle.data.allCollections();
-    const paths = collections.map((collection) => {
-      const { handle } = collection;
-      return { params: { handle } };
-    });
+    const paths = dataToPaths({ data: collections });
 
     return {
       paths,
@@ -41,8 +39,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }) {
-  const { handle } = params;
+export async function getStaticProps({ params: { handle } }) {
   const collection = await $nacelle.data.collection({ handle }).catch(() => {
     console.warn(`no collection with handle '${handle}' found.`);
     return null;

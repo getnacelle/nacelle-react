@@ -57,7 +57,7 @@ async function addMetaFields() {
 
 function validateMetafields(requiredFields, exposedMetafields) {
   const subscriptions = exposedMetafields.filter(
-    ({ node }) => node.namespace === 'subscription'
+    ({ node }) => node.namespace === 'subscriptions'
   );
 
   const matchedFields = subscriptions

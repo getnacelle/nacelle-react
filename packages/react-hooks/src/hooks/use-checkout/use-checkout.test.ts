@@ -17,14 +17,17 @@ const checkoutResponse = {
 };
 
 const cartItem = {
-  ...shopifyItem.variant,
+  variant: shopifyItem.variant,
   productId: shopifyItem.id,
   image: shopifyItem.variant.featuredMedia,
   quantity: 1,
   tags: [],
   handle: shopifyItem.handle,
   vendor: shopifyItem.vendor,
-  locale: shopifyItem.locale
+  locale: shopifyItem.locale,
+  metafields: shopifyItem.metafields,
+  title: shopifyItem.title,
+  id: shopifyItem.id
 };
 
 const items = [cartItem];

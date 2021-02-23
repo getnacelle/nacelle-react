@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "express": "^4.16.2",
-    "preact": "^8.2.6",
+    "preact": "^10.5.12",
     "preact-render-to-string": "^3.7.0",
     "preact-router": "^2.6.0",
     "unistore": "^3.0.4"

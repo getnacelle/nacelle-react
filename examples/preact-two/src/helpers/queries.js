@@ -1,2 +1,31 @@
-export const getSpaceQuery =
-  '\nquery GetSpace {\n  getSpace {\n    id\n    name\n    domain\n    metafields {\n      namespace\n      key\n      value\n    }\n    linklists {\n      handle\n      links {\n        title\n        to\n        type\n        links {\n          title\n          to\n          type\n          links {\n            title\n            to\n            type\n          }\n        }\n      }\n    }\n  }\n}';
+export const getSpaceQuery = `
+query GetSpace {
+    getSpace {
+      id
+      name
+      domain
+      metafields {
+          namespace
+          key
+          value
+      }
+      linklists {
+          handle
+          links {
+            title
+            to
+            type
+            links {
+              title
+              to
+              type
+              links {
+                title
+                to
+                type
+            }
+        }
+      }
+    }
+  }
+}`;

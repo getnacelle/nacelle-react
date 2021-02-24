@@ -1,36 +1,36 @@
 import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { Link } from 'preact-router/match';
 import style from './style.css';
 import headers from '../../helpers/headers';
 import { getSpaceQuery as query } from '../../helpers/queries';
 
 const Header = () => {
+  const [links, setLinks] = useState([]);
+
   useEffect(async () => {
-    const res = await fetch('https://hailfrequency.com/v2/graphql', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        query
-      })
-    });
-    const data = await res.json();
-    console.log(data);
+    try {
+      const res = await fetch('https://hailfrequency.com/v2/graphql', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          query
+        })
+      });
+      const data = await res.json();
+      setLinks(data.data.getSpace.linklists[0].links);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (
     <header class={style.header}>
-      <h1>Preact App</h1>
+      <h1>Your Shop</h1>
       <nav>
-        <Link activeClassName={style.active} href="/">
-          Home
-        </Link>
-        <Link activeClassName={style.active} href="/profile">
-          Me
-        </Link>
-        <Link activeClassName={style.active} href="/profile/john">
-          John
-        </Link>
+        {links.map((link) => {
+          return <Link href={link.to}>{link.title}</Link>;
+        })}
       </nav>
     </header>
   );

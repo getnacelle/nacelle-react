@@ -23,7 +23,7 @@ const contentfulSettings = { ...settings, locale: process.env.CMS_LOCALE };
 
 const clientPIM = new NacelleClient(shopifySettings);
 const clientCMS = new NacelleClient(contentfulSettings);
-const client = clientCMS;
+const client = new NacelleClient(contentfulSettings);
 
 client.data.product = (params) => clientPIM.data.product(params);
 client.data.products = (params) => clientPIM.data.products(params);

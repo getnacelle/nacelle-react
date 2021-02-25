@@ -15,7 +15,7 @@ const ProductDetail = ({ product }) => {
     return <div>Loading...</div>;
   }
 
-  return (
+  return product ? (
     <div css={styles.layout}>
       <ProductCard
         product={product}
@@ -54,6 +54,10 @@ const ProductDetail = ({ product }) => {
         </section>
       </ProductCard>
     </div>
+  ) : (
+    <>
+      <p>No product found...</p>
+    </>
   );
 };
 
@@ -69,12 +73,12 @@ export async function getStaticPaths() {
       fallback: true
     };
   } catch (err) {
-    throw new Error(`could not fetch products on homepage:\n${err}`);
+    throw new Error(`could not fetch products on product detail page:\n${err}`);
   }
 }
 
-export async function getStaticProps({ params: { handle } }) {
-  const product = await $nacelle.data.product({ handle }).catch(() => {
+export async function getStaticProps({ params: { handle }, preview }) {
+  const product = await $nacelle.data.product({ handle, preview }).catch(() => {
     console.warn(`no product with handle '${handle}' found.`);
     return null;
   });

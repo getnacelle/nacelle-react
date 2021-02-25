@@ -10,7 +10,6 @@ export default function handler(req, res) {
         'For example: https://my-preview-site/api/preview?path=/page/some-page'
     });
   }
-  console.log(`PATH: ${req.query.path}`);
 
   // Enable Preview Mode by setting the cookies
   res.setPreviewData({});
@@ -18,5 +17,9 @@ export default function handler(req, res) {
 
   // Redirect to the path from the fetched post
   // We don't redirect to req.query.slug as that might lead to open redirect vulnerabilities
+  if (req.query.path.endsWith('/homepage')) {
+    res.redirect('/');
+  }
+
   res.redirect(req.query.path);
 }

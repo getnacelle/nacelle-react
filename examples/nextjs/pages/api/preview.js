@@ -1,5 +1,5 @@
-// If this is located at pages/api/cms-preview.js,
-// then open /api/cms-preview from your browser.
+// To view unpublished products, collections, or content, provide the
+// desired destination via the `path` param: `/api/preview?path=/pages/first-draft`
 export default function handler(req, res) {
   // Check the secret and next parameters
   // This secret should only be known to this API route and the CMS

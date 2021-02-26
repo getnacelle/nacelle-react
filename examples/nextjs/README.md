@@ -23,9 +23,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Previewing Products and Content
 
+NOTE: The preview feature takes advantage of Next.js API Routes. When running this project locally, please use the [Vercel CLI](https://vercel.com/docs/cli).
+
 This project uses [Next.js Preview](https://nextjs.org/docs/advanced-features/preview-mode) conventions to fetch unpublished products from Shopify and content from Contentful. In order to activate preview, you must access the app via the [API Route](https://nextjs.org/docs/api-routes/introduction) `/api/preview`, which takes a `path` query parameter. For example, to preview an unpublished Shopify product with the handle `dania-glasses`, visit `/api/preview?path=/products/dania-glasses`. To preview an unpublished page with the handle `shipping-policy`, visit `/api/preview?path=/pages/shipping-policy`. In both cases, `/pages/api/preview.js` will redirect you to the desired path, and will pass `context.preview` to `getStaticProps` (docs)[https://nextjs.org/docs/advanced-features/preview-mode#fetch-preview-data] to signal to the `$nacelle` client that it should fetch preview data.
 
-### Configuring Preivew Routes in Contentful
+### Configuring Preview Routes in Contentful
 
 If you have a preview configuration in Contentful (settings -> content preview) to make it easy for content editors to preview draft pages (recommended), be sure to configure preview routes with the `/api/preview?path=/some/path` convention described above.
 

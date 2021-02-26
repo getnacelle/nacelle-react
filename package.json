@@ -4,6 +4,7 @@
   "scripts": {
     "build": "lerna run build",
     "test:ci": "jest --clearCache && lerna run test:ci",
+    "dev:vercel": "vercel dev",
     "lint": "lerna run lint",
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap --hoist --nohoist=@nacelle/client-js*",

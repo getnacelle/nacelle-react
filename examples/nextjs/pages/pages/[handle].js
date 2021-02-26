@@ -32,8 +32,8 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params: { handle } }) {
-  const page = await $nacelle.data.page({ handle }).catch(() => {
+export async function getStaticProps({ params: { handle }, preview }) {
+  const page = await $nacelle.data.page({ handle, preview }).catch(() => {
     console.warn(`no page with handle '${handle}' found.`);
     return null;
   });

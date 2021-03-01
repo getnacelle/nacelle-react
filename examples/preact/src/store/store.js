@@ -1,12 +1,35 @@
 import createStore from 'unistore';
 
-export let actions = (store) => ({
-  increment(state) {
-    return { count: state.count + 1 };
-  },
-  decrement(state) {
-    return { count: state.count - 1 };
-  }
+export const store = createStore({
+  showCart: false,
+  lineItems: []
 });
 
-export default (initialState) => createStore(initialState);
+export let actions = (store) => ({
+  flyoutCart(state) {
+    let { showCart, ...rest } = state;
+    return { showCart: true, ...rest };
+  },
+  toggleCart(state) {
+    let { showCart, ...rest } = state;
+    return { showCart: !showCart, ...rest };
+  },
+  addLineItem(state, payload) {
+    let { lineItems, ...rest } = state;
+    if (
+      lineItems.find((lineItem) => lineItem.productId === payload.productId)
+    ) {
+      lineItems = lineItems.map((lineItem) => {
+        if (lineItem.productId === payload.productId) {
+          let { quantity, ...rest } = lineItem;
+          return { quantity: quantity + payload.quantity, ...rest };
+        } else {
+          return lineItem;
+        }
+      });
+      return { lineItems, ...rest };
+    }
+    lineItems = [...lineItems, payload];
+    return { lineItems, ...rest };
+  }
+});

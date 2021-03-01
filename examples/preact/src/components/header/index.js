@@ -4,8 +4,14 @@ import { Link } from 'preact-router/match';
 import style from './style.css';
 import headers from '../../helpers/headers';
 import { getSpaceQuery as query } from '../../helpers/queries';
+import Cart from '../cart/index';
+import { connect } from 'unistore/preact';
+import { actions } from '../../store/store';
 
-const Header = () => {
+const Header = connect(
+  'showCart',
+  actions
+)(({ toggleCart }) => {
   const [links, setLinks] = useState([]);
 
   useEffect(async () => {
@@ -27,13 +33,19 @@ const Header = () => {
   return (
     <header class={style.header}>
       <h1>Your Shop</h1>
-      <nav>
-        {links.map((link) => {
-          return <Link href={link.to}>{link.title}</Link>;
-        })}
-      </nav>
+      {links.length > 0 && (
+        <nav>
+          {links.map((link) => {
+            return <Link href={link.to}>{link.title}</Link>;
+          })}
+          <a href="#" onClick={toggleCart}>
+            🛒
+          </a>
+        </nav>
+      )}
+      <Cart />
     </header>
   );
-};
+});
 
 export default Header;

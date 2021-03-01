@@ -1,14 +1,9 @@
-//.babelrc
 {
-    "plugins": [
-        ["transform-react-jsx", { "pragma": "h" }]
-    ],
-    "presets": [
-        ["env", {
-            "targets": {
-                "node": "current",
-                "browsers": ["last 2 versions"]
-            }
-        }]
-    ]
+  "env": {
+    "test": {
+      "presets": [
+        ["preact-cli/babel", { "modules": "commonjs" }]
+      ]
+    }
+  }
 }

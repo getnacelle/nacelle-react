@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import $nacelle from 'services/nacelle';
@@ -14,6 +14,11 @@ const ProductDetail = ({ product }) => {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+
+  const { dispatchEvent } = useContext(EventLogContext);
+  useEffect(() => {
+    dispatchEvent({ type: 'PRODUCT_VIEW', payload: product });
+  }, []);
 
   return product ? (
     <div css={styles.layout}>

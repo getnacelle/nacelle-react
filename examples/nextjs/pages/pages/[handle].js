@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import $nacelle from 'services/nacelle.js';
 import { dataToPaths } from 'utils';
+import { EventLogContext } from 'providers/EventDispatcher';
 
 const Page = ({ page }) => {
   const router = useRouter();
+
+  const { dispatchEvent } = useContext(EventLogContext);
+  useEffect(() => {
+    dispatchEvent({ type: 'PAGE_VIEW' });
+  }, []);
 
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running

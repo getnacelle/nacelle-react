@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCheckout, useCart } from '@nacelle/react-hooks';
@@ -8,6 +8,7 @@ import { formatCurrency } from '@nacelle/react-dev-utils';
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './Cart.styles';
+import { EventLogContext } from 'providers/EventDispatcher';
 
 const checkoutCredentials = {
   nacelleSpaceId: process.env.NACELLE_SPACE_ID,
@@ -21,9 +22,10 @@ const Cart = () => {
     checkoutCredentials,
     cart
   );
-
+  const { dispatchEvent } = useContext(EventLogContext);
   useEffect(() => {
     if (checkoutData) {
+      dispatchEvent({ type: 'CHECKOUT_INIT', payload: checkoutData });
       const { processCheckout } = checkoutData.data;
       window.location = processCheckout.url;
     }
@@ -75,6 +77,7 @@ const Cart = () => {
 
 const CartItem = ({ item, cartActions, isMobile }) => {
   const [itemQuantity, updateQuantity] = useState(item.quantity || 0);
+  const { dispatchEvent } = useContext(EventLogContext);
 
   const formatPrice = formatCurrency(item.locale, item.priceCurrency);
 
@@ -96,7 +99,10 @@ const CartItem = ({ item, cartActions, isMobile }) => {
     return updateQuantity(qty);
   };
 
-  const removeItemFromCart = () => cartActions.removeFromCart(item);
+  const removeItemFromCart = () => {
+    dispatchEvent({ type: 'REMOVE_FROM_CART', payload: item });
+    return cartActions.removeFromCart(item);
+  };
 
   return (
     <div css={styles.cartItem}>

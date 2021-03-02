@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@nacelle/react-hooks';
@@ -8,6 +8,7 @@ import { formatCurrency } from '@nacelle/react-dev-utils';
 import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './ProductCard.styles';
+import { EventLogContext } from 'providers/EventDispatcher';
 
 const LinkPDP = ({ pdpLink, children }) => {
   if (!pdpLink) {
@@ -34,6 +35,7 @@ const ProductCard = ({
   const [quantity, setQuantity] = useState(0);
   const [, { addToCart, toggleCart }] = useCart();
   const device = useDetectDevice();
+  const { dispatchEvent } = useContext(EventLogContext);
 
   const productLink = `/products/${product.handle}`;
   const productVariant = product.variants[0];
@@ -44,8 +46,8 @@ const ProductCard = ({
 
   const addItemToCart = () => {
     const item = { ...product, variant: productVariant, quantity };
-
     addToCart(item);
+    dispatchEvent({ type: 'ADD_TO_CART', payload: item });
     return toggleCart();
   };
 

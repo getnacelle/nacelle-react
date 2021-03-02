@@ -2,15 +2,15 @@ import React, { useEffect, useReducer } from 'react';
 
 export const EventLogContext = React.createContext();
 
-const eventReducer = (state, action) => {
+const eventReducer = (state, event) => {
   if (
-    action.type === 'PAGE_VIEW' ||
-    action.type === 'PRODUCT_VIEW' ||
-    action.type === 'ADD_TO_CART' ||
-    action.type === 'REMOVE_FROM_CART' ||
-    action.type === 'CHECKOUT_INIT'
+    event.type === 'PAGE_VIEW' ||
+    event.type === 'PRODUCT_VIEW' ||
+    event.type === 'ADD_TO_CART' ||
+    event.type === 'REMOVE_FROM_CART' ||
+    event.type === 'CHECKOUT_INIT'
   ) {
-    return [...state, action];
+    return [...state, event];
   }
   return state;
 };
@@ -19,23 +19,35 @@ export const EventDispatcherProvider = ({ children }) => {
   const [eventLog, dispatchEvent] = useReducer(eventReducer, []);
 
   useEffect(() => {
-    if (eventLog.length > 0 && process.browser) {
+    if (eventLog.length > 0 && typeof window !== 'undefined') {
       const event = eventLog.pop();
       switch (event.type) {
         case 'PAGE_VIEW':
           console.log('PAGE VIEW EVENT FIRED');
           break;
         case 'PRODUCT_VIEW':
-          console.log('PRODUCT_VIEW EVENT FIRED', event.payload);
+          console.log(
+            'PRODUCT_VIEW EVENT FIRED',
+            JSON.stringify(event.payload, null, 2)
+          );
           break;
         case 'ADD_TO_CART':
-          console.log('ADD_TO_CART EVENT FIRED', event.payload);
+          console.log(
+            'ADD_TO_CART EVENT FIRED',
+            JSON.stringify(event.payload, null, 2)
+          );
           break;
         case 'REMOVE_FROM_CART':
-          console.log('REMOVE_FROM_CART EVENT FIRED', event.payload);
+          console.log(
+            'REMOVE_FROM_CART EVENT FIRED',
+            JSON.stringify(event.payload, null, 2)
+          );
           break;
         case 'CHECKOUT_INIT':
-          console.log('CHECKOUT_INIT EVENT FIRED', event.payload);
+          console.log(
+            'CHECKOUT_INIT EVENT FIRED',
+            JSON.stringify(event.payload, null, 2)
+          );
           break;
         default:
           break;

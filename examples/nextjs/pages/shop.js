@@ -13,10 +13,10 @@ export default function Shop({ page, products }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ preview }) {
   try {
     const products = await $nacelle.data.allProducts();
-    const page = await $nacelle.data.page({ handle: 'shop' });
+    const page = await $nacelle.data.page({ handle: 'shop', preview });
     return {
       props: { products, page }
     };

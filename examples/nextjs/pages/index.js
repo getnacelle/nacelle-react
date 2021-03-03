@@ -11,17 +11,15 @@ export default function Home({ page }) {
   ) : null;
 }
 
-export async function getStaticProps() {
-  try {
-    const page = await $nacelle.data.page({ handle: 'homepage' }).catch(() => {
+export async function getStaticProps({ preview }) {
+  const page = await $nacelle.data
+    .page({ handle: 'homepage', preview })
+    .catch(() => {
       console.warn(`no page with handle 'homepage' found.`);
       return null;
     });
 
-    return {
-      props: { page }
-    };
-  } catch (err) {
-    console.error(`Error fetching data on homepage:\n${err}`);
-  }
+  return {
+    props: { page }
+  };
 }

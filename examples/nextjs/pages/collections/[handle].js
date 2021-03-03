@@ -39,11 +39,13 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params: { handle } }) {
-  const collection = await $nacelle.data.collection({ handle }).catch(() => {
-    console.warn(`no collection with handle '${handle}' found.`);
-    return null;
-  });
+export async function getStaticProps({ params: { handle }, preview }) {
+  const collection = await $nacelle.data
+    .collection({ handle, preview })
+    .catch(() => {
+      console.warn(`no collection with handle '${handle}' found.`);
+      return null;
+    });
 
   const defaultProductList =
     collection &&
@@ -53,12 +55,14 @@ export async function getStaticProps({ params: { handle } }) {
 
   const handles = defaultProductList?.handles;
 
-  const products = await $nacelle.data.products({ handles }).catch(() => {
-    console.warn(`no products found for collection '${handle}'.`);
-    return [];
-  });
+  const products = await $nacelle.data
+    .products({ handles, preview })
+    .catch(() => {
+      console.warn(`no products found for collection '${handle}'.`);
+      return [];
+    });
 
-  const page = await $nacelle.data.page({ handle }).catch(() => {
+  const page = await $nacelle.data.page({ handle, preview }).catch(() => {
     console.warn(`no page with handle '${handle}' found.`);
     return null;
   });

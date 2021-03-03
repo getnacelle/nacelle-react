@@ -22,6 +22,17 @@ describe('useCart reducer', () => {
       expect(result.cart).toEqual([formatCartItem(shopifyItem)]);
     });
 
+    it(`should include a product's metafields when added to the cart`, () => {
+      const result = cartReducer(initialState, {
+        type: ADD_TO_CART,
+        payload: shopifyItem
+      });
+      expect(result.cart[0]).toHaveProperty('metafields');
+
+      const metafieldKeys = result.cart[0].metafields.map((m) => m.key);
+      expect(metafieldKeys).toContain('shipping_interval_frequency');
+    });
+
     it('should increment the quantity if the item is already in the cart', () => {
       const cartState = {
         ...initialState,

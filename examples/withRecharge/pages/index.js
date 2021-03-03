@@ -116,7 +116,7 @@ const Home = () => {
               <article key={item.productId} css={styles.cartItem}>
                 <div css={styles.cartItemInfo}>
                   <h3>{item.title}</h3>
-                  <span>{`$${parseInt(variantPrice, 10).toFixed(2)}`}</span>
+                  <span>{`$${parseFloat(variantPrice).toFixed(2)}`}</span>
                 </div>
                 <Button
                   styles={styles.removeButton}
@@ -146,9 +146,6 @@ function determineVariantPrice(product, selectedVariant) {
   const variantId = atob(selectedVariant.id)
     .split('gid://shopify/ProductVariant/')
     .pop();
-  const productId = atob(product.pimSyncSourceProductId)
-    .split('gid://shopify/Product/')
-    .pop();
 
   const priceVariantMap = product.metafields.find(
     ({ key }) => key === 'original_to_hidden_variant_map'
@@ -159,9 +156,9 @@ function determineVariantPrice(product, selectedVariant) {
   }
 
   const parsedPriceMap = JSON.parse(priceVariantMap.value);
-  const discountPrices = parsedPriceMap[productId];
+  const discountPrices = parsedPriceMap[variantId];
 
-  if (discountPrices && discountPrices.discount_variant_id === variantId) {
+  if (discountPrices) {
     return discountPrices.discount_variant_price;
   }
 

@@ -1,15 +1,44 @@
-import React, { Fragment, useState, useRef } from 'react';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
 import Head from 'next/head';
 import atob from 'atob';
 import { RechargeSelect } from '@nacelle/react-recharge';
 import { Image, Button } from '@nacelle/react-components';
+import { useCheckout } from '@nacelle/react-hooks';
 
 import product from '../data/product';
 import * as styles from '../styles/pages.styles';
 
+const checkoutCredentials = {
+  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
+  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
+};
+
+function sanitizeMetafields(metafields) {
+  return metafields.map((metafield) => {
+    const { key, value } = metafield;
+    return { key, value };
+  });
+}
+
 const Home = () => {
   const [cart, setCart] = useState([]);
   const itemMetafields = useRef([]);
+  const [checkoutData, checkout, isCheckingOut] = useCheckout(
+    checkoutCredentials,
+    cart
+  );
+
+  useEffect(() => {
+    if (
+      checkoutData &&
+      checkoutData.data &&
+      checkoutData.data.processCheckout
+    ) {
+      const { processCheckout } = checkoutData.data;
+      window.location = processCheckout.url;
+    }
+  }, [checkoutData]);
+
   const selectedVariantId = product.variants[0].id;
   const selectedVariant = product.variants.find(
     ({ id }) => id === selectedVariantId
@@ -22,18 +51,19 @@ const Home = () => {
 
   const addItemToCart = () => {
     const cartItem = {
+      ...selectedVariant,
       image: product.featuredMedia,
       title: product.title,
-      variant: {
-        ...selectedVariant,
-        price: variantPrice
-      },
       quantity: 1,
       productId: product.id,
+      id: selectedVariant.id,
       handle: product.handle,
       vendor: product.vendor,
       tags: product.tags,
-      metafields: [...product.metafields, itemMetafields]
+      metafields: sanitizeMetafields([
+        ...product.metafields,
+        ...itemMetafields.current
+      ])
     };
 
     return setCart((currentCart) => [...currentCart, cartItem]);
@@ -86,7 +116,7 @@ const Home = () => {
               <article key={item.productId} css={styles.cartItem}>
                 <div css={styles.cartItemInfo}>
                   <h3>{item.title}</h3>
-                  <span>{`$${parseInt(variantPrice, 10).toFixed(2)}`}</span>
+                  <span>{`$${parseFloat(variantPrice).toFixed(2)}`}</span>
                 </div>
                 <Button
                   styles={styles.removeButton}
@@ -95,6 +125,13 @@ const Home = () => {
                   onClick={removeItemFromCart}
                 >
                   REMOVE
+                </Button>
+                <Button
+                  onClick={checkout}
+                  disabled={!cart.length || isCheckingOut}
+                  fullwidth={true}
+                >
+                  {isCheckingOut ? 'Processing Cart...' : 'Checkout'}
                 </Button>
               </article>
             ))}
@@ -106,12 +143,9 @@ const Home = () => {
 };
 
 function determineVariantPrice(product, selectedVariant) {
-  const [, variantId] = atob(selectedVariant.id).split(
-    'gid://shopify/ProductVariant/'
-  );
-  const [, productId] = atob(product.pimSyncSourceProductId).split(
-    'gid://shopify/Product/'
-  );
+  const variantId = atob(selectedVariant.id)
+    .split('gid://shopify/ProductVariant/')
+    .pop();
 
   const priceVariantMap = product.metafields.find(
     ({ key }) => key === 'original_to_hidden_variant_map'
@@ -122,9 +156,9 @@ function determineVariantPrice(product, selectedVariant) {
   }
 
   const parsedPriceMap = JSON.parse(priceVariantMap.value);
-  const discountPrices = parsedPriceMap[productId];
+  const discountPrices = parsedPriceMap[variantId];
 
-  if (discountPrices.discount_variant_id === variantId) {
+  if (discountPrices) {
     return discountPrices.discount_variant_price;
   }
 

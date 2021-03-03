@@ -1,76 +1,119 @@
 export default {
-  id: 'pepper-wood-apparel.myshopify.com::shevonne-bag::en-us',
-  handle: 'shevonne-bag',
+  id: 'starship-furniture.myshopify.com::copy-of-venus-sheet-set::en-us',
+  handle: 'copy-of-venus-sheet-set',
   locale: 'en-us',
-  globalHandle: 'shevonne-bag::en-us',
-  pimSyncSourceDomain: 'pepper-wood-apparel.myshopify.com',
-  title: 'Shevonne Bag',
+  globalHandle: 'copy-of-venus-sheet-set::en-us',
+  pimSyncSource: 'shopify',
+  pimSyncSourceDomain: 'starship-furniture.myshopify.com',
+  pimSyncSourceProductId: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0LzE0NzM5MDcwNjQ4Njg=',
+  title: 'Pluto Sheet Set',
   description:
-    '<p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. </p>',
-  priceRange: { min: '245.0', max: '245.0', currencyCode: 'USD' },
-  availableForSale: true,
-  tags: ['women'],
+    "I have reset the sensors to scan for frequencies outside the usual range. By emitting harmonic vibrations to shatter the lattices. We will monitor and adjust the frequency of the resonators. He has this ability of instantly interpreting and extrapolating any verbal communication he hears. It may be due to the envelope over the structure, causing hydrogen-carbon helix patterns throughout. I'm comparing the molecular integrity of that bubble against our phasers.",
+  priceRange: {
+    min: '169.0',
+    max: '169.0',
+    currencyCode: 'USD'
+  },
+  productType: 'Sheets',
   media: [
     {
-      id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS84NDYxNzc5MjA2Mjc5',
+      id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS8yNTI1MzY5OTI1NjY4',
       thumbnailSrc:
-        'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578&width=100',
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1570056986&width=100',
       src:
-        'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578',
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1570056986',
       type: 'image',
-      altText: 'Shevonne Bag'
+      altText: null
+    },
+    {
+      id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS8yNTI1MzcwMDU2NzQw',
+      thumbnailSrc:
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/80.png?v=1570056986&width=100',
+      src:
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/80.png?v=1570056986',
+      type: 'image',
+      altText: null
+    },
+    {
+      id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS8yNTI1MzcwMTIyMjc2',
+      thumbnailSrc:
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/81.png?v=1570056986&width=100',
+      src:
+        'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/81.png?v=1570056986',
+      type: 'image',
+      altText: null
     }
   ],
+  featuredMedia: {
+    id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS8yNTI1MzY5OTI1NjY4',
+    thumbnailSrc:
+      'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1570056986&width=100',
+    src:
+      'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1570056986',
+    type: 'image',
+    altText: null
+  },
+  availableForSale: true,
+  vendor: 'Starship Furniture',
+  tags: ['Bedding', 'Sheets'],
+  createdAt: 1563168096,
   metafields: [
     {
       id: null,
-      key: 'shipping_interval_unit_type',
       namespace: 'subscriptions',
+      key: 'shipping_interval_unit_type',
       value: 'Days'
     },
     {
       id: null,
-      key: 'discount_percentage',
       namespace: 'subscriptions',
+      key: 'discount_percentage',
       value: '20.0000000000'
     },
     {
       id: null,
-      key: 'is_subscription_only',
       namespace: 'subscriptions',
+      key: 'is_subscription_only',
       value: 'false'
     },
     {
       id: null,
-      key: 'subscription_id',
       namespace: 'subscriptions',
+      key: 'subscription_id',
       value: '218593'
     },
     {
       id: null,
-      key: 'has_subscription',
       namespace: 'subscriptions',
+      key: 'has_subscription',
       value: 'True'
     },
     {
       id: null,
-      key: 'shipping_interval_frequency',
       namespace: 'subscriptions',
+      key: 'shipping_interval_frequency',
       value: '30,14,7'
+    },
+    {
+      id: null,
+      namespace: 'subscriptions',
+      key: 'discount_product_id',
+      value: '4453566283833'
     },
     {
       id: null,
       namespace: 'subscriptions',
       key: 'original_to_hidden_variant_map',
       value:
-        '{"4915654230151": {"discount_variant_id": "33893988368519", "discount_variant_price": "135.20"}}'
+        '{"11754282221604": {"discount_variant_id": 31385917325369, "discount_variant_price": "135.20"}}'
     }
   ],
+  indexedAt: 1614637071,
   variants: [
     {
-      id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8zMzg5Mzk4ODM2ODUxOQ==',
+      id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0VmFyaWFudC8xMTc1NDI4MjIyMTYwNA==',
       title: 'Default Title',
-      price: '245.0',
+      price: '169.0',
       priceCurrency: 'USD',
       compareAtPrice: null,
       compareAtPriceCurrency: null,
@@ -82,48 +125,33 @@ export default {
         }
       ],
       featuredMedia: {
-        id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0SW1hZ2UvMTYyODQ4MTIzNzgyNDc=',
+        id: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0SW1hZ2UvMTE1NjMxMjUxMTI4Njg=',
         thumbnailSrc:
-          'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578&width=100',
+          'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1563168131&width=100',
         src:
-          'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578',
+          'https://cdn.shopify.com/s/files/1/0094/4098/5124/products/79.png?v=1563168131',
         type: 'image',
         altText: null
       },
-      sku: null,
+      sku: 'ST-PL-01',
       availableForSale: true,
       metafields: [
         {
           id: null,
           namespace: 'subscriptions',
-          key: 'discount_variant_price',
-          value: '135.20'
+          key: 'discount_variant_id',
+          value: '31385917325369'
         },
         {
           id: null,
           namespace: 'subscriptions',
-          key: 'discount_variant_id',
-          value: '33893988368519'
+          key: 'discount_variant_price',
+          value: '135.20'
         }
       ],
       weight: null,
       weightUnit: null,
       priceRules: null
     }
-  ],
-  indexedAt: 1597771717,
-  pimSyncSource: 'shopify',
-  pimSyncSourceProductId: 'Z2lkOi8vc2hvcGlmeS9Qcm9kdWN0LzQ5MTU2NTQyMzAxNTE=',
-  productType: null,
-  featuredMedia: {
-    id: 'Z2lkOi8vc2hvcGlmeS9JbWFnZVNvdXJjZS84NDYxNzc5MjA2Mjc5',
-    thumbnailSrc:
-      'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578&width=100',
-    src:
-      'https://cdn.shopify.com/s/files/1/0344/4362/4583/products/over-the-shoulder-pink-purse.jpg?v=1587622578',
-    type: 'image',
-    altText: 'Shevonne Bag'
-  },
-  vendor: 'Prairie Wind Apparel',
-  createdAt: 1587622578
+  ]
 };

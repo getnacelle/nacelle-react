@@ -138,7 +138,8 @@ export function formatCartItem(item: NacelleShopProduct): CartItem {
     productId,
     image,
     locale,
-    quantity: item.quantity > 0 ? item.quantity : 1
+    quantity: item.quantity > 0 ? item.quantity : 1,
+    metafields: [...item.metafields, ...variant.metafields]
   };
 }
 

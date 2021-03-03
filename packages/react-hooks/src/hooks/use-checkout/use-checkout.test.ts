@@ -24,7 +24,9 @@ const cartItem = {
   tags: [],
   handle: shopifyItem.handle,
   vendor: shopifyItem.vendor,
-  locale: shopifyItem.locale
+  locale: shopifyItem.locale,
+  metafields: [...shopifyItem.metafields, ...shopifyItem.variant.metafields],
+  title: shopifyItem.title
 };
 
 const items = [cartItem];

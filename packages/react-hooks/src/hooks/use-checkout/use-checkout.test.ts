@@ -17,7 +17,7 @@ const checkoutResponse = {
 };
 
 const cartItem = {
-  variant: shopifyItem.variant,
+  ...shopifyItem.variant,
   productId: shopifyItem.id,
   image: shopifyItem.variant.featuredMedia,
   quantity: 1,
@@ -25,9 +25,8 @@ const cartItem = {
   handle: shopifyItem.handle,
   vendor: shopifyItem.vendor,
   locale: shopifyItem.locale,
-  metafields: shopifyItem.metafields,
-  title: shopifyItem.title,
-  id: shopifyItem.id
+  metafields: [...shopifyItem.metafields, ...shopifyItem.variant.metafields],
+  title: shopifyItem.title
 };
 
 const items = [cartItem];

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import $nacelle from 'services/nacelle.js';
 import { dataToPaths } from 'utils';

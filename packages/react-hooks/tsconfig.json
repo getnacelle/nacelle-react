@@ -9,7 +9,11 @@
     "jsx": "react",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./*"]
+    }
   },
   "include": ["src/**/*", "jest.config.js"],
   "exclude": [

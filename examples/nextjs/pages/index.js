@@ -1,19 +1,22 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import $nacelle from 'services/nacelle';
 import ContentSections from 'components/ContentSections';
 
 export default function Home({ page }) {
-  return (
-    <Fragment>
+  return page ? (
+    <>
       <ContentSections sections={page.sections} />
-    </Fragment>
-  );
+    </>
+  ) : null;
 }
 
 export async function getStaticProps() {
   try {
-    const page = await $nacelle.data.page({ handle: 'homepage' });
+    const page = await $nacelle.data.page({ handle: 'homepage' }).catch(() => {
+      console.warn(`no page with handle 'homepage' found.`);
+      return null;
+    });
 
     return {
       props: { page }

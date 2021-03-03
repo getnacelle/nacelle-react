@@ -126,20 +126,11 @@ const cartReducer = (
  * @returns a formatted cart item
  */
 export function formatCartItem(item: NacelleShopProduct): CartItem {
-  const {
-    title,
-    vendor,
-    tags,
-    handle,
-    locale,
-    id: productId,
-    metafields
-  } = item;
+  const { title, vendor, tags, handle, locale, id: productId } = item;
   const { featuredMedia: image, ...variant } = item.variant;
 
   return {
-    variant: variant,
-    id: variant.id,
+    ...variant,
     title,
     vendor,
     tags,
@@ -148,7 +139,7 @@ export function formatCartItem(item: NacelleShopProduct): CartItem {
     image,
     locale,
     quantity: item.quantity > 0 ? item.quantity : 1,
-    metafields
+    metafields: [...item.metafields, ...variant.metafields]
   };
 }
 

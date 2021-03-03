@@ -21,24 +21,15 @@ npm install @nacelle/react-recharge -S
 
 ### Metafields
 
-After the package is installed, you'll need to create a `.env` file in the root of the project that contains credentials for your store:
-
-```
-SHOPIFY_STORE_NAME=
-SHOPIFY_ACCESS_TOKEN=
-```
-
-Please note that the above access token _must_ be the GraphQL Admin API token.
-
 Recharge sets important product metafields that we need to expose to Nacelle. We can do this with a simple graphql query using [Shopify's GraphQL Admin API](https://help.shopify.com/en/api/graphql-admin-api/reference/object/metafieldstorefrontvisibility)
 
 This module adds an NPM command that can be run to expose these, and only needs to be run once during the initial setup
 
 ```sh
-npx expose-metafields
+npx expose-metafields store=<your-myshopify-domain> token=<your-shopify-admin-api-token>
 ```
 
-This command will read the values from your `.env` file and query the Admin API to expose the metafields needed.
+This command will query the Admin API to expose the metafields needed. The value for `store` is, for example, `starship-furniture` if the store's Shopify domain is `starship-furniture.myshopify.com`. Please note that the `token` _must_ be the GraphQL Admin API token.
 
 ## Usage
 

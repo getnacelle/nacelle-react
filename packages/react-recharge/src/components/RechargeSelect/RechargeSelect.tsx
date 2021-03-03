@@ -39,7 +39,7 @@ const RechargeSelect: FC<RechargeSelectProps> = ({
   );
 
   useEffect(() => {
-    if (productMetafields.length > 0) {
+    if (productMetafields.length > 0 && !frequency) {
       setFrequency(metafields.shipping_interval_frequency[0]);
 
       const cartMetafields = createCartMetafields(
@@ -151,7 +151,7 @@ const RechargeSelect: FC<RechargeSelectProps> = ({
               onChange={onFrequencyChange}
             >
               {metafields.shipping_interval_frequency.map((subFrequency) => (
-                <option key={subFrequency} value={frequency}>
+                <option key={subFrequency} value={subFrequency}>
                   {subFrequency} {metafields.shipping_interval_unit_type}
                 </option>
               ))}

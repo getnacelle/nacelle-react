@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
-const modules = `${process.cwd()}/node_modules`
+const { args } = require('./util');
 
-require('dotenv-safe').config({
-  example: `${modules}/@nacelle/react-recharge/build/.env.example`
-});
+const store = args.store;
+const token = args.token;
 
 const chalk = require('chalk');
 const { Interphase } = require('@nacelle/interphase-node');
@@ -13,19 +12,13 @@ const log = (...str) => console.log(chalk.cyanBright(...str));
 const logInfo = (...str) => console.log(chalk.yellow(...str));
 const logError = (...str) => console.log(chalk.redBright(...str));
 
-log(`Initializing Shop: ${process.env.SHOPIFY_STORE_NAME}`);
+log(`Initializing Shop: ${store}`);
 
 addMetaFields();
 
 async function addMetaFields() {
-  console.log({
-    store: process.env.SHOPIFY_STORE_NAME,
-    token: process.env.SHOPIFY_ACCESS_TOKEN
-  });
-  const interphase = new Interphase(
-    process.env.SHOPIFY_STORE_NAME,
-    process.env.SHOPIFY_ACCESS_TOKEN
-  );
+  console.log({ store, token });
+  const interphase = new Interphase(store, token);
 
   try {
     log('Exposing ReCharge metafields...');

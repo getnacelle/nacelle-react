@@ -42,18 +42,22 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
   `);
   collections.data.allNacelleCollection.edges.forEach((collection) => {
     const { handle, productLists } = collection.node;
-    const defaultList = productLists.find(
-      (productList) => productList.slug === 'default'
-    );
-    createPage({
-      // Build a Product Loading Page (PLP) for each collection
-      path: `/collections/${handle}`,
-      component: path.resolve('./src/templates/collection.js'),
-      context: {
-        handle,
-        handles: defaultList && defaultList.handles
-      }
-    });
+
+    if (productLists.length) {
+      const defaultList = productLists.find(
+        (productList) => productList.slug === 'default'
+      );
+
+      createPage({
+        // Build a Product Loading Page (PLP) for each collection
+        path: `/collections/${handle}`,
+        component: path.resolve('./src/templates/collection.js'),
+        context: {
+          handle,
+          handles: defaultList && defaultList.handles
+        }
+      });
+    }
   });
 };
 

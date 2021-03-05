@@ -15,6 +15,7 @@ export type CheckoutStatus = {
 
 export type CartReducerAction =
   | { type: 'cart/add-to-cart'; payload: NacelleShopProduct }
+  | { type: 'cart/update-item'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/increment-item'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/decrement-item'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/remove-from-cart'; payload: NacelleShopProduct | CartItem }

@@ -13,7 +13,7 @@ const Cart = connect(
     try {
       const cartItems = lineItems.map((lineItem) => ({
         cartItemId: lineItem.productId,
-        metafields: [],
+        metafields: lineItem.metafields,
         quantity: lineItem.quantity,
         variantId: lineItem.variant.id
       }));
@@ -37,7 +37,6 @@ const Cart = connect(
       alert(error);
     }
   };
-
   return (
     <>
       {showCart && (

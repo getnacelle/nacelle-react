@@ -25,6 +25,7 @@ const Products = connect(
       image: product.featuredMedia,
       title: product.title,
       variant: selectedVariant,
+      metafields: selectedVariant.metafields,
       productId: product.id,
       handle: handle,
       quantity
@@ -48,7 +49,6 @@ const Products = connect(
     setProduct(data.data.getProductByHandle);
     setSelectedVariant(data.data.getProductByHandle.variants[0]);
   }, []);
-
   return (
     <div class={style.products}>
       {product.title && (

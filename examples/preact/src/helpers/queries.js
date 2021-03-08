@@ -61,6 +61,10 @@ query getProductByHandle($handle: String!){
       price
       compareAtPrice
       swatchSrc
+      metafields {
+        key
+        value
+      }
       featuredMedia{
         id
         type

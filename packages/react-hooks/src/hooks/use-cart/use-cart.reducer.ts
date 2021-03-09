@@ -5,6 +5,7 @@ import { CartState, CartReducerAction } from './use-cart.types';
 export const ADD_TO_CART = 'cart/add-to-cart';
 export const INCREMENT_ITEM = 'cart/increment-item';
 export const DECREMENT_ITEM = 'cart/decrement-item';
+export const UPDATE_ITEM = 'cart/update-item';
 export const REMOVE_FROM_CART = 'cart/remove-from-cart';
 export const TOGGLE_CART = 'cart/toggle-visibility';
 export const SET_CHECKOUT_STATUS = 'cart/set-status';
@@ -29,7 +30,31 @@ const cartReducer = (
   switch (action.type) {
     case ADD_TO_CART: {
       const cart: CartItem[] = buildCart(state.cart, action.payload);
-
+      setCacheItem('cart', JSON.stringify(cart));
+      return {
+        ...state,
+        cart
+      };
+    }
+    case UPDATE_ITEM: {
+      const cart: CartItem[] = state.cart.map((item) => {
+        const payloadId =
+          'variant' in action.payload
+            ? action.payload.variant.id
+            : action.payload.id;
+        if (item.id === payloadId) {
+          Object.keys(item).forEach((key) => {
+            if (
+              action.payload[key] &&
+              key !== 'id' &&
+              item[key] !== action.payload[key]
+            ) {
+              item[key] = action.payload[key];
+            }
+          });
+        }
+        return item;
+      });
       setCacheItem('cart', JSON.stringify(cart));
       return {
         ...state,

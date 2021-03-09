@@ -5,6 +5,7 @@ import { CartState, CheckoutStatus } from './use-cart.types';
 import cartReducer, {
   initialState,
   ADD_TO_CART,
+  UPDATE_ITEM,
   REMOVE_FROM_CART,
   INCREMENT_ITEM,
   DECREMENT_ITEM,
@@ -15,6 +16,7 @@ import cartReducer, {
 
 export type CartActions = {
   addToCart: (payload: NacelleShopProduct) => void;
+  updateItem: (payload: NacelleShopProduct | CartItem) => void;
   removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
   incrementItem: (payload: NacelleShopProduct | CartItem) => void;
   decrementItem: (payload: NacelleShopProduct | CartItem) => void;
@@ -55,6 +57,8 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({ type: ADD_TO_CART, payload }),
       removeFromCart: (payload: NacelleShopProduct | CartItem) =>
         dispatch({ type: REMOVE_FROM_CART, payload }),
+      updateItem: (payload: NacelleShopProduct | CartItem) =>
+        dispatch({ type: UPDATE_ITEM, payload }),
       incrementItem: (payload: NacelleShopProduct | CartItem): void =>
         dispatch({ type: INCREMENT_ITEM, payload }),
       decrementItem: (payload: NacelleShopProduct | CartItem): void =>

@@ -118,6 +118,7 @@ An array containing:
 2. `cartActions`: an object containing methods for interacting with the cart:
 
 - addToCart() - add an item to the cart; if the item is already in the cart this function will increase the quantity of that item
+- `updateItem(item)` - modify properties of an item in the cart
 - `removeFromCart(item)` - remove an item from the cart
 - `incrementItem(item)` - increment the quantity of an item in the cart
 - `decrementItem(item)` - decrement the quantity of an item in the cart

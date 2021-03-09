@@ -4,6 +4,7 @@ import cartReducer, {
   initialState,
   formatCartItem,
   ADD_TO_CART,
+  UPDATE_ITEM,
   REMOVE_FROM_CART,
   INCREMENT_ITEM,
   DECREMENT_ITEM,
@@ -62,7 +63,35 @@ describe('useCart reducer', () => {
       ]);
     });
   });
-
+  describe(`${UPDATE_ITEM}`, () => {
+    it('should update some values of an item in the cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [formatCartItem(shopifyItem)]
+      };
+      const result = cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: { ...shopifyItem, title: 'Updated Title', quantity: 10 }
+      });
+      expect(result.cart).toEqual([
+        { ...formatCartItem(shopifyItem), title: 'Updated Title', quantity: 10 }
+      ]);
+    });
+    it('should update some values of an item in localStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [formatCartItem(shopifyItem)],
+        useLocalStorage: true
+      };
+      cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: { ...shopifyItem, title: 'Updated Title', quantity: 10 }
+      });
+      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
+        { ...formatCartItem(shopifyItem), title: 'Updated Title', quantity: 10 }
+      ]);
+    });
+  });
   describe(`${REMOVE_FROM_CART}`, () => {
     it('should remove an item from the cart', () => {
       const cartState = {

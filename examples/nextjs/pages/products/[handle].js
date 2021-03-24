@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import $nacelle from 'services/nacelle';
 import { dataToPaths } from 'utils';
 import ProductCard from 'components/ProductCard';
 import * as styles from 'styles/pages.styles';
+import { EventLogContext } from 'providers/EventDispatcher';
 
 const ProductDetail = ({ product }) => {
   const router = useRouter();
+
+  const { dispatchEvent } = useContext(EventLogContext);
+  useEffect(() => {
+    dispatchEvent({ type: 'PRODUCT_VIEW', payload: product });
+  }, []);
 
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running

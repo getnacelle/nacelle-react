@@ -6,17 +6,20 @@ import { CartProvider } from '@nacelle/react-hooks';
 import Layout from 'components/Layout';
 import $nacelle from 'services/nacelle.js';
 import { ProductSearchProvider } from 'providers/ProductSearch';
+import { EventDispatcherProvider } from 'providers/EventDispatcher';
 import * as styles from 'styles/global.styles';
 
 function MyApp({ Component, pageProps, space, products }) {
   return (
     <CartProvider useLocalStorage>
       <Global styles={styles.global} />
-      <ProductSearchProvider products={products}>
-        <Layout space={space}>
-          <Component {...pageProps} />
-        </Layout>
-      </ProductSearchProvider>
+      <EventDispatcherProvider>
+        <ProductSearchProvider products={products}>
+          <Layout space={space}>
+            <Component {...pageProps} />
+          </Layout>
+        </ProductSearchProvider>
+      </EventDispatcherProvider>
     </CartProvider>
   );
 }

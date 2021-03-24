@@ -35,7 +35,7 @@
     "gatsby": "^2.27.0",
     "gatsby-alias-imports": "^1.0.6",
     "gatsby-plugin-emotion": "^4.5.0",
-    "gatsby-plugin-image": "^0.2.0",
+    "gatsby-plugin-image": "^1.1.2",
     "gatsby-plugin-sharp": "^2.9.0",
     "gatsby-source-filesystem": "^2.6.1",
     "gatsby-transformer-sharp": "^2.7.0",

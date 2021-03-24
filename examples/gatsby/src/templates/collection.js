@@ -28,7 +28,10 @@ export const query = graphql`
           featuredMedia {
             remoteImage {
               childImageSharp {
-                gatsbyImageData(maxWidth: 320, layout: FLUID)
+                gatsbyImageData(width: 320)
+                fluid {
+                  ...GatsbyImageSharpFluid
+                }
               }
             }
             src
@@ -55,7 +58,10 @@ export const query = graphql`
               altText
               remoteImage {
                 childImageSharp {
-                  gatsbyImageData(maxWidth: 320, layout: FLUID)
+                  gatsbyImageData(width: 320)
+                  fluid {
+                    ...GatsbyImageSharpFluid
+                  }
                 }
               }
             }

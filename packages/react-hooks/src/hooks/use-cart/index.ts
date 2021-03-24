@@ -4,7 +4,9 @@ import {
   useCartActions,
   CartProvider
 } from './use-cart.provider';
+import { CartState, CartActions } from './use-cart.types';
 
-const useCart = () => [useCartState(), useCartActions()];
+const useCart = () =>
+  [useCartState(), useCartActions()] as [CartState, CartActions];
 
 export { useCart, CartProvider, isInCart };

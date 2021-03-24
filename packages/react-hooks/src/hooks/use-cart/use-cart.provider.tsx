@@ -15,7 +15,7 @@ import cartReducer, {
 } from './use-cart.reducer';
 
 export type CartProviderProps = {
-  useLocalStorage: boolean;
+  useLocalStorage?: boolean;
   children: JSX.Element | JSX.Element[];
 };
 export type CartContextValue = null | CartState;
@@ -25,7 +25,7 @@ const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
-  useLocalStorage,
+  useLocalStorage = true,
   children
 }) => {
   const hasWindow = typeof window !== 'undefined';

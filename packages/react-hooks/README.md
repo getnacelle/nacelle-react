@@ -86,7 +86,7 @@ const Cart = () => {
 };
 ```
 
-#### `useCheckout`
+#### `useCart`
 
 A hook which uses items in a cart to generate a checkout via Nacelle's Hail Frequency API.
 
@@ -103,6 +103,8 @@ const App = () => {
   </CartProvider>;
 };
 ```
+
+By default, the `<CartProvider />` uses Local Storage to persist the cart between refreshes. To disable this, pass `useLocalStorage={false}` as a prop.
 
 ##### Returns
 

@@ -1,7 +1,7 @@
-import React, { useReducer, useMemo, useContext, FC, ReactNode } from 'react';
+import React, { useReducer, useMemo, useContext, FC } from 'react';
 import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
-import { CartState, CheckoutStatus } from './use-cart.types';
+import { CartState, CheckoutStatus, CartActions } from './use-cart.types';
 import cartReducer, {
   initialState,
   ADD_TO_CART,
@@ -14,20 +14,9 @@ import cartReducer, {
   CLEAR_CART
 } from './use-cart.reducer';
 
-export type CartActions = {
-  addToCart: (payload: NacelleShopProduct) => void;
-  updateItem: (payload: NacelleShopProduct | CartItem) => void;
-  removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
-  incrementItem: (payload: NacelleShopProduct | CartItem) => void;
-  decrementItem: (payload: NacelleShopProduct | CartItem) => void;
-  setCheckoutStatus: (payload: CheckoutStatus) => void;
-  toggleCart: () => void;
-  clearCart: () => void;
-};
-
 export type CartProviderProps = {
-  useLocalStorage: boolean;
-  children: [ReactNode];
+  useLocalStorage?: boolean;
+  children: JSX.Element | JSX.Element[];
 };
 export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;
@@ -36,7 +25,7 @@ const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
-  useLocalStorage,
+  useLocalStorage = true,
   children
 }) => {
   const hasWindow = typeof window !== 'undefined';

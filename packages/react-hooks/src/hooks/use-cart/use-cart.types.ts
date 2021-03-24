@@ -8,6 +8,17 @@ export type CartState = {
   useLocalStorage: boolean;
 };
 
+export type CartActions = {
+  addToCart: (payload: NacelleShopProduct) => void;
+  updateItem: (payload: NacelleShopProduct | CartItem) => void;
+  removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
+  incrementItem: (payload: NacelleShopProduct | CartItem) => void;
+  decrementItem: (payload: NacelleShopProduct | CartItem) => void;
+  setCheckoutStatus: (payload: CheckoutStatus) => void;
+  toggleCart: () => void;
+  clearCart: () => void;
+};
+
 export type CheckoutStatus = {
   checkoutId: string;
   checkoutComplete: boolean;

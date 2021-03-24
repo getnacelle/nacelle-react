@@ -1,4 +1,4 @@
-import React, { useReducer, useMemo, useContext, FC, ReactNode } from 'react';
+import React, { useReducer, useMemo, useContext, FC } from 'react';
 import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
 import { CartState, CheckoutStatus, CartActions } from './use-cart.types';
@@ -16,7 +16,7 @@ import cartReducer, {
 
 export type CartProviderProps = {
   useLocalStorage: boolean;
-  children: [ReactNode];
+  children: JSX.Element | JSX.Element[];
 };
 export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;

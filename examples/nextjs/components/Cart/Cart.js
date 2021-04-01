@@ -75,6 +75,9 @@ const Cart = () => {
 
 const CartItem = ({ item, cartActions, isMobile }) => {
   const [itemQuantity, updateQuantity] = useState(item.quantity || 0);
+  useEffect(() => {
+    updateQuantity(item.quantity);
+  }, [item]);
 
   const formatPrice = formatCurrency(item.locale, item.priceCurrency);
 

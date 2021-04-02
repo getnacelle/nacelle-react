@@ -1,7 +1,7 @@
 // To view unpublished products, collections, or content, provide the
 // desired destination via the `path` param: `/api/preview?path=/pages/first-draft`
 export default function handler(req, res) {
-  const previewModeSecret = 'my-preview-mode-secret';
+  const previewModeSecret = 'my-preview-mode-secret'; // IMPORTANT! Update this value.
   const { secret } = req.query;
 
   if (!secret) {

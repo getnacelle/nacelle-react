@@ -4,7 +4,7 @@ import nacelleClient from '~/services/nacelle';
 // desired destination via the `path` param: `/api/preview?path=/pages/first-draft`
 export default async function handler(req, res) {
   const previewModeSecret = 'my-preview-mode-secret'; // IMPORTANT! Update this value.
-  const { secret } = req.query;
+  const { secret, path = '/' } = req.query;
 
   if (!secret) {
     return res.status(400).json({
@@ -18,11 +18,9 @@ export default async function handler(req, res) {
     return res.status(400).json({
       message:
         'Cannot enable preview mode. ' +
-        'An incorrect preview mode secret provided to the /api/preview endpoint.'
+        'An incorrect preview mode secret was provided to the /api/preview endpoint.'
     });
   }
-
-  const { path = '/' } = req.query;
 
   if (path === '/') {
     // Set cookies to enable Preview Mode

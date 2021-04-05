@@ -1,7 +1,10 @@
+// To view unpublished products, collections, or content, provide the
+// desired destination via the `path` query parameter.
+//
+// For example: `/api/preview?secret=my-preview-mode-secret&path=/pages/first-draft`
+
 import nacelleClient from '~/services/nacelle';
 
-// To view unpublished products, collections, or content, provide the
-// desired destination via the `path` param: `/api/preview?path=/pages/first-draft`
 export default async function handler(req, res) {
   const previewModeSecret = 'my-preview-mode-secret'; // IMPORTANT! Update this value.
   const { secret, path = '/' } = req.query;

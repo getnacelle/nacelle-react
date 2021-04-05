@@ -1,6 +1,6 @@
 {
   "name": "nacelle-gatsby-example",
-  "version": "2.11.2",
+  "version": "2.11.3-alpha.0",
   "private": true,
   "description": "An example project built with gatsby-source-nacelle",
   "main": "src/pages/index.js",
@@ -29,7 +29,7 @@
     "@nacelle/gatsby-source-nacelle": "^2.10.2",
     "@nacelle/react-components": "^2.10.1",
     "@nacelle/react-dev-utils": "^2.10.1",
-    "@nacelle/react-hooks": "^2.11.2",
+    "@nacelle/react-hooks": "^2.11.3-alpha.0",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
     "gatsby": "^2.27.0",

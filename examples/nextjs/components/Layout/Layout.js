@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Footer from 'components/Footer';
 import Header from 'components/Header/Header';
 
-const Cart = dynamic(() => import('../Cart'), { ssr: false });
+const Cart = dynamic(() => import('components/Cart'), { ssr: false });
 
 const Layout = ({ children, space }) => {
   return (

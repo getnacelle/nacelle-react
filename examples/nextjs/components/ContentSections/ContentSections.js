@@ -6,7 +6,7 @@ import CollectionGrid from 'components/CollectionGrid';
 
 // Avoid SSR for the Side By Side component since it relies on the size
 // of the device and client-side data to choose the proper layout
-const DynamicSideBySide = dynamic(() => import('../SideBySide'), {
+const DynamicSideBySide = dynamic(() => import('components/SideBySide'), {
   ssr: false
 });
 
@@ -26,9 +26,7 @@ const ContentSections = ({ sections }) => {
           <DynamicSideBySide fields={section.fields} key={section.sys.id} />
         );
       case 'collectionGrid':
-        return (
-          <CollectionGrid fields={section.fields} key={section.sys.id} />
-        );
+        return <CollectionGrid fields={section.fields} key={section.sys.id} />;
       // ...add additional cases for whichever content types are needed
       default:
         return null;

@@ -3,7 +3,7 @@
 //
 // For example: `/api/preview?secret=my-preview-mode-secret&path=/pages/first-draft`
 
-import nacelleClient from '~/services/nacelle';
+import nacelleClient from 'services/nacelle';
 
 export default async function handler(req, res) {
   const previewModeSecret = 'my-preview-mode-secret'; // IMPORTANT! Update this value.

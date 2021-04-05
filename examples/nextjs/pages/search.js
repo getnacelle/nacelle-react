@@ -3,7 +3,7 @@ import { TextInput, Grid } from '@nacelle/react-components';
 
 import ProductGallery from 'components/ProductGallery';
 import { useProductSearch, useSearchData } from 'providers/ProductSearch';
-import * as styles from '../styles/pages.styles';
+import * as styles from 'styles/pages.styles';
 
 const SearchFilter = ({ filter, onClick, isChecked }) => {
   return (

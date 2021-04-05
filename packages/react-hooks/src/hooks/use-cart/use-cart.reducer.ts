@@ -126,11 +126,23 @@ const cartReducer = (
         ...state,
         cart: []
       };
-    case TOGGLE_CART:
+    case TOGGLE_CART: {
+      let show = !state.show;
+      const stay = action.payload;
+
+      if (stay) {
+        if (stay === 'open') {
+          show = true;
+        } else if (stay === 'closed') {
+          show = false;
+        }
+      }
+
       return {
         ...state,
-        show: !state.show
+        show
       };
+    }
     case SET_CHECKOUT_STATUS: {
       return {
         ...state,
@@ -202,7 +214,7 @@ export function buildCart(
         if (item.id !== payloadId) {
           return item;
         }
-        return { ...item, quantity: item.quantity + 1 };
+        return { ...item, quantity: item.quantity + (payload.quantity || 1) };
       })
     : [...cart, { ...formatCartItem(payload) }];
 }

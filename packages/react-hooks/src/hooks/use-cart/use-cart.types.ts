@@ -15,7 +15,7 @@ export type CartActions = {
   incrementItem: (payload: NacelleShopProduct | CartItem) => void;
   decrementItem: (payload: NacelleShopProduct | CartItem) => void;
   setCheckoutStatus: (payload: CheckoutStatus) => void;
-  toggleCart: () => void;
+  toggleCart: (payload: CartToggleStates) => void;
   clearCart: () => void;
 };
 
@@ -30,6 +30,11 @@ export type CartReducerAction =
   | { type: 'cart/increment-item'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/decrement-item'; payload: NacelleShopProduct | CartItem }
   | { type: 'cart/remove-from-cart'; payload: NacelleShopProduct | CartItem }
-  | { type: 'cart/toggle-visibility'; payload?: null }
+  | { type: 'cart/toggle-visibility'; payload?: CartToggleStates }
   | { type: 'cart/set-status'; payload: CheckoutStatus }
   | { type: 'cart/clear'; payload?: null };
+
+export enum CartToggleStates {
+  open = 'open',
+  closed = 'closed'
+}

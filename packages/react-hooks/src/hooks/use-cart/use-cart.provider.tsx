@@ -1,7 +1,12 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
 import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
-import { CartState, CheckoutStatus, CartActions } from './use-cart.types';
+import {
+  CartState,
+  CheckoutStatus,
+  CartActions,
+  CartToggleStates
+} from './use-cart.types';
 import cartReducer, {
   initialState,
   ADD_TO_CART,
@@ -52,7 +57,8 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({ type: INCREMENT_ITEM, payload }),
       decrementItem: (payload: NacelleShopProduct | CartItem): void =>
         dispatch({ type: DECREMENT_ITEM, payload }),
-      toggleCart: () => dispatch({ type: TOGGLE_CART }),
+      toggleCart: (payload: CartToggleStates) =>
+        dispatch({ type: TOGGLE_CART, payload }),
       setCheckoutStatus: (payload: CheckoutStatus): void =>
         dispatch({ type: SET_CHECKOUT_STATUS, payload }),
       clearCart: (): void => dispatch({ type: CLEAR_CART })

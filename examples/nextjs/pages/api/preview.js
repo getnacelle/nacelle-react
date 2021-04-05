@@ -80,7 +80,12 @@ export default async function handler(req, res) {
   if (path.startsWith('/pages/')) {
     const method = 'page';
     const { newPath, handle } = await getPathFromIndexedData({ path, method });
-    handleRedirect({ res, newPath, handle, method });
+
+    if (path.startsWith('/pages/homepage')) {
+      handleRedirect({ res, newPath: '/', handle, method });
+    } else {
+      handleRedirect({ res, newPath, handle, method });
+    }
   }
 
   if (path.startsWith('/articles/')) {
@@ -89,7 +94,7 @@ export default async function handler(req, res) {
     handleRedirect({ res, newPath, handle, method });
   }
 
-  if (path.startsWith('/homepage')) {
+  if (path === '/') {
     // Set cookies to enable Preview Mode
     res.setPreviewData({});
     console.info('[nacelle] preview mode enabled');

@@ -160,3 +160,8 @@ export const buttons = {
   flexDirection: 'row',
   alignItems: 'center'
 };
+
+export const accountButton = {
+  width: '25px',
+  height: '25px'
+};

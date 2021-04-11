@@ -2,6 +2,7 @@ import App from 'next/app';
 import React from 'react';
 import { Global } from '@emotion/core';
 import { CartProvider } from '@nacelle/react-hooks';
+import { AccountProvider } from 'providers/Account';
 
 import Layout from 'components/Layout';
 import $nacelle from 'services/nacelle.js';
@@ -12,11 +13,13 @@ function MyApp({ Component, pageProps, space, products }) {
   return (
     <CartProvider useLocalStorage>
       <Global styles={styles.global} />
-      <ProductSearchProvider products={products}>
-        <Layout space={space}>
-          <Component {...pageProps} />
-        </Layout>
-      </ProductSearchProvider>
+      <AccountProvider>
+        <ProductSearchProvider products={products}>
+          <Layout space={space}>
+            <Component {...pageProps} />
+          </Layout>
+        </ProductSearchProvider>
+      </AccountProvider>
     </CartProvider>
   );
 }

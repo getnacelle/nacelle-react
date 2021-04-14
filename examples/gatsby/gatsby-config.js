@@ -7,6 +7,7 @@ module.exports = {
       options: {
         nacelleSpaceId: process.env.NACELLE_SPACE_ID,
         nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+        nacelleEndpoint: process.env.NACELLE_ENDPOINT,
         cmsPreviewEnabled: process.env.NACELLE_PREVIEW_MODE,
         contentfulPreviewSpaceId: process.env.CONTENTFUL_PREVIEW_SPACE_ID,
         contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,

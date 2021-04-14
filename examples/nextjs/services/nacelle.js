@@ -5,6 +5,6 @@ export default new NacelleClient({
   // https://docs.getnacelle.com/api-reference/client-js-sdk.html
   id: process.env.NACELLE_SPACE_ID,
   token: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: 'https://hailfrequency.com/v3/graphql',
+  nacelleEndpoint: process.env.NACELLE_ENDPOINT,
   useStatic: false
 });

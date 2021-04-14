@@ -69,5 +69,7 @@
       "pre-push": "npm run test:ci"
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "@nacelle/react-dev-utils": "^2.10.1"
+  }
 }

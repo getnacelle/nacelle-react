@@ -1,6 +1,6 @@
 {
   "name": "nacelle-recharge-example",
-  "version": "2.11.4",
+  "version": "2.11.5",
   "private": true,
   "scripts": {
     "lint": "eslint ./",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@nacelle/react-components": "^2.10.1",
-    "@nacelle/react-hooks": "^2.11.4",
+    "@nacelle/react-hooks": "^2.11.5",
     "atob": "^2.1.2",
     "next": "^10.0.4",
     "react": "^16.13.1",

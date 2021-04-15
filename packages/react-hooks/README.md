@@ -24,7 +24,7 @@ A hook which uses items in a cart to generate a checkout via Nacelle's Hail Freq
 
 ##### Accepts
 
-1. `credentials`: an object containing `nacelleSpaceId` and `nacelleGraphqlToken`
+1. `credentials`: an object containing `nacelleSpaceId`, `nacelleGraphqlToken`, and `nacelleEndpoint`
 2. `lineItems`: an array containing objects representing items in the cart, where each object contains `variant.id` and `variant.qty` properties
 3. `checkoutId`[optional]: a string representing the checkout identification token from a previously-initiated checkout sequence
 
@@ -50,7 +50,8 @@ const Cart = () => {
   ];
   const credentials = {
     nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-    nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
+    nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+    nacelleEndpoint: process.env.NACELLE_ENDPOINT
   };
   const [checkoutData, checkout, isLoading] = useCheckout(
     credentials,

@@ -65,18 +65,15 @@ export const useCheckout = (
     };
 
     try {
-      const response: Response = await fetch(
-        'https://hailfrequency.com/v2/graphql',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
-            'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
-          },
-          body: JSON.stringify({ query: CHECKOUT_QUERY, variables })
-        }
-      );
+      const response: Response = await fetch(credentials.nacelleEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
+          'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
+        },
+        body: JSON.stringify({ query: CHECKOUT_QUERY, variables })
+      });
 
       const checkoutResult: CheckoutResponse = await response.json();
 

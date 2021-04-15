@@ -11,7 +11,8 @@ import * as styles from './Cart.styles';
 
 const checkoutCredentials = {
   nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
+  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.NACELLE_ENDPOINT
 };
 
 const Cart = () => {

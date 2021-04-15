@@ -33,7 +33,8 @@ const items = [cartItem];
 
 const credentials = {
   nacelleSpaceId: 'my-space-id',
-  nacelleGraphqlToken: 'my-graphql-token'
+  nacelleGraphqlToken: 'my-graphql-token',
+  nacelleEndpoint: 'https://hailfrequency.com/v3/graphql'
 };
 
 describe('useCheckout', () => {
@@ -59,18 +60,15 @@ describe('useCheckout', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(global.fetch).toHaveBeenCalledWith(
-      'https://hailfrequency.com/v2/graphql',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
-          'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
-        },
-        body: expect.any(String)
-      }
-    );
+    expect(global.fetch).toHaveBeenCalledWith(credentials.nacelleEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
+        'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
+      },
+      body: expect.any(String)
+    });
 
     expect(result.current[2]).toEqual(false);
     expect(result.current[0]).toEqual(checkoutResponse);

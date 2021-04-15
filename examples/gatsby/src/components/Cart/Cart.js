@@ -10,7 +10,8 @@ import * as styles from './Cart.styles';
 
 const checkoutCredentials = {
   nacelleSpaceId: process.env.GATSBY_NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN
+  nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
 };
 
 const Cart = () => {

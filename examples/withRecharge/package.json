@@ -14,7 +14,7 @@
     "@nacelle/react-components": "^2.10.1",
     "@nacelle/react-hooks": "^2.11.5",
     "atob": "^2.1.2",
-    "next": "^10.0.4",
+    "next": "^10.1.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

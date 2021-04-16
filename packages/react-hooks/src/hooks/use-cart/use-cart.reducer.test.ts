@@ -236,13 +236,29 @@ describe('useCart reducer', () => {
 
   describe(`${SET_CHECKOUT_STATUS}`, () => {
     it('should set the checkoutId and complete status for the cart', () => {
-      const result = cartReducer(initialState, {
+      const cartState = {
+        ...initialState,
+        useLocalStorage: true
+      };
+
+      const setCheckoutPayload = {
+        checkoutId: 'my-checkout-id',
+        checkoutComplete: true
+      };
+
+      const result = cartReducer(cartState, {
         type: SET_CHECKOUT_STATUS,
-        payload: { checkoutId: 'my-checkout-id', checkoutComplete: true }
+        payload: setCheckoutPayload
       });
 
       expect(result.checkoutId).toEqual('my-checkout-id');
       expect(result.checkoutComplete).toEqual(true);
+      expect(window.localStorage.getItem('checkoutId')).toEqual(
+        setCheckoutPayload.checkoutId
+      );
+      expect(
+        JSON.parse(window.localStorage.getItem('checkoutComplete'))
+      ).toEqual(setCheckoutPayload.checkoutComplete);
     });
   });
 });

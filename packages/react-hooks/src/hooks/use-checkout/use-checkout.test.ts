@@ -42,6 +42,15 @@ describe('useCheckout', () => {
     jest.resetAllMocks();
   });
 
+  it('should throw an error if credentials are missing', () => {
+    const badCreds = {
+      ...credentials,
+      nacelleEndpoint: undefined
+    };
+
+    expect(() => renderHook(() => useCheckout(badCreds, items))).toThrow();
+  });
+
   it('should return checkout data from hail frequency', async () => {
     global.fetch = jest.fn().mockImplementation(() =>
       Promise.resolve({

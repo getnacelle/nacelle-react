@@ -25,10 +25,18 @@ const Cart = () => {
 
   useEffect(() => {
     if (checkoutData) {
-      const { processCheckout } = checkoutData.data;
-      window.location = processCheckout.url;
+      const {
+        processCheckout: { url, id, completed }
+      } = checkoutData.data;
+
+      cartActions.setCheckoutStatus({
+        checkoutId: id,
+        checkoutComplete: completed
+      });
+
+      window.location = url;
     }
-  }, [checkoutData]);
+  }, [checkoutData, cartActions]);
 
   const cartStateStyle = show ? styles.show : styles.hide;
 

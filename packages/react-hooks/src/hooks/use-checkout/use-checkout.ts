@@ -55,7 +55,7 @@ export const useCheckout = (
           `are required in the 'credentials' provided to the useCheckout hook.`
       );
     }
-  });
+  }, [credentials]);
 
   const cartItems = lineItems.map((item, idx) => ({
     variantId: item.id,

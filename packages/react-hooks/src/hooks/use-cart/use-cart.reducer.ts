@@ -27,6 +27,10 @@ const cartReducer = (
     ? window.localStorage.setItem.bind(localStorage)
     : () => {};
 
+  const unsetCacheItem = state.useLocalStorage
+    ? window.localStorage.removeItem.bind(localStorage)
+    : () => {};
+
   switch (action.type) {
     case ADD_TO_CART: {
       const cart: CartItem[] = buildCart(state.cart, action.payload);
@@ -36,6 +40,7 @@ const cartReducer = (
         cart
       };
     }
+
     case UPDATE_ITEM: {
       const cart: CartItem[] = state.cart.map((item) => {
         const payloadId =
@@ -61,6 +66,7 @@ const cartReducer = (
         cart
       };
     }
+
     case REMOVE_FROM_CART: {
       const payloadId =
         'variant' in action.payload
@@ -77,6 +83,7 @@ const cartReducer = (
         cart
       };
     }
+
     case INCREMENT_ITEM: {
       const cart: CartItem[] = state.cart.map((item) => {
         const payloadId =
@@ -97,6 +104,7 @@ const cartReducer = (
         cart
       };
     }
+
     case DECREMENT_ITEM: {
       const cart: CartItem[] = state.cart.map((item) => {
         const payloadId =
@@ -120,12 +128,14 @@ const cartReducer = (
         cart
       };
     }
+
     case CLEAR_CART:
       if (state.useLocalStorage) window.localStorage.removeItem('cart');
       return {
         ...state,
         cart: []
       };
+
     case TOGGLE_CART: {
       let show = !state.show;
       const stay = action.payload;
@@ -143,13 +153,25 @@ const cartReducer = (
         show
       };
     }
+
     case SET_CHECKOUT_STATUS: {
+      const { checkoutId, checkoutComplete } = action.payload;
+
+      if (action.payload === null) {
+        unsetCacheItem('checkoutId');
+        unsetCacheItem('checkoutComplete');
+      } else {
+        setCacheItem('checkoutId', checkoutId);
+        setCacheItem('checkoutComplete', checkoutComplete.toString());
+      }
+
       return {
         ...state,
-        checkoutId: action.payload.checkoutId,
-        checkoutComplete: action.payload.checkoutComplete
+        checkoutId,
+        checkoutComplete
       };
     }
+
     default:
       throw new Error('invalid action sent to cart reducer');
   }

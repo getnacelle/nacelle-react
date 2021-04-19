@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { CartItem } from '@nacelle/types';
 
-import { Credentials, CheckoutResponse } from '../../common/types';
+import { Credentials, CheckoutResponse } from '~/common/types';
 
 const CHECKOUT_QUERY = `
-mutation sendCheckout($input: CheckoutInput) {
-  processCheckout(input: $input) {
-    id
-    completed
-    url
-    source
+  mutation sendCheckout($input: CheckoutInput) {
+    processCheckout(input: $input) {
+      id
+      completed
+      url
+      source
+    }
   }
-}
 `;
 
 /**
@@ -41,6 +41,21 @@ export const useCheckout = (
     },
     []
   );
+
+  useEffect(() => {
+    const {
+      nacelleEndpoint,
+      nacelleSpaceId,
+      nacelleGraphqlToken
+    } = credentials;
+
+    if (!nacelleEndpoint || !nacelleSpaceId || !nacelleGraphqlToken) {
+      throw new Error(
+        `'nacelleEndpoint', 'nacelleSpaceId', and 'nacelleGraphqlToken' ` +
+          `are required in the 'credentials' provided to the useCheckout hook.`
+      );
+    }
+  }, [credentials]);
 
   const cartItems = lineItems.map((item, idx) => ({
     variantId: item.id,

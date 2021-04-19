@@ -51,6 +51,28 @@ describe('useCart reducer', () => {
     });
 
     it('should add to item localStorage cart', () => {
+      const localStorageMock = (() => {
+        let store = {};
+        return {
+          getItem: (key) => {
+            return store[key];
+          },
+          setItem: (key, value) => {
+            store[key] = value.toString();
+          },
+          clear: () => {
+            store = {};
+          },
+          removeItem: (key) => {
+            delete store[key];
+          }
+        };
+      })();
+
+      Object.defineProperty(window, 'localStorage', {
+        value: localStorageMock
+      });
+
       cartReducer(
         { ...initialState, useLocalStorage: true },
         {
@@ -236,13 +258,29 @@ describe('useCart reducer', () => {
 
   describe(`${SET_CHECKOUT_STATUS}`, () => {
     it('should set the checkoutId and complete status for the cart', () => {
-      const result = cartReducer(initialState, {
+      const cartState = {
+        ...initialState,
+        useLocalStorage: true
+      };
+
+      const setCheckoutPayload = {
+        checkoutId: 'my-checkout-id',
+        checkoutComplete: true
+      };
+
+      const result = cartReducer(cartState, {
         type: SET_CHECKOUT_STATUS,
-        payload: { checkoutId: 'my-checkout-id', checkoutComplete: true }
+        payload: setCheckoutPayload
       });
 
       expect(result.checkoutId).toEqual('my-checkout-id');
       expect(result.checkoutComplete).toEqual(true);
+      expect(window.localStorage.getItem('checkoutId')).toEqual(
+        setCheckoutPayload.checkoutId
+      );
+      expect(
+        JSON.parse(window.localStorage.getItem('checkoutComplete'))
+      ).toEqual(setCheckoutPayload.checkoutComplete);
     });
   });
 });

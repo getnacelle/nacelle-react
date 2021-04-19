@@ -34,7 +34,9 @@ export type CartReducerAction =
   | { type: 'cart/set-status'; payload: CheckoutStatus }
   | { type: 'cart/clear'; payload?: null };
 
-export const enum CartToggleStates {
-  open = 'open',
-  closed = 'closed'
-}
+const cartToggleStates = {
+  open: 'open',
+  closed: 'closed'
+} as const;
+
+export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];

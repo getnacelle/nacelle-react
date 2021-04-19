@@ -33,16 +33,30 @@ export const CartProvider: FC<CartProviderProps> = ({
   useLocalStorage = true,
   children
 }) => {
-  const hasWindow = typeof window !== 'undefined';
+  const isClient = typeof window !== 'undefined';
   const cart =
-    useLocalStorage && hasWindow
+    useLocalStorage && isClient
       ? JSON.parse(window.localStorage.getItem('cart')) || []
       : [];
+
+  const checkoutId =
+    useLocalStorage && isClient
+      ? (window.localStorage.getItem('checkoutId') as string) || null
+      : null;
+
+  const checkoutComplete =
+    useLocalStorage && isClient
+      ? (JSON.parse(
+          window.localStorage.getItem('checkoutComplete')
+        ) as boolean) || false
+      : false;
 
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,
     cart,
-    useLocalStorage: useLocalStorage && hasWindow
+    checkoutId,
+    checkoutComplete,
+    useLocalStorage: useLocalStorage && isClient
   });
 
   const cartActions: CartActions = useMemo(

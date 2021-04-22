@@ -26,11 +26,15 @@ type UseCheckoutResponse = [
  * @property {Object} credentials - an object containing your nacelleEndpoint, nacelleSpaceId, and nacelleGraphqlToken
  * @property {Object[]} lineItems - an array of 'variant' objects containing an 'id' and a 'qty'
  * @property {string} checkoutId - an id string of a previously-created checkout to be continued
+ * @property {Object} metafields - an array of key-value pairs of metadata
+ * @property {string} note - a string representing the order note
+ * @property {string[]} discountCodes - an array of strings representing the discount codes to be applied
+ * @property {string} source - a string representing a URL which is attributed as the source of the checkout
  */
 
 /**
  * @descr Fetch checkout data (url, id, etc.) from the Hail Frequency API
- * @param {CheckoutInput} params - an object containing `credentials` and `lineItems`, plus optional parameters `checkoutId`, `metafields`, `note`, and `source`
+ * @param {CheckoutInput} params - an object containing `credentials` and `lineItems`, plus optional parameters `checkoutId`, `metafields`, `note`, 'discountCodes', and `source`
  *
  * @returns an array with checkout data [0], a checkout callback fn [1], and an isSending boolean [2]
  */
@@ -40,6 +44,7 @@ export const useCheckout = ({
   checkoutId,
   metafields,
   note,
+  discountCodes,
   source
 }: CheckoutInput): UseCheckoutResponse => {
   const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
@@ -91,6 +96,7 @@ export const useCheckout = ({
       checkoutId,
       metafields,
       note,
+      discountCodes,
       source
     };
 
@@ -118,12 +124,13 @@ export const useCheckout = ({
       throw new Error(error);
     }
   }, [
+    credentials,
     cartItems,
     checkoutId,
     metafields,
     note,
+    discountCodes,
     source,
-    credentials,
     isCheckingOut
   ]);
 

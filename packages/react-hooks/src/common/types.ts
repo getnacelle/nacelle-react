@@ -24,5 +24,6 @@ export interface CheckoutInput {
   metafields?: MetafieldInput[];
   checkoutId?: string;
   note?: string;
+  discountCodes?: string[];
   source?: string;
 }

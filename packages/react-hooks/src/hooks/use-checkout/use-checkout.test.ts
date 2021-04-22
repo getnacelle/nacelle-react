@@ -64,13 +64,21 @@ describe('useCheckout', () => {
       cartItems: lineItems,
       metafields: [{ key: 'testingTesting', value: '123' }],
       note: 'please pack with extra bubble wrap',
-      source: 'https://endofie.party/'
+      source: 'https://endofie.party/',
+      discountCodes: ['2020-was-hard']
     };
 
-    const { metafields, note, source } = input;
+    const { metafields, note, source, discountCodes } = input;
 
     const { result } = renderHook(() =>
-      useCheckout({ credentials, lineItems, metafields, note, source })
+      useCheckout({
+        credentials,
+        lineItems,
+        metafields,
+        note,
+        source,
+        discountCodes
+      })
     );
     const [, checkout] = result.current;
 
@@ -86,6 +94,9 @@ describe('useCheckout', () => {
     expect(bodyCalledWith.variables.input.metafields).toEqual(input.metafields);
     expect(bodyCalledWith.variables.input.note).toEqual(input.note);
     expect(bodyCalledWith.variables.input.source).toEqual(input.source);
+    expect(bodyCalledWith.variables.input.discountCodes).toEqual(
+      input.discountCodes
+    );
   });
 
   it('should return checkout data from hail frequency', async () => {

@@ -23,10 +23,10 @@ function sanitizeMetafields(metafields) {
 const Home = () => {
   const [cart, setCart] = useState([]);
   const itemMetafields = useRef([]);
-  const [checkoutData, checkout, isCheckingOut] = useCheckout(
-    checkoutCredentials,
-    cart
-  );
+  const [checkoutData, checkout, isCheckingOut] = useCheckout({
+    credentials: checkoutCredentials,
+    lineItems: cart
+  });
 
   useEffect(() => {
     if (

@@ -17,10 +17,10 @@ const checkoutCredentials = {
 const Cart = () => {
   const [{ cart, show }, cartActions] = useCart();
   const { isMobile } = useDetectDevice();
-  const [checkoutData, checkout, isCheckingOut] = useCheckout(
-    checkoutCredentials,
-    cart
-  );
+  const [checkoutData, checkout, isCheckingOut] = useCheckout({
+    credentials: checkoutCredentials,
+    lineItems: cart
+  });
 
   useEffect(() => {
     if (checkoutData) {

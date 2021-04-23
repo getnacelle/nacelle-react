@@ -76,14 +76,14 @@ export const useCheckout = ({
     }
   }, [credentials]);
 
-  const cartItems = lineItems.map((item, idx) => ({
-    variantId: item.id,
-    cartItemId: `${idx}::${item.id}`,
-    quantity: item.quantity,
-    metafields: item.metafields
-  }));
-
   const checkout = useCallback(async () => {
+    const cartItems = lineItems.map((item, idx) => ({
+      variantId: item.id,
+      cartItemId: `${idx}::${item.id}`,
+      quantity: item.quantity,
+      metafields: item.metafields
+    }));
+
     if (isCheckingOut) {
       // while sending, don't send again
       return null;
@@ -124,8 +124,8 @@ export const useCheckout = ({
       throw new Error(error);
     }
   }, [
+    lineItems,
     credentials,
-    cartItems,
     checkoutId,
     metafields,
     note,

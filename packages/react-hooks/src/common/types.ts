@@ -12,10 +12,19 @@ export interface Credentials {
   nacelleEndpoint: string;
 }
 
+interface CheckoutError {
+  message: string;
+  extensions: {
+    variables: string;
+    field: string;
+    code: string;
+  };
+}
 export interface CheckoutResponse {
   data: {
     processCheckout: Checkout;
   };
+  errors: CheckoutError[];
 }
 
 export interface CheckoutInput {

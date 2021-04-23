@@ -115,6 +115,12 @@ export const useCheckout = ({
 
       setCheckoutData(checkoutResult);
 
+      if (checkoutResult.errors) {
+        throw new Error(
+          `Checkout Errors:\n${JSON.stringify(checkoutResult.errors)}`
+        );
+      }
+
       if (isMounted.current) {
         setIsCheckingOut(false); // only update if still mounted
       }

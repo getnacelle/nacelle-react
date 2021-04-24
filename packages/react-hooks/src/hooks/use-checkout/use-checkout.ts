@@ -81,7 +81,7 @@ export const useCheckout = ({
       variantId: item.id,
       cartItemId: `${idx}::${item.id}`,
       quantity: item.quantity,
-      metafields: item.metafields
+      metafields: item.metafields?.map((m) => ({ key: m.key, value: m.value }))
     }));
 
     if (isCheckingOut) {
@@ -117,7 +117,7 @@ export const useCheckout = ({
 
       if (checkoutResult.errors) {
         throw new Error(
-          `Checkout Errors:\n${JSON.stringify(checkoutResult.errors)}`
+          `Checkout Errors:\n${JSON.stringify(checkoutResult.errors, null, 2)}`
         );
       }
 

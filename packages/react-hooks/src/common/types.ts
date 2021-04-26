@@ -1,4 +1,5 @@
 import { Checkout } from '@nacelle/types';
+import { CartItem, MetafieldInput } from '@nacelle/types';
 
 /**
  * @param nacelleSpaceId: the target Nacelle Space ID (string)
@@ -11,8 +12,27 @@ export interface Credentials {
   nacelleEndpoint: string;
 }
 
+interface CheckoutError {
+  message: string;
+  extensions: {
+    variables: string;
+    field: string;
+    code: string;
+  };
+}
 export interface CheckoutResponse {
   data: {
     processCheckout: Checkout;
   };
+  errors: CheckoutError[];
+}
+
+export interface CheckoutInput {
+  credentials: Credentials;
+  lineItems: CartItem[];
+  metafields?: MetafieldInput[];
+  checkoutId?: string;
+  note?: string;
+  discountCodes?: string[];
+  source?: string;
 }

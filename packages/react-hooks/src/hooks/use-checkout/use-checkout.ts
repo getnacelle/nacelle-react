@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { CartItem } from '@nacelle/types';
+import { CheckoutInput as NacelleCheckoutInput } from '@nacelle/types';
 
-import { Credentials, CheckoutResponse } from '~/common/types';
+import { CheckoutInput, CheckoutResponse } from '~/common/types';
 
 const CHECKOUT_QUERY = `
   mutation sendCheckout($input: CheckoutInput) {
@@ -14,20 +14,39 @@ const CHECKOUT_QUERY = `
   }
 `;
 
+type UseCheckoutResponse = [
+  null | CheckoutResponse,
+  () => Promise<CheckoutResponse>,
+  boolean
+];
+
 /**
- * Fetch checkout data (url, id, etc.) from the Hail Frequency API
- *
- * @param credentials an object containing your nacelle_space_id and your nacelle_graphql_token
- * @param lineItems an array of 'variant' objects containing an 'id' and a 'qty'
- * @param checkoutId an id string of a previously checkout to be continued
+ * @typedef CheckoutInput
+ * @type {Object}
+ * @property {Object} credentials - an object containing your nacelleEndpoint, nacelleSpaceId, and nacelleGraphqlToken
+ * @property {Object[]} lineItems - an array of 'variant' objects containing an 'id' and a 'qty'
+ * @property {string} checkoutId - an id string of a previously-created checkout to be continued
+ * @property {Object} metafields - an array of key-value pairs of metadata
+ * @property {string} note - a string representing the order note
+ * @property {string[]} discountCodes - an array of strings representing the discount codes to be applied
+ * @property {string} source - a string representing a URL which is attributed as the source of the checkout
+ */
+
+/**
+ * @descr Fetch checkout data (url, id, etc.) from the Hail Frequency API
+ * @param {CheckoutInput} params - an object containing `credentials` and `lineItems`, plus optional parameters `checkoutId`, `metafields`, `note`, 'discountCodes', and `source`
  *
  * @returns an array with checkout data [0], a checkout callback fn [1], and an isSending boolean [2]
  */
-export const useCheckout = (
-  credentials: Credentials,
-  lineItems: CartItem[],
-  checkoutId?: string
-): [null | CheckoutResponse, () => Promise<CheckoutResponse>, boolean] => {
+export const useCheckout = ({
+  credentials,
+  lineItems,
+  checkoutId,
+  metafields,
+  note,
+  discountCodes,
+  source
+}: CheckoutInput): UseCheckoutResponse => {
   const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
     null
   );
@@ -57,14 +76,14 @@ export const useCheckout = (
     }
   }, [credentials]);
 
-  const cartItems = lineItems.map((item, idx) => ({
-    variantId: item.id,
-    cartItemId: `${idx}::${item.id}`,
-    quantity: item.quantity,
-    metafields: item.metafields
-  }));
-
   const checkout = useCallback(async () => {
+    const cartItems = lineItems.map((item, idx) => ({
+      variantId: item.id,
+      cartItemId: `${idx}::${item.id}`,
+      quantity: item.quantity,
+      metafields: item.metafields?.map((m) => ({ key: m.key, value: m.value }))
+    }));
+
     if (isCheckingOut) {
       // while sending, don't send again
       return null;
@@ -72,11 +91,13 @@ export const useCheckout = (
 
     setIsCheckingOut(true);
 
-    const variables = {
-      input: {
-        cartItems,
-        checkoutId
-      }
+    const input: NacelleCheckoutInput = {
+      cartItems,
+      checkoutId,
+      metafields,
+      note,
+      discountCodes,
+      source
     };
 
     try {
@@ -87,12 +108,18 @@ export const useCheckout = (
           'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
           'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
         },
-        body: JSON.stringify({ query: CHECKOUT_QUERY, variables })
+        body: JSON.stringify({ query: CHECKOUT_QUERY, variables: { input } })
       });
 
       const checkoutResult: CheckoutResponse = await response.json();
 
       setCheckoutData(checkoutResult);
+
+      if (checkoutResult.errors) {
+        throw new Error(
+          `Checkout Errors:\n${JSON.stringify(checkoutResult.errors, null, 2)}`
+        );
+      }
 
       if (isMounted.current) {
         setIsCheckingOut(false); // only update if still mounted
@@ -102,7 +129,16 @@ export const useCheckout = (
     } catch (error) {
       throw new Error(error);
     }
-  }, [cartItems, checkoutId, credentials, isCheckingOut]);
+  }, [
+    lineItems,
+    credentials,
+    checkoutId,
+    metafields,
+    note,
+    discountCodes,
+    source,
+    isCheckingOut
+  ]);
 
   return [checkoutData, checkout, isCheckingOut];
 };

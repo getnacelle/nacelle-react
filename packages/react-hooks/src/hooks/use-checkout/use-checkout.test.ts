@@ -29,7 +29,7 @@ const cartItem = {
   title: shopifyItem.title
 };
 
-const items = [cartItem];
+const lineItems = [cartItem];
 
 const credentials = {
   nacelleSpaceId: 'my-space-id',
@@ -40,6 +40,12 @@ const credentials = {
 describe('useCheckout', () => {
   beforeEach(() => {
     jest.resetAllMocks();
+
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(checkoutResponse)
+      })
+    );
   });
 
   it('should throw an error if credentials are missing', () => {
@@ -48,17 +54,55 @@ describe('useCheckout', () => {
       nacelleEndpoint: undefined
     };
 
-    expect(() => renderHook(() => useCheckout(badCreds, items))).toThrow();
+    expect(() =>
+      renderHook(() => useCheckout({ credentials: badCreds, lineItems }))
+    ).toThrow();
+  });
+
+  it('should pass optional fields to hail frequency', async () => {
+    const input = {
+      cartItems: lineItems,
+      metafields: [{ key: 'testingTesting', value: '123' }],
+      note: 'please pack with extra bubble wrap',
+      source: 'https://endofie.party/',
+      discountCodes: ['2020-was-hard']
+    };
+
+    const { metafields, note, source, discountCodes } = input;
+
+    const { result } = renderHook(() =>
+      useCheckout({
+        credentials,
+        lineItems,
+        metafields,
+        note,
+        source,
+        discountCodes
+      })
+    );
+    const [, checkout] = result.current;
+
+    await act(async () => {
+      await checkout();
+    });
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    const bodyCalledWith = JSON.parse(
+      (global.fetch as jest.Mock).mock.calls[0][1].body
+    );
+
+    expect(bodyCalledWith.variables.input.metafields).toEqual(input.metafields);
+    expect(bodyCalledWith.variables.input.note).toEqual(input.note);
+    expect(bodyCalledWith.variables.input.source).toEqual(input.source);
+    expect(bodyCalledWith.variables.input.discountCodes).toEqual(
+      input.discountCodes
+    );
   });
 
   it('should return checkout data from hail frequency', async () => {
-    global.fetch = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(checkoutResponse)
-      })
+    const { result } = renderHook(() =>
+      useCheckout({ credentials, lineItems })
     );
-
-    const { result } = renderHook(() => useCheckout(credentials, items));
     const [, checkout] = result.current;
 
     expect(result.current[2]).toEqual(false);

@@ -29,7 +29,7 @@ A configuration object with the following properties:
 ###### Required Properties
 
 - `credentials`: an object containing `nacelleSpaceId`, `nacelleGraphqlToken`, and `nacelleEndpoint`
-- `lineItems`: an array containing objects representing items in the cart, where each object contains `variant.id` and `variant.qty` properties
+- `lineItems`: an array containing objects representing items in the cart, where each object contains `variant.id` and `variant.quantity`, and optionally, an array of `metafields`
 
 ###### Optional Properties
 
@@ -56,20 +56,20 @@ import { useCheckout } from '@nacelle/react-hooks';
 
 const Cart = () => {
   const lineItems = [
-    (item1: { variant: { id: 101, qty: 1 } }),
-    (item2: { variant: { id: 102, qty: 4 } })
+    { id: 123456789, quantity: 1 },
+    { id: 987654321, quantity: 4 }
   ];
   const credentials = {
     nacelleSpaceId: process.env.NACELLE_SPACE_ID,
     nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
     nacelleEndpoint: process.env.NACELLE_ENDPOINT
   };
-  const [checkoutData, checkout, isLoading] = useCheckout(
+  const [checkoutData, checkout, isLoading] = useCheckout({
     credentials,
     lineItems
-  );
+  });
   useEffect(() => {
-    if (checkoutData) {
+    if (checkoutData && checkoutData.data) {
       const { processCheckout } = checkoutData.data;
       window.location = processCheckout.url;
     }
@@ -80,19 +80,6 @@ const Cart = () => {
       <button type="button" onClick={() => checkout()} disabled={isLoading}>
         {isLoading ? <>Loading...</> : <>Checkout</>}
       </button>
-      <ul>
-        {lineItems.map((el) => (
-          <li key={el.variant.id}>
-            <h3>{item.title}</h3>
-            <img src={item.src} alt={item.title} />
-            <p>{item.variant.title}</p>
-            <p>Quantity: {item.variant.qty}</p>
-            <p>
-              $ {(Number(item.variant.price) * item.variant.qty).toFixed(2)}
-            </p>
-          </li>
-        ))}
-      </ul>
     </>
   );
 };

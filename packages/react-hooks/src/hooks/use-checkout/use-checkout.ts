@@ -24,7 +24,7 @@ type UseCheckoutResponse = [
  * @typedef CheckoutInput
  * @type {Object}
  * @property {Object} credentials - an object containing your nacelleEndpoint, nacelleSpaceId, and nacelleGraphqlToken
- * @property {Object[]} lineItems - an array of 'variant' objects containing an 'id' and a 'qty'
+ * @property {Object[]} lineItems - an array of 'variant' objects containing an 'id' and 'quantity' (required), and optionally, an array of line item 'metafields'
  * @property {string} checkoutId - an id string of a previously-created checkout to be continued
  * @property {Object} metafields - an array of key-value pairs of metadata
  * @property {string} note - a string representing the order note

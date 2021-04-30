@@ -5,15 +5,21 @@ import { useCheckout } from './use-checkout';
 
 const checkoutResponse = {
   data: {
-    data: {
-      processCheckout: {
-        id: 'checkout-id',
-        completed: false,
-        url: 'https://sample-apparel.myshopify.com/12345/checkouts/checkout-id',
-        source: 'Shopify'
-      }
+    processCheckout: {
+      id: 'checkout-id',
+      completed: false,
+      url: 'https://sample-apparel.myshopify.com/12345/checkouts/checkout-id',
+      source: 'Shopify'
     }
   }
+};
+
+const checkoutData = {
+  checkoutId: 'checkout-id',
+  checkoutComplete: false,
+  checkoutUrl:
+    'https://sample-apparel.myshopify.com/12345/checkouts/checkout-id',
+  checkoutSource: 'Shopify'
 };
 
 const cartItem = {
@@ -46,6 +52,28 @@ describe('useCheckout', () => {
         json: () => Promise.resolve(checkoutResponse)
       })
     );
+
+    const localStorageMock = (() => {
+      let store = {};
+      return {
+        getItem: (key) => {
+          return store[key];
+        },
+        setItem: (key, value) => {
+          store[key] = value.toString();
+        },
+        clear: () => {
+          store = {};
+        },
+        removeItem: (key) => {
+          delete store[key];
+        }
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock
+    });
   });
 
   it('should throw an error if credentials are missing', () => {
@@ -80,13 +108,12 @@ describe('useCheckout', () => {
         discountCodes
       })
     );
-    const [, checkout] = result.current;
+    const [, { processCheckout }] = result.current;
 
     await act(async () => {
-      await checkout();
+      await processCheckout();
     });
 
-    expect(global.fetch).toHaveBeenCalledTimes(1);
     const bodyCalledWith = JSON.parse(
       (global.fetch as jest.Mock).mock.calls[0][1].body
     );
@@ -103,16 +130,13 @@ describe('useCheckout', () => {
     const { result } = renderHook(() =>
       useCheckout({ credentials, lineItems })
     );
-    const [, checkout] = result.current;
 
-    expect(result.current[2]).toEqual(false);
-    expect(result.current[0]).toEqual(null);
+    const [, { processCheckout }] = result.current;
 
     await act(async () => {
-      await checkout();
+      await processCheckout();
     });
 
-    expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith(credentials.nacelleEndpoint, {
       method: 'POST',
       headers: {
@@ -124,6 +148,6 @@ describe('useCheckout', () => {
     });
 
     expect(result.current[2]).toEqual(false);
-    expect(result.current[0]).toEqual(checkoutResponse);
+    expect(result.current[0]).toEqual(checkoutData);
   });
 });

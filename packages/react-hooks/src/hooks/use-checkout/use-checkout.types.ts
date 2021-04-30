@@ -12,6 +12,15 @@ export interface Credentials {
   nacelleEndpoint: string;
 }
 
+export interface AnyObject {
+  [key: string]: AnyObject | string | unknown;
+}
+export interface GraphQLRequestParams {
+  credentials: Credentials;
+  query: string;
+  variables: AnyObject;
+}
+
 interface CheckoutError {
   message: string;
   extensions: {
@@ -20,9 +29,21 @@ interface CheckoutError {
     code: string;
   };
 }
-export interface CheckoutResponse {
+export interface ProcessCheckoutResponse {
   data: {
     processCheckout: Checkout;
+  };
+  errors: CheckoutError[];
+}
+
+export interface GetCheckoutResponse {
+  data: {
+    getCheckout: {
+      id: string;
+      url: string;
+      completed: boolean;
+      source: string;
+    };
   };
   errors: CheckoutError[];
 }
@@ -35,4 +56,11 @@ export interface CheckoutInput {
   note?: string;
   discountCodes?: string[];
   source?: string;
+}
+
+export interface CheckoutData {
+  checkoutComplete: boolean;
+  checkoutId: string;
+  checkoutSource?: string;
+  checkoutUrl: string;
 }

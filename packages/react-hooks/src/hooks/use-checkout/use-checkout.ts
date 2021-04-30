@@ -1,24 +1,38 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { CheckoutInput as NacelleCheckoutInput } from '@nacelle/types';
 
-import { CheckoutInput, CheckoutResponse } from '~/common/types';
+import {
+  hailFrequencyRequest,
+  getCacheBoolean,
+  getCacheString
+} from '~/hooks/use-checkout/utils';
+import {
+  GET_CHECKOUT_QUERY,
+  PROCESS_CHECKOUT_QUERY
+} from '~/hooks/use-checkout/queries';
+import {
+  CheckoutData,
+  CheckoutInput,
+  GetCheckoutResponse,
+  ProcessCheckoutResponse
+} from '~/hooks/use-checkout/use-checkout.types';
 
-const CHECKOUT_QUERY = `
-  mutation sendCheckout($input: CheckoutInput) {
-    processCheckout(input: $input) {
-      id
-      completed
-      url
-      source
-    }
-  }
-`;
+export interface CheckoutStatus {
+  checkoutId: string;
+  checkoutComplete: boolean;
+  checkoutUrl: string;
+}
 
-type UseCheckoutResponse = [
-  null | CheckoutResponse,
-  () => Promise<CheckoutResponse>,
-  boolean
-];
+export interface GetCheckoutParams {
+  id: string;
+  url: string;
+}
+export interface UseCheckoutFunctions {
+  getCheckout: (GetCheckoutParams) => Promise<GetCheckoutResponse>;
+  processCheckout: () => Promise<ProcessCheckoutResponse>;
+}
+
+type UseCheckoutResponse = [null | CheckoutData, UseCheckoutFunctions, boolean];
 
 /**
  * @typedef CheckoutInput
@@ -47,11 +61,12 @@ export const useCheckout = ({
   discountCodes,
   source
 }: CheckoutInput): UseCheckoutResponse => {
-  const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
-    null
-  );
+  const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
+  const id = getCacheString('checkoutId');
+  const url = getCacheString('checkoutUrl');
+  const complete = getCacheBoolean('checkoutComplete') as boolean;
 
   useEffect(
     // Set isMounted to false when the component is unmounted
@@ -76,7 +91,26 @@ export const useCheckout = ({
     }
   }, [credentials]);
 
-  const checkout = useCallback(async () => {
+  const getCheckout = useCallback(
+    async ({ id, url }: GetCheckoutParams) => {
+      if (typeof window !== undefined) {
+        if (id && url) {
+          const response = await hailFrequencyRequest({
+            credentials,
+            query: GET_CHECKOUT_QUERY,
+            variables: { id, url }
+          });
+
+          const checkoutResult: GetCheckoutResponse = await response.json();
+
+          return checkoutResult;
+        }
+      }
+    },
+    [credentials]
+  );
+
+  const processCheckout = useCallback(async () => {
     const cartItems = lineItems.map((item, idx) => ({
       variantId: item.id,
       cartItemId: `${idx}::${item.id}`,
@@ -93,7 +127,7 @@ export const useCheckout = ({
 
     const input: NacelleCheckoutInput = {
       cartItems,
-      checkoutId,
+      checkoutId: checkoutId || id,
       metafields,
       note,
       discountCodes,
@@ -101,21 +135,34 @@ export const useCheckout = ({
     };
 
     try {
-      const response: Response = await fetch(credentials.nacelleEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
-          'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
-        },
-        body: JSON.stringify({ query: CHECKOUT_QUERY, variables: { input } })
+      const response = await hailFrequencyRequest({
+        credentials,
+        query: PROCESS_CHECKOUT_QUERY,
+        variables: { input }
       });
 
-      const checkoutResult: CheckoutResponse = await response.json();
+      const checkoutResult: ProcessCheckoutResponse = await response.json();
 
-      setCheckoutData(checkoutResult);
+      if (checkoutResult?.data?.processCheckout) {
+        const { processCheckout } = checkoutResult.data;
 
-      if (checkoutResult.errors) {
+        setCheckoutData({
+          checkoutId: processCheckout.id,
+          checkoutComplete: processCheckout.completed,
+          checkoutUrl: processCheckout.url,
+          checkoutSource: processCheckout.source
+        });
+
+        window.localStorage.setItem(
+          'checkoutComplete',
+          processCheckout.completed.toString()
+        );
+        window.localStorage.setItem('checkoutId', processCheckout.id);
+        window.localStorage.setItem('checkoutSource', processCheckout.source);
+        window.localStorage.setItem('checkoutUrl', processCheckout.url);
+      }
+
+      if (checkoutResult?.errors) {
         throw new Error(
           `Checkout Errors:\n${JSON.stringify(checkoutResult.errors, null, 2)}`
         );
@@ -125,13 +172,16 @@ export const useCheckout = ({
         setIsCheckingOut(false); // only update if still mounted
       }
 
-      return checkoutResult;
+      if (checkoutResult?.data?.processCheckout?.url) {
+        window.location.href = checkoutResult.data.processCheckout.url;
+      }
     } catch (error) {
       throw new Error(error);
     }
   }, [
     lineItems,
     credentials,
+    id,
     checkoutId,
     metafields,
     note,
@@ -140,5 +190,39 @@ export const useCheckout = ({
     isCheckingOut
   ]);
 
-  return [checkoutData, checkout, isCheckingOut];
+  useEffect(() => {
+    let checkoutComplete = complete;
+    let checkoutSource = source || (getCacheString('checkoutSource') as string);
+
+    if (!checkoutComplete && id && url && !isCheckingOut) {
+      getCheckout({ id, url }).then((checkoutResult) => {
+        if (!checkoutResult.errors && checkoutResult.data?.getCheckout) {
+          checkoutComplete = checkoutResult.data.getCheckout.completed;
+          checkoutSource = checkoutResult.data.getCheckout.source;
+
+          localStorage.setItem('checkoutComplete', checkoutComplete.toString());
+        }
+      });
+    }
+
+    setCheckoutData({
+      checkoutComplete,
+      checkoutId: id,
+      checkoutSource,
+      checkoutUrl: url
+    });
+  }, [complete, id, url, source, getCheckout, isCheckingOut]);
+
+  const clearCheckoutData = useCallback(() => {
+    window.localStorage.removeItem('checkoutComplete');
+    window.localStorage.removeItem('checkoutId');
+    window.localStorage.removeItem('checkoutSource');
+    window.localStorage.removeItem('checkoutUrl');
+
+    setCheckoutData(null);
+  }, []);
+
+  const checkoutFunctions = { processCheckout, getCheckout, clearCheckoutData };
+
+  return [checkoutData, checkoutFunctions, isCheckingOut];
 };

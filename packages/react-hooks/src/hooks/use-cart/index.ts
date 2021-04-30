@@ -1,4 +1,3 @@
-import { isInCart } from './use-cart.reducer';
 import {
   useCartState,
   useCartActions,
@@ -9,4 +8,4 @@ import { CartState, CartActions } from './use-cart.types';
 const useCart = () =>
   [useCartState(), useCartActions()] as [CartState, CartActions];
 
-export { useCart, CartProvider, isInCart };
+export { useCart, CartProvider };

@@ -5,9 +5,19 @@ import {
   CartState,
   CheckoutStatus,
   CartActions,
-  CartToggleStates
+  CartToggleStates,
+  AddToCartFunction,
+  ClearCartFunction,
+  DecrementItemFunction,
+  IncrementItemFunction,
+  RemoveFromCartFunction,
+  SetCheckoutStatusFunction,
+  ToggleCartFunction,
+  UpdateItemFunction,
+  IsInCartFunction
 } from './use-cart.types';
-import cartReducer, {
+
+import createCartReducer, {
   initialState,
   ADD_TO_CART,
   UPDATE_ITEM,
@@ -19,19 +29,37 @@ import cartReducer, {
   CLEAR_CART
 } from './use-cart.reducer';
 
-export type CartProviderProps = {
-  useLocalStorage?: boolean;
-  children: JSX.Element | JSX.Element[];
-};
 export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;
+export type CartProviderProps = {
+  children: JSX.Element | JSX.Element[];
+  useLocalStorage?: boolean;
+  addToCart?: AddToCartFunction;
+  clearCart?: ClearCartFunction;
+  decrementItem?: DecrementItemFunction;
+  incrementItem?: IncrementItemFunction;
+  removeFromCart?: RemoveFromCartFunction;
+  setCheckoutStatus?: SetCheckoutStatusFunction;
+  toggleCart?: ToggleCartFunction;
+  updateItem?: UpdateItemFunction;
+  isInCart?: IsInCartFunction;
+};
 
 const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
+  children,
   useLocalStorage = true,
-  children
+  addToCart,
+  clearCart,
+  decrementItem,
+  incrementItem,
+  removeFromCart,
+  setCheckoutStatus,
+  toggleCart,
+  updateItem,
+  isInCart
 }) => {
   const isClient = typeof window !== 'undefined';
   const cart =
@@ -39,23 +67,20 @@ export const CartProvider: FC<CartProviderProps> = ({
       ? JSON.parse(window.localStorage.getItem('cart')) || []
       : [];
 
-  const checkoutId =
-    useLocalStorage && isClient
-      ? (window.localStorage.getItem('checkoutId') as string) || null
-      : null;
-
-  const checkoutComplete =
-    useLocalStorage && isClient
-      ? (JSON.parse(
-          window.localStorage.getItem('checkoutComplete')
-        ) as boolean) || false
-      : false;
-
+  const cartReducer = createCartReducer({
+    addToCart,
+    clearCart,
+    decrementItem,
+    incrementItem,
+    removeFromCart,
+    setCheckoutStatus,
+    toggleCart,
+    updateItem,
+    isInCart
+  });
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,
     cart,
-    checkoutId,
-    checkoutComplete,
     useLocalStorage: useLocalStorage && isClient
   });
 

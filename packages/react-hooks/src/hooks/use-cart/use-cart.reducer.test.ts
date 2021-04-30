@@ -1,8 +1,7 @@
 import { shopifyItem } from '@nacelle/react-dev-utils';
 
-import cartReducer, {
+import createCartReducer, {
   initialState,
-  formatCartItem,
   ADD_TO_CART,
   UPDATE_ITEM,
   REMOVE_FROM_CART,
@@ -12,6 +11,10 @@ import cartReducer, {
   TOGGLE_CART,
   SET_CHECKOUT_STATUS
 } from './use-cart.reducer';
+
+import { formatCartItem } from '../use-cart/utils';
+
+const cartReducer = createCartReducer();
 
 describe('useCart reducer', () => {
   describe(`${ADD_TO_CART}`, () => {
@@ -265,6 +268,7 @@ describe('useCart reducer', () => {
 
       const setCheckoutPayload = {
         checkoutId: 'my-checkout-id',
+        checkoutUrl: 'https://checkout.nacelle.com',
         checkoutComplete: true
       };
 

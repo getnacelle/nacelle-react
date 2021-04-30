@@ -43,8 +43,19 @@ A configuration object with the following properties:
 
 An array containing:
 
-1. `checkoutData`: an object containing the `data.data.processCheckout` payload, which contains the checkout's `id` token (string), and the `completed` status (boolean)
-2. `checkout`: a function that returns information for processing the checkout
+1. `checkoutData`: an object containing the following properties:
+
+- `checkoutComplete` (boolean) - signals whether the checkout process has successfully completed
+- `checkoutId` (string) - the checkout ID
+- `checkoutSource` (string) - the checkout provider (e.g. 'Shopify')
+- `checkoutUrl` (string) - the url of the checkout page
+
+2. `checkoutFunctions`: an object containing the following properties:
+
+- `processCheckout`: (function) when called, initiates checkout processing
+- `getCheckout({ id, url })` (function) when called with a checkout `id` and `url`, updates the `checkoutData.checkoutComplete` (note: `useCheckout` runs this function automatically - it is provided only to satisfy custom use cases)
+- `clearCheckoutData`: (function) when called, resets the `checkoutData` and clears `checkoutData` values stored in `localStorage`
+
 3. `isLoading`: a boolean that indicates whether or not checkout information is presently being exchanged with Nacelle's Hail Frequency API
 
 ##### Example Usage
@@ -59,25 +70,33 @@ const Cart = () => {
     { id: 123456789, quantity: 1 },
     { id: 987654321, quantity: 4 }
   ];
+
   const credentials = {
     nacelleSpaceId: process.env.NACELLE_SPACE_ID,
     nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
     nacelleEndpoint: process.env.NACELLE_ENDPOINT
   };
-  const [checkoutData, checkout, isLoading] = useCheckout({
-    credentials,
-    lineItems
+
+  const [
+    checkoutData,
+    { processCheckout, clearCheckoutData },
+    isCheckingOut
+  ] = useCheckout({
+    credentials: checkoutCredentials,
+    lineItems: cart
   });
+
   useEffect(() => {
-    if (checkoutData && checkoutData.data) {
-      const { processCheckout } = checkoutData.data;
-      window.location = processCheckout.url;
+    if (checkoutData?.checkoutComplete) {
+      clearCheckoutData();
+      cartActions.clearCart();
     }
-  }, [checkoutData]);
+  }, [checkoutData?.checkoutComplete, clearCheckoutData, cartActions]);
+
   return (
     <>
       <h2>Cart</h2>
-      <button type="button" onClick={() => checkout()} disabled={isLoading}>
+      <button type="button" onClick={processCheckout} disabled={isLoading}>
         {isLoading ? <>Loading...</> : <>Checkout</>}
       </button>
     </>
@@ -113,8 +132,6 @@ An array containing:
 
 - cart: a list of items in the cart
 - show: a boolean to determine if the cart should be shown
-- checkoutId: the Shopify checkoutId of the cart (if applicable)
-- checkoutComplete: a boolean indicating if the checkout process has completed or not
 
 2. `cartActions`: an object containing methods for interacting with the cart:
 
@@ -124,7 +141,6 @@ An array containing:
 - `incrementItem(item)` - increment the quantity of an item in the cart
 - `decrementItem(item)` - decrement the quantity of an item in the cart
 - `toggleCart()` - toggles the cart's show status
-- `setCheckoutStatus(status)` - sets the checkoutId and checkoutComplete properties of the cart
 - `clearCart()` - removes all items from the cart
 
 There is also a convenience method available named `isInCart` that will determine if an item is in the cart (i.e. `isInCart(cart, item)`).

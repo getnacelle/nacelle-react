@@ -3,8 +3,6 @@ import { NacelleShopProduct, CartItem } from '@nacelle/types';
 export type CartState = {
   cart: CartItem[];
   show: boolean;
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };
 
@@ -25,15 +23,8 @@ export type CartActions = {
   removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
   incrementItem: (payload: NacelleShopProduct | CartItem) => void;
   decrementItem: (payload: NacelleShopProduct | CartItem) => void;
-  setCheckoutStatus: (payload: CheckoutStatus) => void;
   toggleCart: (payload: CartToggleStates) => void;
   clearCart: () => void;
-};
-
-export type CheckoutStatus = {
-  checkoutId: string;
-  checkoutComplete: boolean;
-  checkoutUrl: string;
 };
 
 export type AddToCartAction = {
@@ -66,11 +57,6 @@ export type ToggleVisibilityAction = {
   payload?: CartToggleStates;
 };
 
-export type SetStatusAction = {
-  type: 'cart/set-status';
-  payload: CheckoutStatus;
-};
-
 export type ClearCartAction = { type: 'cart/clear'; payload?: null };
 
 export type CartReducerAction =
@@ -80,7 +66,6 @@ export type CartReducerAction =
   | DecrementItemAction
   | RemoveFromCartAction
   | ToggleVisibilityAction
-  | SetStatusAction
   | ClearCartAction;
 
 const cartToggleStates = {
@@ -95,6 +80,5 @@ export type { ClearCartFunction } from './actions/clearCart';
 export type { DecrementItemFunction } from './actions/decrementItem';
 export type { IncrementItemFunction } from './actions/incrementItem';
 export type { RemoveFromCartFunction } from './actions/removeFromCart';
-export type { SetCheckoutStatusFunction } from './actions/setCheckoutStatus';
 export type { ToggleCartFunction } from './actions/toggleCart';
 export type { UpdateItemFunction } from './actions/updateItem';

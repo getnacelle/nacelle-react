@@ -3,7 +3,6 @@ import { NacelleShopProduct, CartItem } from '@nacelle/types';
 
 import {
   CartState,
-  CheckoutStatus,
   CartActions,
   CartToggleStates,
   AddToCartFunction,
@@ -11,7 +10,6 @@ import {
   DecrementItemFunction,
   IncrementItemFunction,
   RemoveFromCartFunction,
-  SetCheckoutStatusFunction,
   ToggleCartFunction,
   UpdateItemFunction,
   IsInCartFunction
@@ -25,7 +23,6 @@ import createCartReducer, {
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   TOGGLE_CART,
-  SET_CHECKOUT_STATUS,
   CLEAR_CART
 } from './use-cart.reducer';
 
@@ -39,7 +36,6 @@ export type CartProviderProps = {
   decrementItem?: DecrementItemFunction;
   incrementItem?: IncrementItemFunction;
   removeFromCart?: RemoveFromCartFunction;
-  setCheckoutStatus?: SetCheckoutStatusFunction;
   toggleCart?: ToggleCartFunction;
   updateItem?: UpdateItemFunction;
   isInCart?: IsInCartFunction;
@@ -56,7 +52,6 @@ export const CartProvider: FC<CartProviderProps> = ({
   decrementItem,
   incrementItem,
   removeFromCart,
-  setCheckoutStatus,
   toggleCart,
   updateItem,
   isInCart
@@ -73,7 +68,6 @@ export const CartProvider: FC<CartProviderProps> = ({
     decrementItem,
     incrementItem,
     removeFromCart,
-    setCheckoutStatus,
     toggleCart,
     updateItem,
     isInCart
@@ -98,8 +92,6 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({ type: DECREMENT_ITEM, payload }),
       toggleCart: (payload: CartToggleStates) =>
         dispatch({ type: TOGGLE_CART, payload }),
-      setCheckoutStatus: (payload: CheckoutStatus): void =>
-        dispatch({ type: SET_CHECKOUT_STATUS, payload }),
       clearCart: (): void => dispatch({ type: CLEAR_CART })
     }),
     []
@@ -135,7 +127,6 @@ export function useCartState(): CartState {
  * incrementItem() - increment the quantity of an item in the cart
  * decrementItem() - decrement the quantity of an item in the cart
  * toggleCart() - toggles the cart's show status
- * setCheckoutStatus() - sets the checkoutId and checkoutComplete properties of the cart
  * clearCart() - removes all items from the cart
  */
 export function useCartActions(): CartActions {

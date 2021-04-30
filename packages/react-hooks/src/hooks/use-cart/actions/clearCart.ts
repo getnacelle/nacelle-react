@@ -18,7 +18,5 @@ export type ClearCartFunction = (
 ) => {
   cart: any[];
   show: boolean;
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };

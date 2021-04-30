@@ -34,7 +34,5 @@ export type ToggleCartFunction = (
 ) => {
   show: boolean;
   cart: CartItem[];
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };

@@ -6,7 +6,6 @@ import {
   DecrementItemFunction,
   IncrementItemFunction,
   RemoveFromCartFunction,
-  SetCheckoutStatusFunction,
   ToggleCartFunction,
   UpdateItemFunction,
   IsInCartFunction
@@ -18,10 +17,9 @@ import {
   decrementItem as decrementItemDefault,
   incrementItem as incrementItemDefault,
   removeFromCart as removeFromCartDefault,
-  setCheckoutStatus as setCheckoutStatusDefault,
   toggleCart as toggleCartDefault,
   updateItem as updateItemDefault
-} from '~/hooks/use-cart/actions';
+} from './actions';
 
 export const ADD_TO_CART = 'cart/add-to-cart';
 export const INCREMENT_ITEM = 'cart/increment-item';
@@ -35,8 +33,6 @@ export const CLEAR_CART = 'cart/clear';
 export const initialState: CartState = {
   cart: [],
   show: false,
-  checkoutId: null,
-  checkoutComplete: false,
   useLocalStorage: true
 };
 
@@ -46,7 +42,6 @@ export interface CreateCartReducerParams {
   decrementItem?: DecrementItemFunction;
   incrementItem?: IncrementItemFunction;
   removeFromCart?: RemoveFromCartFunction;
-  setCheckoutStatus?: SetCheckoutStatusFunction;
   toggleCart?: ToggleCartFunction;
   updateItem?: UpdateItemFunction;
   isInCart?: IsInCartFunction;
@@ -58,7 +53,6 @@ function createCartReducer({
   decrementItem,
   incrementItem,
   removeFromCart,
-  setCheckoutStatus,
   toggleCart,
   updateItem,
   isInCart
@@ -105,12 +99,6 @@ function createCartReducer({
         return toggleCart
           ? toggleCart(state, action)
           : toggleCartDefault(state, action);
-      }
-
-      case SET_CHECKOUT_STATUS: {
-        return setCheckoutStatus
-          ? setCheckoutStatus(state, action)
-          : setCheckoutStatusDefault(state, action);
       }
 
       default:

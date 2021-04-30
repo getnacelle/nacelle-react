@@ -8,11 +8,10 @@ import createCartReducer, {
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   CLEAR_CART,
-  TOGGLE_CART,
-  SET_CHECKOUT_STATUS
+  TOGGLE_CART
 } from './use-cart.reducer';
 
-import { formatCartItem } from '../use-cart/utils';
+import { formatCartItem } from './utils';
 
 const cartReducer = createCartReducer();
 
@@ -77,7 +76,7 @@ describe('useCart reducer', () => {
       });
 
       cartReducer(
-        { ...initialState, useLocalStorage: true },
+        { ...initialState },
         {
           type: ADD_TO_CART,
           payload: shopifyItem
@@ -259,32 +258,32 @@ describe('useCart reducer', () => {
     });
   });
 
-  describe(`${SET_CHECKOUT_STATUS}`, () => {
-    it('should set the checkoutId and complete status for the cart', () => {
-      const cartState = {
-        ...initialState,
-        useLocalStorage: true
-      };
+  // describe(`${SET_CHECKOUT_STATUS}`, () => {
+  //   it('should set the checkoutId and complete status for the cart', () => {
+  //     const cartState = {
+  //       ...initialState,
+  //       useLocalStorage: true
+  //     };
 
-      const setCheckoutPayload = {
-        checkoutId: 'my-checkout-id',
-        checkoutUrl: 'https://checkout.nacelle.com',
-        checkoutComplete: true
-      };
+  //     const setCheckoutPayload = {
+  //       checkoutId: 'my-checkout-id',
+  //       checkoutUrl: 'https://checkout.nacelle.com',
+  //       checkoutComplete: true
+  //     };
 
-      const result = cartReducer(cartState, {
-        type: SET_CHECKOUT_STATUS,
-        payload: setCheckoutPayload
-      });
+  //     const result = cartReducer(cartState, {
+  //       type: SET_CHECKOUT_STATUS,
+  //       payload: setCheckoutPayload
+  //     });
 
-      expect(result.checkoutId).toEqual('my-checkout-id');
-      expect(result.checkoutComplete).toEqual(true);
-      expect(window.localStorage.getItem('checkoutId')).toEqual(
-        setCheckoutPayload.checkoutId
-      );
-      expect(
-        JSON.parse(window.localStorage.getItem('checkoutComplete'))
-      ).toEqual(setCheckoutPayload.checkoutComplete);
-    });
-  });
+  //     expect(result.checkoutId).toEqual('my-checkout-id');
+  //     expect(result.checkoutComplete).toEqual(true);
+  //     expect(window.localStorage.getItem('checkoutId')).toEqual(
+  //       setCheckoutPayload.checkoutId
+  //     );
+  //     expect(
+  //       JSON.parse(window.localStorage.getItem('checkoutComplete'))
+  //     ).toEqual(setCheckoutPayload.checkoutComplete);
+  //   });
+  // });
 });

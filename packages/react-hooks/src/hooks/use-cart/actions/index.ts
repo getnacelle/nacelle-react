@@ -7,7 +7,6 @@ export { default as clearCart } from './clearCart';
 export { default as decrementItem } from './decrementItem';
 export { default as incrementItem } from './incrementItem';
 export { default as removeFromCart } from './removeFromCart';
-export { default as setCheckoutStatus } from './setCheckoutStatus';
 export { default as toggleCart } from './toggleCart';
 export { default as updateItem } from './updateItem';
 // @endindex

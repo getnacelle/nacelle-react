@@ -31,7 +31,5 @@ export type RemoveFromCartFunction = (
 ) => {
   cart: CartItem[];
   show: boolean;
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };

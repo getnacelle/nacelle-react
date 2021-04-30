@@ -39,7 +39,5 @@ export type AddToCartFunction = (
 ) => {
   cart: CartItem[];
   show: boolean;
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };

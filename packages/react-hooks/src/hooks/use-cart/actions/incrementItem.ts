@@ -39,7 +39,5 @@ export type IncrementItemFunction = (
 ) => {
   cart: CartItem[];
   show: boolean;
-  checkoutId: string;
-  checkoutComplete: boolean;
   useLocalStorage: boolean;
 };

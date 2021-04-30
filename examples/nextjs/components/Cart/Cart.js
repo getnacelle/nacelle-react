@@ -74,13 +74,6 @@ const Cart = () => {
       >
         {isCheckingOut ? 'Processing Cart...' : 'Checkout'}
       </Button>
-      {/* <Button
-        onClick={clearCheckoutData}
-        styles={styles.checkoutButton}
-        fullwidth={true}
-      >
-        Clear checkout data
-      </Button> */}
     </div>
   );
 };

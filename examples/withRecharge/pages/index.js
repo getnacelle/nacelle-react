@@ -23,21 +23,21 @@ function sanitizeMetafields(metafields) {
 const Home = () => {
   const [cart, setCart] = useState([]);
   const itemMetafields = useRef([]);
-  const [checkoutData, checkout, isCheckingOut] = useCheckout({
+  const [
+    checkoutData,
+    { processCheckout, clearCheckoutData },
+    isCheckingOut
+  ] = useCheckout({
     credentials: checkoutCredentials,
     lineItems: cart
   });
 
   useEffect(() => {
-    if (
-      checkoutData &&
-      checkoutData.data &&
-      checkoutData.data.processCheckout
-    ) {
-      const { processCheckout } = checkoutData.data;
-      window.location = processCheckout.url;
+    if (checkoutData?.checkoutComplete) {
+      clearCheckoutData();
+      setCart([]);
     }
-  }, [checkoutData]);
+  }, [checkoutData?.checkoutComplete, clearCheckoutData]);
 
   const selectedVariantId = product.variants[0].id;
   const selectedVariant = product.variants.find(
@@ -127,7 +127,7 @@ const Home = () => {
                   REMOVE
                 </Button>
                 <Button
-                  onClick={checkout}
+                  onClick={processCheckout}
                   disabled={!cart.length || isCheckingOut}
                   fullwidth={true}
                 >

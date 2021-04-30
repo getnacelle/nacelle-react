@@ -17,25 +17,21 @@ const checkoutCredentials = {
 const Cart = () => {
   const [{ cart, show }, cartActions] = useCart();
   const { isMobile } = useDetectDevice();
-  const [checkoutData, checkout, isCheckingOut] = useCheckout({
+  const [
+    checkoutData,
+    { processCheckout, clearCheckoutData },
+    isCheckingOut
+  ] = useCheckout({
     credentials: checkoutCredentials,
     lineItems: cart
   });
 
   useEffect(() => {
-    if (checkoutData) {
-      const {
-        processCheckout: { url, id, completed }
-      } = checkoutData.data;
-
-      cartActions.setCheckoutStatus({
-        checkoutId: id,
-        checkoutComplete: completed
-      });
-
-      window.location = url;
+    if (checkoutData?.checkoutComplete) {
+      clearCheckoutData();
+      cartActions.clearCart();
     }
-  }, [checkoutData, cartActions]);
+  }, [checkoutData?.checkoutComplete, clearCheckoutData, cartActions]);
 
   const cartStateStyle = show ? styles.show : styles.hide;
 
@@ -68,7 +64,7 @@ const Cart = () => {
         </h4>
       </footer>
       <Button
-        onClick={checkout}
+        onClick={processCheckout}
         disabled={!cart.length || isCheckingOut}
         styles={styles.checkoutButton}
         fullwidth={true}

@@ -1,4 +1,4 @@
-import { GraphQLRequestParams } from '~/hooks/use-checkout/use-checkout.types';
+import { GraphQLRequestParams } from '../use-checkout.types';
 
 export async function hailFrequencyRequest({
   credentials,

@@ -1,6 +1,6 @@
 import { CartItem, NacelleShopProduct } from '@nacelle/types';
 
-import { IsInCartFunction } from '~/hooks/use-cart/use-cart.types';
+import { IsInCartFunction } from '../use-cart.types';
 
 /**
  * A utility function which will return true if the item is already in the cart

@@ -1,38 +1,26 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { CheckoutInput as NacelleCheckoutInput } from '@nacelle/types';
 
-import {
-  hailFrequencyRequest,
-  getCacheBoolean,
-  getCacheString
-} from '~/hooks/use-checkout/utils';
-import {
-  GET_CHECKOUT_QUERY,
-  PROCESS_CHECKOUT_QUERY
-} from '~/hooks/use-checkout/queries';
+import { hailFrequencyRequest, getCacheBoolean, getCacheString } from './utils';
+import { GET_CHECKOUT_QUERY, PROCESS_CHECKOUT_QUERY } from './queries';
 import {
   CheckoutData,
   CheckoutInput,
   GetCheckoutResponse,
   ProcessCheckoutResponse
-} from '~/hooks/use-checkout/use-checkout.types';
-
-export interface CheckoutStatus {
-  checkoutId: string;
-  checkoutComplete: boolean;
-  checkoutUrl: string;
-}
+} from './use-checkout.types';
 
 export interface GetCheckoutParams {
   id: string;
   url: string;
 }
 export interface UseCheckoutFunctions {
-  getCheckout: (GetCheckoutParams) => Promise<GetCheckoutResponse>;
+  getCheckout: (params: GetCheckoutParams) => Promise<GetCheckoutResponse>;
   processCheckout: () => Promise<ProcessCheckoutResponse>;
+  clearCheckoutData: () => void;
 }
 
-type UseCheckoutResponse = [null | CheckoutData, UseCheckoutFunctions, boolean];
+type UseCheckoutResponse = [CheckoutData, UseCheckoutFunctions, boolean];
 
 /**
  * @typedef CheckoutInput
@@ -61,7 +49,12 @@ export const useCheckout = ({
   discountCodes,
   source
 }: CheckoutInput): UseCheckoutResponse => {
-  const [checkoutData, setCheckoutData] = useState<CheckoutData | null>(null);
+  const [checkoutData, setCheckoutData] = useState<CheckoutData>({
+    checkoutComplete: false,
+    checkoutId: '',
+    checkoutSource: '',
+    checkoutUrl: ''
+  });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
   const id = getCacheString('checkoutId');

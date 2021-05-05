@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkout } from '@nacelle/types';
 import { CartItem, MetafieldInput } from '@nacelle/types';
 
@@ -21,7 +22,7 @@ export interface GraphQLRequestParams {
   variables: AnyObject;
 }
 
-interface CheckoutError {
+export interface CheckoutError {
   message: string;
   extensions: {
     variables: string;
@@ -48,19 +49,92 @@ export interface GetCheckoutResponse {
   errors: CheckoutError[];
 }
 
-export interface CheckoutInput {
-  credentials: Credentials;
+export interface GetCheckoutInput {
+  id: string;
+  url: string;
+}
+
+export interface ProcessCheckoutInput {
   lineItems: CartItem[];
-  metafields?: MetafieldInput[];
   checkoutId?: string;
-  note?: string;
   discountCodes?: string[];
+  metafields?: MetafieldInput[];
+  note?: string;
   source?: string;
 }
 
-export interface CheckoutData {
+export interface CheckoutState {
   checkoutComplete: boolean;
   checkoutId: string;
-  checkoutSource?: string;
+  checkoutSource: string;
   checkoutUrl: string;
 }
+
+export type GetCheckoutAction = {
+  type: 'checkout/get-checkout';
+  credentials: Credentials;
+  payload: GetCheckoutInput;
+};
+
+export type ProcessCheckoutAction = {
+  type: 'checkout/process-checkout';
+  credentials: Credentials;
+  payload: ProcessCheckoutInput;
+  isCheckingOut: boolean;
+  setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
+  isMounted: React.MutableRefObject<boolean>;
+};
+
+export type ClearCheckoutDataAction = {
+  type: 'checkout/clear-checkout-data';
+  payload?: null;
+};
+
+export type SetCheckoutCompleteAction = {
+  type: 'checkout/set-checkout-complete';
+  payload: boolean;
+};
+
+export type SetCheckoutIdAction = {
+  type: 'checkout/set-checkout-id';
+  payload: string;
+};
+
+export type SetCheckoutSourceAction = {
+  type: 'checkout/set-checkout-source';
+  payload: string;
+};
+
+export type SetCheckoutUrlAction = {
+  type: 'checkout/set-checkout-url';
+  payload: string;
+};
+
+export type SetCheckoutDataAction = {
+  type: 'checkout/set-checkout-data';
+  payload: CheckoutState;
+};
+
+export type CheckoutReducerAction =
+  | ClearCheckoutDataAction
+  | GetCheckoutAction
+  | ProcessCheckoutAction
+  | SetCheckoutDataAction
+  | SetCheckoutCompleteAction
+  | SetCheckoutIdAction
+  | SetCheckoutSourceAction
+  | SetCheckoutUrlAction;
+
+export type CheckoutActions = {
+  clearCheckoutData: () => void;
+};
+
+export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
+
+export interface ActionHandlerParams {
+  dispatch: CheckoutDispatch;
+}
+
+export type ActionHandler = ({
+  dispatch
+}: ActionHandlerParams) => (action: CheckoutReducerAction) => Promise<void>;

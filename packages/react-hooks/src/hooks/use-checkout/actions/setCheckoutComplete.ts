@@ -1,3 +1,4 @@
+import { setCacheItem } from '../utils';
 import {
   CheckoutState,
   SetCheckoutCompleteAction
@@ -7,9 +8,7 @@ const setCheckoutComplete = (
   state: CheckoutState,
   action: SetCheckoutCompleteAction
 ): CheckoutState => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('checkoutComplete', action.payload.toString());
-  }
+  setCacheItem('checkoutComplete', action.payload.toString());
 
   return {
     ...state,

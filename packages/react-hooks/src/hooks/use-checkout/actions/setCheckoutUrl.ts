@@ -1,12 +1,11 @@
+import { setCacheItem } from '../utils';
 import { CheckoutState, SetCheckoutUrlAction } from '../use-checkout.types';
 
 const setCheckoutUrl = (
   state: CheckoutState,
   action: SetCheckoutUrlAction
 ): CheckoutState => {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('checkoutUrl', action.payload);
-  }
+  setCacheItem('checkoutUrl', action.payload);
 
   return {
     ...state,

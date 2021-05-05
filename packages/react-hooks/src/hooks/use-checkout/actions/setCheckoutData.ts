@@ -1,3 +1,4 @@
+import { setCacheItem } from '../utils';
 import { CheckoutState, SetCheckoutDataAction } from '../use-checkout.types';
 
 const setCheckoutData = (
@@ -11,12 +12,10 @@ const setCheckoutData = (
     checkoutUrl
   } = action.payload;
 
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('checkoutComplete', checkoutComplete.toString());
-    localStorage.setItem('checkoutId', checkoutId);
-    localStorage.setItem('checkoutSource', checkoutSource);
-    localStorage.setItem('checkoutUrl', checkoutUrl);
-  }
+  setCacheItem('checkoutComplete', checkoutComplete.toString());
+  setCacheItem('checkoutId', checkoutId);
+  setCacheItem('checkoutSource', checkoutId);
+  setCacheItem('checkoutUrl', checkoutId);
 
   return {
     ...state,

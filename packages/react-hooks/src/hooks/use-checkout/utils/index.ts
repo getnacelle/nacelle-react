@@ -48,3 +48,15 @@ export function getCacheString(key: string): string | null {
 
   return null;
 }
+
+export function setCacheItem(key: string, value: string): void {
+  if (typeof window !== 'undefined' && value) {
+    window.localStorage.setItem(key, value);
+  }
+}
+
+export function unsetCacheItem(key: string): void {
+  if (typeof window !== 'undefined' && key) {
+    window.localStorage.removeItem(key);
+  }
+}

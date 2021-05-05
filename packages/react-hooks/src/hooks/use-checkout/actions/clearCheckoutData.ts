@@ -1,12 +1,11 @@
+import { unsetCacheItem } from '../utils';
 import { CheckoutState } from 'hooks/use-checkout/use-checkout.types';
 
 const clearCheckoutData = (state: CheckoutState): CheckoutState => {
-  if (typeof window !== 'undefined') {
-    window.localStorage.removeItem('checkoutComplete');
-    window.localStorage.removeItem('checkoutId');
-    window.localStorage.removeItem('checkoutSource');
-    window.localStorage.removeItem('checkoutUrl');
-  }
+  unsetCacheItem('checkoutComplete');
+  unsetCacheItem('checkoutId');
+  unsetCacheItem('checkoutSource');
+  unsetCacheItem('checkoutUrl');
 
   return {
     ...state,

@@ -15,7 +15,7 @@ import {
   IsInCartFunction
 } from './use-cart.types';
 
-import createCartReducer, {
+import cartReducer, {
   initialState,
   ADD_TO_CART,
   UPDATE_ITEM,
@@ -67,16 +67,6 @@ export const CartProvider: FC<CartProviderProps> = ({
     }
   }
 
-  const cartReducer = createCartReducer({
-    addToCart,
-    clearCart,
-    decrementItem,
-    incrementItem,
-    removeFromCart,
-    toggleCart,
-    updateItem,
-    isInCart
-  });
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,
     cart,
@@ -86,20 +76,29 @@ export const CartProvider: FC<CartProviderProps> = ({
   const cartActions: CartActions = useMemo(
     () => ({
       addToCart: (payload: CartItem): void =>
-        dispatch({ type: ADD_TO_CART, payload, isInCart }),
+        dispatch({ type: ADD_TO_CART, payload, isInCart, addToCart }),
       removeFromCart: (payload: CartItem) =>
-        dispatch({ type: REMOVE_FROM_CART, payload }),
+        dispatch({ type: REMOVE_FROM_CART, payload, removeFromCart }),
       updateItem: (payload: CartItem) =>
-        dispatch({ type: UPDATE_ITEM, payload }),
+        dispatch({ type: UPDATE_ITEM, payload, updateItem }),
       incrementItem: (payload: CartItem): void =>
-        dispatch({ type: INCREMENT_ITEM, payload }),
+        dispatch({ type: INCREMENT_ITEM, payload, incrementItem }),
       decrementItem: (payload: CartItem): void =>
-        dispatch({ type: DECREMENT_ITEM, payload }),
+        dispatch({ type: DECREMENT_ITEM, payload, decrementItem }),
       toggleCart: (payload: CartToggleStates) =>
-        dispatch({ type: TOGGLE_CART, payload }),
-      clearCart: (): void => dispatch({ type: CLEAR_CART })
+        dispatch({ type: TOGGLE_CART, payload, toggleCart }),
+      clearCart: (): void => dispatch({ type: CLEAR_CART, clearCart })
     }),
-    [isInCart]
+    [
+      isInCart,
+      addToCart,
+      removeFromCart,
+      updateItem,
+      incrementItem,
+      decrementItem,
+      toggleCart,
+      clearCart
+    ]
   );
 
   return (

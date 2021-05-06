@@ -6,7 +6,7 @@ const cartItem = {
   quantity: 1
 };
 
-import createCartReducer, {
+import cartReducer, {
   initialState,
   ADD_TO_CART,
   UPDATE_ITEM,
@@ -16,8 +16,6 @@ import createCartReducer, {
   CLEAR_CART,
   TOGGLE_CART
 } from './use-cart.reducer';
-
-const cartReducer = createCartReducer();
 
 describe('useCart reducer', () => {
   beforeEach(() => {

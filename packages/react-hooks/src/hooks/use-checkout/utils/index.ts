@@ -35,7 +35,7 @@ export function getCacheBoolean(key: string): boolean {
   return false;
 }
 
-export function getCacheString(key: string): string | null {
+export function getCacheString(key: string): string {
   if (typeof window !== 'undefined') {
     const item = window.localStorage.getItem(key);
 
@@ -43,10 +43,10 @@ export function getCacheString(key: string): string | null {
       return item;
     }
 
-    return null;
+    return '';
   }
 
-  return null;
+  return '';
 }
 
 export function setCacheItem(key: string, value: string): void {

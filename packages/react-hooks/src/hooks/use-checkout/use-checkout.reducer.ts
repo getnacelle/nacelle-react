@@ -7,14 +7,16 @@ import {
   setCheckoutSource,
   setCheckoutUrl
 } from './actions';
+import { getCacheBoolean, getCacheString } from './utils';
 
 import { CheckoutState, CheckoutReducerAction } from './use-checkout.types';
 
+const isClient = typeof window !== 'undefined';
 export const initialState: CheckoutState = {
-  checkoutComplete: false,
-  checkoutId: '',
-  checkoutUrl: '',
-  checkoutSource: ''
+  checkoutComplete: isClient ? getCacheBoolean('checkoutComplete') : false,
+  checkoutId: isClient ? getCacheString('checkoutId') : '',
+  checkoutUrl: isClient ? getCacheString('checkoutUrl') : '',
+  checkoutSource: isClient ? getCacheString('checkoutSource') : ''
 };
 
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';

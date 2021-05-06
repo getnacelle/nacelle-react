@@ -14,8 +14,8 @@ const setCheckoutData = (
 
   setCacheItem('checkoutComplete', checkoutComplete.toString());
   setCacheItem('checkoutId', checkoutId);
-  setCacheItem('checkoutSource', checkoutId);
-  setCacheItem('checkoutUrl', checkoutId);
+  setCacheItem('checkoutSource', checkoutSource);
+  setCacheItem('checkoutUrl', checkoutUrl);
 
   return {
     ...state,

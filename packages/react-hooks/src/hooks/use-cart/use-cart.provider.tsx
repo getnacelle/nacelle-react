@@ -1,12 +1,20 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
-import { NacelleShopProduct, CartItem } from '@nacelle/types';
+import { CartItem } from '../common/types';
 
 import {
   CartState,
-  CheckoutStatus,
   CartActions,
-  CartToggleStates
+  CartToggleStates,
+  AddToCartFunction,
+  ClearCartFunction,
+  DecrementItemFunction,
+  IncrementItemFunction,
+  RemoveFromCartFunction,
+  ToggleCartFunction,
+  UpdateItemFunction,
+  IsInCartFunction
 } from './use-cart.types';
+
 import cartReducer, {
   initialState,
   ADD_TO_CART,
@@ -15,69 +23,82 @@ import cartReducer, {
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   TOGGLE_CART,
-  SET_CHECKOUT_STATUS,
   CLEAR_CART
 } from './use-cart.reducer';
 
-export type CartProviderProps = {
-  useLocalStorage?: boolean;
-  children: JSX.Element | JSX.Element[];
-};
 export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;
+export type CartProviderProps = {
+  children: JSX.Element | JSX.Element[];
+  useLocalStorage?: boolean;
+  addToCart?: AddToCartFunction;
+  clearCart?: ClearCartFunction;
+  decrementItem?: DecrementItemFunction;
+  incrementItem?: IncrementItemFunction;
+  removeFromCart?: RemoveFromCartFunction;
+  toggleCart?: ToggleCartFunction;
+  updateItem?: UpdateItemFunction;
+  isInCart?: IsInCartFunction;
+};
 
 const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
+  children,
   useLocalStorage = true,
-  children
+  addToCart,
+  clearCart,
+  decrementItem,
+  incrementItem,
+  removeFromCart,
+  toggleCart,
+  updateItem,
+  isInCart
 }) => {
   const isClient = typeof window !== 'undefined';
-  const cart =
-    useLocalStorage && isClient
-      ? JSON.parse(window.localStorage.getItem('cart')) || []
-      : [];
+  let cart = [];
 
-  const checkoutId =
-    useLocalStorage && isClient
-      ? (window.localStorage.getItem('checkoutId') as string) || null
-      : null;
+  if (useLocalStorage && isClient) {
+    const cartString = window.localStorage.getItem('cart');
 
-  const checkoutComplete =
-    useLocalStorage && isClient
-      ? (JSON.parse(
-          window.localStorage.getItem('checkoutComplete')
-        ) as boolean) || false
-      : false;
+    if (cartString) {
+      cart = JSON.parse(cartString);
+    }
+  }
 
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,
     cart,
-    checkoutId,
-    checkoutComplete,
     useLocalStorage: useLocalStorage && isClient
   });
 
   const cartActions: CartActions = useMemo(
     () => ({
-      addToCart: (payload: NacelleShopProduct): void =>
-        dispatch({ type: ADD_TO_CART, payload }),
-      removeFromCart: (payload: NacelleShopProduct | CartItem) =>
-        dispatch({ type: REMOVE_FROM_CART, payload }),
-      updateItem: (payload: NacelleShopProduct | CartItem) =>
-        dispatch({ type: UPDATE_ITEM, payload }),
-      incrementItem: (payload: NacelleShopProduct | CartItem): void =>
-        dispatch({ type: INCREMENT_ITEM, payload }),
-      decrementItem: (payload: NacelleShopProduct | CartItem): void =>
-        dispatch({ type: DECREMENT_ITEM, payload }),
+      addToCart: (payload: CartItem): void =>
+        dispatch({ type: ADD_TO_CART, payload, isInCart, addToCart }),
+      removeFromCart: (payload: CartItem) =>
+        dispatch({ type: REMOVE_FROM_CART, payload, removeFromCart }),
+      updateItem: (payload: CartItem) =>
+        dispatch({ type: UPDATE_ITEM, payload, updateItem }),
+      incrementItem: (payload: CartItem): void =>
+        dispatch({ type: INCREMENT_ITEM, payload, incrementItem }),
+      decrementItem: (payload: CartItem): void =>
+        dispatch({ type: DECREMENT_ITEM, payload, decrementItem }),
       toggleCart: (payload: CartToggleStates) =>
-        dispatch({ type: TOGGLE_CART, payload }),
-      setCheckoutStatus: (payload: CheckoutStatus): void =>
-        dispatch({ type: SET_CHECKOUT_STATUS, payload }),
-      clearCart: (): void => dispatch({ type: CLEAR_CART })
+        dispatch({ type: TOGGLE_CART, payload, toggleCart }),
+      clearCart: (): void => dispatch({ type: CLEAR_CART, clearCart })
     }),
-    []
+    [
+      isInCart,
+      addToCart,
+      removeFromCart,
+      updateItem,
+      incrementItem,
+      decrementItem,
+      toggleCart,
+      clearCart
+    ]
   );
 
   return (
@@ -94,7 +115,7 @@ export const CartProvider: FC<CartProviderProps> = ({
  *
  * @returns an object with the cart's current state
  */
-export function useCartState(): CartState {
+export function useCartState(): CartState | null {
   const context = useContext(CartContext);
   return context;
 }
@@ -110,10 +131,9 @@ export function useCartState(): CartState {
  * incrementItem() - increment the quantity of an item in the cart
  * decrementItem() - decrement the quantity of an item in the cart
  * toggleCart() - toggles the cart's show status
- * setCheckoutStatus() - sets the checkoutId and checkoutComplete properties of the cart
  * clearCart() - removes all items from the cart
  */
-export function useCartActions(): CartActions {
+export function useCartActions(): CartActions | null {
   const context = useContext(CartActionContext);
   return context;
 }

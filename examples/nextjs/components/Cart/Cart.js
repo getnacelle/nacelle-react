@@ -9,34 +9,21 @@ import ItemQuantity from 'components/ItemQuantity';
 import useDetectDevice from 'hooks/useDetectDevice';
 import * as styles from './Cart.styles';
 
-const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
-};
-
 const Cart = () => {
   const [{ cart, show }, cartActions] = useCart();
   const { isMobile } = useDetectDevice();
-  const [checkoutData, checkout, isCheckingOut] = useCheckout({
-    credentials: checkoutCredentials,
-    lineItems: cart
-  });
+  const [
+    { checkoutComplete },
+    { processCheckout, clearCheckoutData },
+    isCheckingOut
+  ] = useCheckout();
 
   useEffect(() => {
-    if (checkoutData) {
-      const {
-        processCheckout: { url, id, completed }
-      } = checkoutData.data;
-
-      cartActions.setCheckoutStatus({
-        checkoutId: id,
-        checkoutComplete: completed
-      });
-
-      window.location = url;
+    if (checkoutComplete) {
+      clearCheckoutData();
+      cartActions.clearCart();
     }
-  }, [checkoutData, cartActions]);
+  }, [checkoutComplete, clearCheckoutData, cartActions]);
 
   const cartStateStyle = show ? styles.show : styles.hide;
 
@@ -55,10 +42,10 @@ const Cart = () => {
         </Button>
       </header>
       <section css={styles.cartItems}>
-        {cart.map((item) => (
+        {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={item.id}
+            key={`${item.variant.id}::${idx}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />
@@ -71,7 +58,7 @@ const Cart = () => {
         </h4>
       </footer>
       <Button
-        onClick={checkout}
+        onClick={() => processCheckout({ lineItems: cart })}
         disabled={!cart.length || isCheckingOut}
         styles={styles.checkoutButton}
         fullwidth={true}
@@ -84,11 +71,15 @@ const Cart = () => {
 
 const CartItem = ({ item, cartActions, isMobile }) => {
   const [itemQuantity, updateQuantity] = useState(item.quantity || 0);
+
   useEffect(() => {
     updateQuantity(item.quantity);
   }, [item]);
 
-  const formatPrice = formatCurrency(item.locale, item.priceCurrency);
+  const formatPrice = formatCurrency(
+    item.product.locale,
+    item.variant.priceCurrency
+  );
 
   const incrementQty = () => {
     const qty = itemQuantity + 1;
@@ -112,10 +103,10 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 
   return (
     <div css={styles.cartItem}>
-      <Link href={`/products/${item.handle}`}>
+      <Link href={`/products/${item.product.handle}`}>
         <a css={[styles.thumbnailContainer, isMobile && { paddingLeft: 0 }]}>
           <Image
-            src={item.image.thumbnailSrc}
+            src={item.product.featuredMedia.thumbnailSrc}
             width="100"
             height="70"
             css={styles.cartItemThumbnail}
@@ -125,17 +116,19 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 
       <div css={[styles.column, { width: '100%' }]}>
         <div css={styles.cartItemTitleLayout}>
-          <h4 css={styles.cartItemTitle}>{item.title}</h4>
+          <h4 css={styles.cartItemTitle}>{item.product.title}</h4>
           {isMobile && (
             <span css={[styles.cartItemPrice, { flexGrow: 0 }]}>
-              {formatPrice(item.price)}
+              {formatPrice(item.variant.price)}
             </span>
           )}
         </div>
 
         <div css={styles.productInteractLayout}>
           {!isMobile && (
-            <span css={styles.cartItemPrice}>{formatPrice(item.price)}</span>
+            <span css={styles.cartItemPrice}>
+              {formatPrice(item.variant.price)}
+            </span>
           )}
           <ItemQuantity
             quantity={itemQuantity}
@@ -155,12 +148,12 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 };
 
 function calculateSubTotal(cart) {
-  const cartLocale = cart.length ? cart[0].locale : 'en-us';
-  const cartCurrency = cart.length ? cart[0].priceCurrency : 'USD';
+  const cartLocale = cart.length ? cart[0].product.locale : 'en-us';
+  const cartCurrency = cart.length ? cart[0].variant.priceCurrency : 'USD';
   const formatPrice = formatCurrency(cartLocale, cartCurrency);
 
   const total = cart.reduce((subTotal, item) => {
-    const itemTotal = item.quantity * parseInt(item.price, 10);
+    const itemTotal = item.quantity * parseInt(item.variant.price, 10);
     return subTotal + itemTotal;
   }, 0);
 

@@ -57,5 +57,9 @@
   "gitHead": "3153c14f529fa9f691e7cd2e6c44cee74d1a78db",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "use-reducer-async": "^2.0.1"
   }
 }

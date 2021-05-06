@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Head from 'next/head';
 import atob from 'atob';
 import { RechargeSelect } from '@nacelle/react-recharge';
@@ -8,36 +8,10 @@ import { useCheckout } from '@nacelle/react-hooks';
 import product from '../data/product';
 import * as styles from '../styles/pages.styles';
 
-const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
-};
-
-function sanitizeMetafields(metafields) {
-  return metafields.map((metafield) => {
-    const { key, value } = metafield;
-    return { key, value };
-  });
-}
-
 const Home = () => {
   const [cart, setCart] = useState([]);
   const itemMetafields = useRef([]);
-  const [checkoutData, checkout, isCheckingOut] = useCheckout({
-    credentials: checkoutCredentials,
-    lineItems: cart
-  });
-
-  useEffect(() => {
-    if (
-      checkoutData &&
-      checkoutData.data &&
-      checkoutData.data.processCheckout
-    ) {
-      const { processCheckout } = checkoutData.data;
-      window.location = processCheckout.url;
-    }
-  }, [checkoutData]);
+  const [, { processCheckout }, isCheckingOut] = useCheckout();
 
   const selectedVariantId = product.variants[0].id;
   const selectedVariant = product.variants.find(
@@ -50,21 +24,7 @@ const Home = () => {
   const isInCart = cart.findIndex((item) => item.productId === product.id) > -1;
 
   const addItemToCart = () => {
-    const cartItem = {
-      ...selectedVariant,
-      image: product.featuredMedia,
-      title: product.title,
-      quantity: 1,
-      productId: product.id,
-      id: selectedVariant.id,
-      handle: product.handle,
-      vendor: product.vendor,
-      tags: product.tags,
-      metafields: sanitizeMetafields([
-        ...product.metafields,
-        ...itemMetafields.current
-      ])
-    };
+    const cartItem = { product, variant: selectedVariant, quantity: 1 };
 
     return setCart((currentCart) => [...currentCart, cartItem]);
   };
@@ -78,7 +38,7 @@ const Home = () => {
   };
 
   return (
-    <Fragment>
+    <>
       <Head>
         <title>Nacelle Recharge Example</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -127,7 +87,7 @@ const Home = () => {
                   REMOVE
                 </Button>
                 <Button
-                  onClick={checkout}
+                  onClick={() => processCheckout({ lineItems: cart })}
                   disabled={!cart.length || isCheckingOut}
                   fullwidth={true}
                 >
@@ -138,7 +98,7 @@ const Home = () => {
           </div>
         </section>
       </main>
-    </Fragment>
+    </>
   );
 };
 

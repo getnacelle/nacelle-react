@@ -1,15 +1,7 @@
-import { CartItem } from '@nacelle/types';
+import { CartItem } from '../../common/types';
 
 import { buildCart, isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
-import {
-  AddToCartAction,
-  CartState,
-  IsInCartFunction
-} from '~/hooks/use-cart/use-cart.types';
-
-interface AddToCartOptions {
-  isInCart?: IsInCartFunction;
-}
+import { AddToCartAction, CartState } from '~/hooks/use-cart/use-cart.types';
 
 const addToCart: AddToCartFunction = (
   state: CartState,

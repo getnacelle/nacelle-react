@@ -9,7 +9,7 @@ import React, {
 import { useReducerAsync } from 'use-reducer-async';
 import 'abort-controller/polyfill';
 
-import { getCheckout, processCheckout } from './handlers';
+import { getCheckout, processCheckout } from './async-handlers';
 import { getCacheString, getCacheBoolean } from './utils';
 import {
   CheckoutActions,

@@ -1,5 +1,11 @@
 import { shopifyItem } from '@nacelle/react-dev-utils';
 
+const cartItem = {
+  product: shopifyItem,
+  variant: shopifyItem?.variants ? shopifyItem.variants[0] : { id: '12345' },
+  quantity: 1
+};
+
 import createCartReducer, {
   initialState,
   ADD_TO_CART,
@@ -11,123 +17,153 @@ import createCartReducer, {
   TOGGLE_CART
 } from './use-cart.reducer';
 
-import { formatCartItem } from './utils';
-
 const cartReducer = createCartReducer();
 
 describe('useCart reducer', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    const localStorageMock = (() => {
+      let store: any = {};
+      return {
+        getItem: (key: string) => {
+          return store[key];
+        },
+        setItem: (key: string, value: string) => {
+          store[key] = value.toString();
+        },
+        clear: () => {
+          store = {};
+        },
+        removeItem: (key: string) => {
+          delete store[key];
+        }
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock
+    });
+  });
+
   describe(`${ADD_TO_CART}`, () => {
     it('should append an item to the cart', () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
-        payload: shopifyItem
+        payload: cartItem
       });
-      expect(result.cart).toEqual([formatCartItem(shopifyItem)]);
+      expect(result.cart).toEqual([cartItem]);
     });
 
     it(`should include a product's metafields when added to the cart`, () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
-        payload: shopifyItem
+        payload: cartItem
       });
-      expect(result.cart[0]).toHaveProperty('metafields');
+      expect(result.cart[0].product).toHaveProperty('metafields');
 
-      const metafieldKeys = result.cart[0].metafields?.map((m) => m.key);
+      const metafieldKeys = result.cart[0].product.metafields?.map(
+        (m) => m.key
+      );
       expect(metafieldKeys).toContain('shipping_interval_frequency');
     });
 
     it('should increment the quantity if the item is already in the cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)]
+        cart: [cartItem]
       };
 
       const result = cartReducer(cartState, {
         type: ADD_TO_CART,
-        payload: shopifyItem
+        payload: cartItem
       });
 
-      expect(result.cart).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 2 }
-      ]);
+      expect(result.cart).toEqual([{ ...cartItem, quantity: 2 }]);
     });
 
     it('should add to item localStorage cart', () => {
-      const localStorageMock = (() => {
-        let store: any = {};
-        return {
-          getItem: (key: string) => {
-            return store[key];
-          },
-          setItem: (key: string, value: string) => {
-            store[key] = value.toString();
-          },
-          clear: () => {
-            store = {};
-          },
-          removeItem: (key: string) => {
-            delete store[key];
-          }
-        };
-      })();
-
-      Object.defineProperty(window, 'localStorage', {
-        value: localStorageMock
-      });
-
       cartReducer(
         { ...initialState },
         {
           type: ADD_TO_CART,
-          payload: shopifyItem
+          payload: cartItem
         }
       );
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([formatCartItem(shopifyItem)]);
+      ).toEqual([cartItem]);
     });
   });
+
   describe(`${UPDATE_ITEM}`, () => {
     it('should update some values of an item in the cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)]
+        cart: [cartItem]
       };
+
       const result = cartReducer(cartState, {
         type: UPDATE_ITEM,
-        payload: { ...shopifyItem, title: 'Updated Title', quantity: 10 }
+        payload: {
+          ...cartItem,
+          quantity: 10,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          }
+        }
       });
+
       expect(result.cart).toEqual([
-        { ...formatCartItem(shopifyItem), title: 'Updated Title', quantity: 10 }
+        {
+          ...cartItem,
+          quantity: 10,
+          product: { ...cartItem.product, title: 'Updated Title' }
+        }
       ]);
     });
+
     it('should update some values of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)],
+        cart: [cartItem],
         useLocalStorage: true
       };
       cartReducer(cartState, {
         type: UPDATE_ITEM,
-        payload: { ...shopifyItem, title: 'Updated Title', quantity: 10 }
+        payload: {
+          ...cartItem,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          },
+          quantity: 10
+        }
       });
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([
-        { ...formatCartItem(shopifyItem), title: 'Updated Title', quantity: 10 }
-      ]);
+
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [
+          {
+            ...cartItem,
+            quantity: 10,
+            product: { ...cartItem.product, title: 'Updated Title' }
+          }
+        ]
+      );
     });
   });
+
   describe(`${REMOVE_FROM_CART}`, () => {
     it('should remove an item from the cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)]
+        cart: [cartItem]
       };
 
       const result = cartReducer(cartState, {
         type: REMOVE_FROM_CART,
-        payload: shopifyItem
+        payload: cartItem
       });
 
       expect(result.cart).toEqual([]);
@@ -136,13 +172,13 @@ describe('useCart reducer', () => {
     it('should remove an item from localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)],
+        cart: [cartItem],
         useLocalStorage: true
       };
 
       cartReducer(cartState, {
         type: REMOVE_FROM_CART,
-        payload: shopifyItem
+        payload: cartItem
       });
 
       expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
@@ -155,34 +191,34 @@ describe('useCart reducer', () => {
     it('should increment the quantity of an item', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)]
+        cart: [cartItem]
       };
 
       const result = cartReducer(cartState, {
         type: INCREMENT_ITEM,
-        payload: shopifyItem
+        payload: cartItem
       });
 
       expect(result.cart).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 2 }
+        { ...cartItem, quantity: cartItem.quantity + 1 }
       ]);
     });
 
     it('should increment the quantity of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [formatCartItem(shopifyItem)],
+        cart: [cartItem],
         useLocalStorage: true
       };
 
       cartReducer(cartState, {
         type: INCREMENT_ITEM,
-        payload: shopifyItem
+        payload: cartItem
       });
 
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...formatCartItem(shopifyItem), quantity: 2 }]);
+      ).toEqual([{ ...cartItem, quantity: 2 }]);
     });
   });
 
@@ -190,50 +226,46 @@ describe('useCart reducer', () => {
     it('should decrement the quantity of an item', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...formatCartItem(shopifyItem), quantity: 2 }]
+        cart: [{ ...cartItem, quantity: 2 }]
       };
 
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: shopifyItem
+        payload: cartItem
       });
 
-      expect(result.cart).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 1 }
-      ]);
+      expect(result.cart).toEqual([{ ...cartItem, quantity: 1 }]);
     });
 
     it('should not decrement the quantity below 0', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...formatCartItem(shopifyItem), quantity: 0 }]
+        cart: [{ ...cartItem, quantity: 0 }]
       };
 
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: shopifyItem
+        payload: cartItem
       });
 
-      expect(result.cart).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 0 }
-      ]);
+      expect(result.cart).toEqual([{ ...cartItem, quantity: 0 }]);
     });
 
     it('should decrement the quantity of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...formatCartItem(shopifyItem), quantity: 2 }],
+        cart: [{ ...cartItem, quantity: 2 }],
         useLocalStorage: true
       };
 
       cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: shopifyItem
+        payload: cartItem
       });
 
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...formatCartItem(shopifyItem), quantity: 1 }]);
+      ).toEqual([{ ...cartItem, quantity: 1 }]);
     });
   });
 
@@ -241,7 +273,7 @@ describe('useCart reducer', () => {
     it('should remove all items from the cart', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...formatCartItem(shopifyItem), quantity: 2 }]
+        cart: [{ ...cartItem, quantity: 2 }]
       };
 
       const result = cartReducer(cartState, {
@@ -261,35 +293,6 @@ describe('useCart reducer', () => {
       expect(newResult.show).toEqual(false);
     });
   });
-
-  // describe(`${SET_CHECKOUT_STATUS}`, () => {
-  //   it('should set the checkoutId and complete status for the cart', () => {
-  //     const cartState = {
-  //       ...initialState,
-  //       useLocalStorage: true
-  //     };
-
-  //     const setCheckoutPayload = {
-  //       checkoutId: 'my-checkout-id',
-  //       checkoutUrl: 'https://checkout.nacelle.com',
-  //       checkoutComplete: true
-  //     };
-
-  //     const result = cartReducer(cartState, {
-  //       type: SET_CHECKOUT_STATUS,
-  //       payload: setCheckoutPayload
-  //     });
-
-  //     expect(result.checkoutId).toEqual('my-checkout-id');
-  //     expect(result.checkoutComplete).toEqual(true);
-  //     expect(window.localStorage.getItem('checkoutId')).toEqual(
-  //       setCheckoutPayload.checkoutId
-  //     );
-  //     expect(
-  //       JSON.parse(window.localStorage.getItem('checkoutComplete'))
-  //     ).toEqual(setCheckoutPayload.checkoutComplete);
-  //   });
-  // });
 });
 
 export default {};

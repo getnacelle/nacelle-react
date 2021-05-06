@@ -1,4 +1,4 @@
-import { CartItem, NacelleShopProduct, ProductVariant } from '@nacelle/types';
+import { CartItem } from '../../common/types';
 
 import { IsInCartFunction } from '../use-cart.types';
 
@@ -10,16 +10,13 @@ import { IsInCartFunction } from '../use-cart.types';
  *
  * @returns a boolean indiciating if the item is already in the cart
  */
-export function isItemInCart(
-  cart: CartItem[],
-  payload: NacelleShopProduct
-): boolean {
-  return cart.findIndex((item) => item.id === payload?.variant?.id) > -1;
+export function isItemInCart(cart: CartItem[], payload: CartItem): boolean {
+  return cart.findIndex((item) => item.variant.id === payload.variant?.id) > -1;
 }
 
 export interface BuildCartParams {
   cart: CartItem[];
-  payload: NacelleShopProduct;
+  payload: CartItem;
   isInCart: IsInCartFunction;
 }
 
@@ -38,16 +35,15 @@ export function buildCart({
 }: BuildCartParams): CartItem[] {
   return isInCart(cart, payload)
     ? cart.map((item) => {
-        const payloadId =
-          'variant' in payload ? payload?.variant?.id : payload.id;
+        const payloadId = payload.variant?.id;
 
-        if (item.id !== payloadId) {
+        if (item.variant.id !== payloadId) {
           return item;
         }
 
         return { ...item, quantity: item.quantity + (payload.quantity || 1) };
       })
-    : [...cart, { ...formatCartItem(payload) }];
+    : [...cart, { ...payload }];
 }
 
 export function setCacheItem(useLocalStorage: boolean) {
@@ -60,31 +56,4 @@ export function unsetCacheItem(useLocalStorage: boolean) {
   return useLocalStorage
     ? window.localStorage.removeItem.bind(localStorage)
     : () => {};
-}
-
-/**
- * Formats a Shopify item to allow easier interaction within the cart
- *
- * @param item a Shopify item object
- *
- * @returns a formatted cart item
- */
-export function formatCartItem(item: NacelleShopProduct): CartItem {
-  const { title, vendor, tags, handle, locale, id: productId } = item;
-  const { featuredMedia: image, ...variant } = item.variant as ProductVariant;
-  const productMetafields = item.metafields || [];
-  const variantMetafields = variant.metafields || [];
-
-  return {
-    ...variant,
-    title,
-    vendor: vendor || '',
-    tags: tags || [''],
-    handle,
-    productId,
-    image: image || { type: '', src: '', thumbnailSrc: '' },
-    locale,
-    quantity: item.quantity || 1,
-    metafields: [...productMetafields, ...variantMetafields]
-  };
 }

@@ -23,10 +23,13 @@ const processCheckout: ActionHandler = ({ dispatch }) => async (
     } = action.payload;
 
     const cartItems = lineItems.map((item, idx) => ({
-      variantId: item.id,
-      cartItemId: `${idx}::${item.id}`,
+      variantId: item.variant.id,
+      cartItemId: `${idx}::${item.variant.id}`,
       quantity: item.quantity,
-      metafields: item.metafields?.map((m) => ({ key: m.key, value: m.value }))
+      metafields: [
+        ...(item.product.metafields || []),
+        ...(item.variant.metafields || [])
+      ].map((m) => ({ key: m.key, value: m.value }))
     }));
 
     if (action.isCheckingOut) {

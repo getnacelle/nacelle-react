@@ -1,4 +1,4 @@
-import { CartItem } from '@nacelle/types';
+import { CartItem } from '../../common/types';
 
 import { setCacheItem } from '~/hooks/use-cart/utils';
 import {
@@ -11,12 +11,9 @@ const incrementItem: IncrementItemFunction = (
   action: IncrementItemAction
 ) => {
   const cart: CartItem[] = state.cart.map((item) => {
-    const payloadId =
-      'variant' in action.payload
-        ? action.payload.variant?.id
-        : action.payload.id;
+    const payloadId = action.payload.variant.id;
 
-    if (item.id === payloadId) {
+    if (item.variant.id === payloadId) {
       return { ...item, quantity: item.quantity + 1 };
     }
 

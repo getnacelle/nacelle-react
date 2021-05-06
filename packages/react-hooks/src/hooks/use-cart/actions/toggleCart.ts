@@ -1,4 +1,4 @@
-import { CartItem } from '@nacelle/types';
+import { CartItem } from '../../common/types';
 
 import {
   CartState,

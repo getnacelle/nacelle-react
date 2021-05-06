@@ -1,4 +1,4 @@
-import { CartItem } from '@nacelle/types';
+import { CartItem } from '../../common/types';
 
 import { setCacheItem } from '~/hooks/use-cart/utils';
 import {
@@ -10,12 +10,11 @@ const removeFromCart: RemoveFromCartFunction = (
   state: CartState,
   action: RemoveFromCartAction
 ) => {
-  const payloadId =
-    'variant' in action.payload
-      ? action.payload.variant?.id
-      : action.payload.id;
+  const payloadId = action.payload.variant?.id;
 
-  const cart: CartItem[] = state.cart.filter((item) => item.id !== payloadId);
+  const cart: CartItem[] = state.cart.filter(
+    (item) => item.variant.id !== payloadId
+  );
 
   setCacheItem(state.useLocalStorage)('cart', JSON.stringify(cart));
 

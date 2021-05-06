@@ -1,4 +1,4 @@
-import { NacelleShopProduct, CartItem } from '@nacelle/types';
+import { CartItem } from '../common/types';
 
 export type CartState = {
   cart: CartItem[];
@@ -6,51 +6,48 @@ export type CartState = {
   useLocalStorage: boolean;
 };
 
-export type IsInCartFunction = (
-  cart: CartItem[],
-  payload: NacelleShopProduct
-) => boolean;
+export type IsInCartFunction = (cart: CartItem[], payload: CartItem) => boolean;
 
 export interface BuildCartParams {
   cart: CartItem[];
-  payload: NacelleShopProduct;
+  payload: CartItem;
   isInCart?: IsInCartFunction;
 }
 
 export type CartActions = {
-  addToCart: (payload: NacelleShopProduct) => void;
-  updateItem: (payload: NacelleShopProduct | CartItem) => void;
-  removeFromCart: (payload: NacelleShopProduct | CartItem) => void;
-  incrementItem: (payload: NacelleShopProduct | CartItem) => void;
-  decrementItem: (payload: NacelleShopProduct | CartItem) => void;
+  addToCart: (payload: CartItem) => void;
+  updateItem: (payload: CartItem) => void;
+  removeFromCart: (payload: CartItem) => void;
+  incrementItem: (payload: CartItem) => void;
+  decrementItem: (payload: CartItem) => void;
   toggleCart: (payload: CartToggleStates) => void;
   clearCart: () => void;
 };
 
 export type AddToCartAction = {
   type: 'cart/add-to-cart';
-  payload: NacelleShopProduct;
+  payload: CartItem;
   isInCart?: IsInCartFunction;
 };
 
 export type UpdateItemAction = {
   type: 'cart/update-item';
-  payload: NacelleShopProduct | CartItem;
+  payload: CartItem;
 };
 
 export type IncrementItemAction = {
   type: 'cart/increment-item';
-  payload: NacelleShopProduct | CartItem;
+  payload: CartItem;
 };
 
 export type DecrementItemAction = {
   type: 'cart/decrement-item';
-  payload: NacelleShopProduct | CartItem;
+  payload: CartItem;
 };
 
 export type RemoveFromCartAction = {
   type: 'cart/remove-from-cart';
-  payload: NacelleShopProduct | CartItem;
+  payload: CartItem;
 };
 
 export type ToggleVisibilityAction = {

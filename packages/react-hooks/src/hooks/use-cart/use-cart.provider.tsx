@@ -1,5 +1,5 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
-import { NacelleShopProduct, CartItem } from '@nacelle/types';
+import { CartItem } from '../common/types';
 
 import {
   CartState,
@@ -85,15 +85,15 @@ export const CartProvider: FC<CartProviderProps> = ({
 
   const cartActions: CartActions = useMemo(
     () => ({
-      addToCart: (payload: NacelleShopProduct): void =>
+      addToCart: (payload: CartItem): void =>
         dispatch({ type: ADD_TO_CART, payload, isInCart }),
-      removeFromCart: (payload: NacelleShopProduct | CartItem) =>
+      removeFromCart: (payload: CartItem) =>
         dispatch({ type: REMOVE_FROM_CART, payload }),
-      updateItem: (payload: NacelleShopProduct | CartItem) =>
+      updateItem: (payload: CartItem) =>
         dispatch({ type: UPDATE_ITEM, payload }),
-      incrementItem: (payload: NacelleShopProduct | CartItem): void =>
+      incrementItem: (payload: CartItem): void =>
         dispatch({ type: INCREMENT_ITEM, payload }),
-      decrementItem: (payload: NacelleShopProduct | CartItem): void =>
+      decrementItem: (payload: CartItem): void =>
         dispatch({ type: DECREMENT_ITEM, payload }),
       toggleCart: (payload: CartToggleStates) =>
         dispatch({ type: TOGGLE_CART, payload }),

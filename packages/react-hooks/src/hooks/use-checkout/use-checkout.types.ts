@@ -1,6 +1,7 @@
 import React from 'react';
 import { Checkout } from '@nacelle/types';
-import { CartItem, MetafieldInput } from '@nacelle/types';
+import { MetafieldInput } from '@nacelle/types';
+import { CartItem } from '../common/types';
 
 /**
  * @param nacelleSpaceId: the target Nacelle Space ID (string)
@@ -16,6 +17,7 @@ export interface Credentials {
 export interface AnyObject {
   [key: string]: AnyObject | string | unknown;
 }
+
 export interface GraphQLRequestParams {
   credentials: Credentials;
   query: string;
@@ -30,6 +32,7 @@ export interface CheckoutError {
     code: string;
   };
 }
+
 export interface ProcessCheckoutResponse {
   data: {
     processCheckout: Checkout;
@@ -136,10 +139,6 @@ export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
 export interface ActionHandlerParams {
   dispatch: CheckoutDispatch;
 }
-
-// export type ActionHandler = ({
-//   dispatch
-// }: ActionHandlerParams) => (action: CheckoutReducerAction) => Promise<void>;
 
 export type ActionHandler = ({
   dispatch

@@ -1,7 +1,15 @@
-import React, { useState, useRef, useMemo, useContext, FC } from 'react';
+import React, {
+  useState,
+  useRef,
+  useMemo,
+  useEffect,
+  useContext,
+  FC
+} from 'react';
 import { useReducerAsync } from 'use-reducer-async';
 
 import { getCheckout, processCheckout } from './handlers';
+import { getCacheString, getCacheBoolean } from './utils';
 import {
   CheckoutActions,
   CheckoutState,
@@ -31,6 +39,7 @@ const CheckoutDataContext = React.createContext<CheckoutContextValue>(
 const CheckoutActionContext = React.createContext<CheckoutActionContextValue>(
   null
 );
+const IsCheckingOutContext = React.createContext<boolean>(false);
 
 const asyncActionHandlers = {
   [GET_CHECKOUT]: getCheckout,
@@ -43,7 +52,7 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
 }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
-  const [state, dispatch] = useReducerAsync(
+  const [checkoutState, dispatch] = useReducerAsync(
     checkoutReducer,
     initialState,
     asyncActionHandlers
@@ -67,21 +76,61 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
     [dispatch, credentials, isCheckingOut]
   );
 
+  // throw an error if credentials are missing
+  useEffect(() => {
+    const {
+      nacelleEndpoint,
+      nacelleSpaceId,
+      nacelleGraphqlToken
+    } = credentials;
+
+    if (!nacelleEndpoint || !nacelleSpaceId || !nacelleGraphqlToken) {
+      throw new Error(
+        `'nacelleEndpoint', 'nacelleSpaceId', and 'nacelleGraphqlToken' ` +
+          `are required in the 'credentials' provided to the useCheckout hook.`
+      );
+    }
+  }, [credentials]);
+
+  // Set isMounted to false when the component is unmounted
+  useEffect(
+    () => () => {
+      isMounted.current = false;
+    },
+    []
+  );
+
+  // Set the `checkoutState.checkoutComplete` value, if needed
+  useEffect(() => {
+    const complete =
+      checkoutState.checkoutComplete || getCacheBoolean('checkoutComplete');
+    const id = checkoutState.checkoutId || getCacheString('checkoutId');
+    const url = checkoutState.checkoutUrl || getCacheString('checkoutUrl');
+
+    if (!complete && id && url && !isCheckingOut) {
+      checkoutActions.getCheckout({ id, url });
+    }
+  }, [checkoutActions, checkoutState, isCheckingOut]);
+
   return (
-    <CheckoutDataContext.Provider value={state}>
+    <CheckoutDataContext.Provider value={checkoutState}>
       <CheckoutActionContext.Provider value={checkoutActions}>
-        {children}
+        <IsCheckingOutContext.Provider value={isCheckingOut}>
+          {children}
+        </IsCheckingOutContext.Provider>
       </CheckoutActionContext.Provider>
     </CheckoutDataContext.Provider>
   );
 };
 
 export function useCheckoutState(): CheckoutContextValue {
-  const context = useContext(CheckoutDataContext);
-  return context;
+  return useContext(CheckoutDataContext);
 }
 
 export function useCheckoutActions(): CheckoutActionContextValue {
-  const context = useContext(CheckoutActionContext);
-  return context;
+  return useContext(CheckoutActionContext);
+}
+
+export function useIsCheckingOut(): boolean {
+  return useContext(IsCheckingOutContext);
 }

@@ -43,7 +43,7 @@ const ProductCard = ({
   );
 
   const addItemToCart = () => {
-    const item = { ...product, variant: productVariant, quantity };
+    const item = { product, variant: productVariant, quantity };
     const stay = 'open';
 
     addToCart(item);

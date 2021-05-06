@@ -31,7 +31,7 @@ const ProductCard = ({
   isPDP = false,
   children
 }) => {
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [, { addToCart, toggleCart }] = useCart();
   const device = useDetectDevice();
   const imageData =
@@ -45,20 +45,17 @@ const ProductCard = ({
   );
 
   const addItemToCart = () => {
-    const item = {
-      ...product,
-      variant: productVariant,
-      quantity
-    };
+    const item = { product, variant: productVariant, quantity };
+    const stay = 'open';
 
     addToCart(item);
-    return toggleCart();
+    return toggleCart(stay);
   };
 
   const imageStyles = constrainImages ? styles.productImage : styles.pdpImage;
 
   const incrementQty = () => setQuantity((qty) => qty + 1);
-  const decrementQty = () => setQuantity((qty) => (qty > 0 ? qty - 1 : 0));
+  const decrementQty = () => setQuantity((qty) => (qty > 1 ? qty - 1 : 1));
   const altText =
     product.featuredMedia.altText || product.title || 'product card';
 

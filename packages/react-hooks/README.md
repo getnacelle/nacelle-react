@@ -154,6 +154,10 @@ By default, the `<CartProvider />` uses Local Storage to persist the cart betwee
 import { useCart } from '@nacelle/react-hooks';
 ```
 
+##### Accepts
+
+(None)
+
 ##### Returns
 
 An array containing:

@@ -125,9 +125,11 @@ export type CheckoutReducerAction =
   | SetCheckoutSourceAction
   | SetCheckoutUrlAction;
 
-export type CheckoutActions = {
+export interface CheckoutActions {
   clearCheckoutData: () => void;
-};
+  getCheckout: (payload: GetCheckoutInput) => void;
+  processCheckout: (payload: ProcessCheckoutInput) => void;
+}
 
 export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
 
@@ -135,6 +137,12 @@ export interface ActionHandlerParams {
   dispatch: CheckoutDispatch;
 }
 
+// export type ActionHandler = ({
+//   dispatch
+// }: ActionHandlerParams) => (action: CheckoutReducerAction) => Promise<void>;
+
 export type ActionHandler = ({
   dispatch
-}: ActionHandlerParams) => (action: CheckoutReducerAction) => Promise<void>;
+}: {
+  dispatch: any;
+}) => (action: any) => Promise<void>;

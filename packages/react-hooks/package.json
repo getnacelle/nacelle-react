@@ -59,6 +59,7 @@
     "access": "public"
   },
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "use-reducer-async": "^2.0.1"
   }
 }

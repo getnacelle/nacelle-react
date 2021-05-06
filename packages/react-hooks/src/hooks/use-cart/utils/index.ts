@@ -1,4 +1,4 @@
-import { CartItem, NacelleShopProduct } from '@nacelle/types';
+import { CartItem, NacelleShopProduct, ProductVariant } from '@nacelle/types';
 
 import { IsInCartFunction } from '../use-cart.types';
 
@@ -14,7 +14,7 @@ export function isItemInCart(
   cart: CartItem[],
   payload: NacelleShopProduct
 ): boolean {
-  return cart.findIndex((item) => item.id === payload.variant.id) > -1;
+  return cart.findIndex((item) => item.id === payload?.variant?.id) > -1;
 }
 
 export interface BuildCartParams {
@@ -39,7 +39,7 @@ export function buildCart({
   return isInCart(cart, payload)
     ? cart.map((item) => {
         const payloadId =
-          'variant' in payload ? payload.variant.id : payload.id;
+          'variant' in payload ? payload?.variant?.id : payload.id;
 
         if (item.id !== payloadId) {
           return item;
@@ -71,18 +71,20 @@ export function unsetCacheItem(useLocalStorage: boolean) {
  */
 export function formatCartItem(item: NacelleShopProduct): CartItem {
   const { title, vendor, tags, handle, locale, id: productId } = item;
-  const { featuredMedia: image, ...variant } = item.variant;
+  const { featuredMedia: image, ...variant } = item.variant as ProductVariant;
+  const productMetafields = item.metafields || [];
+  const variantMetafields = variant.metafields || [];
 
   return {
     ...variant,
     title,
-    vendor,
-    tags,
+    vendor: vendor || '',
+    tags: tags || [''],
     handle,
     productId,
-    image,
+    image: image || { type: '', src: '', thumbnailSrc: '' },
     locale,
-    quantity: item.quantity > 0 ? item.quantity : 1,
-    metafields: [...item.metafields, ...variant.metafields]
+    quantity: item.quantity || 1,
+    metafields: [...productMetafields, ...variantMetafields]
   };
 }

@@ -31,7 +31,7 @@ const processCheckout: ActionHandler = ({ dispatch }) => async (
 
     if (action.isCheckingOut) {
       // while processing checkout, don't process checkout again
-      return null;
+      return;
     }
 
     action.setIsCheckingOut(true);
@@ -74,13 +74,13 @@ const processCheckout: ActionHandler = ({ dispatch }) => async (
         payload: {
           checkoutId: id,
           checkoutComplete: completed,
-          checkoutUrl: url,
-          checkoutSource: source
+          checkoutUrl: url as string,
+          checkoutSource: source as string
         }
       });
     }
 
-    if (action.isMounted.current) {
+    if (action.isMounted) {
       action.setIsCheckingOut(false);
 
       if (checkoutResult?.data?.processCheckout?.url) {

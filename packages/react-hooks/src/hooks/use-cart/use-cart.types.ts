@@ -30,6 +30,7 @@ export type CartActions = {
 export type AddToCartAction = {
   type: 'cart/add-to-cart';
   payload: NacelleShopProduct;
+  isInCart?: IsInCartFunction;
 };
 
 export type UpdateItemAction = {

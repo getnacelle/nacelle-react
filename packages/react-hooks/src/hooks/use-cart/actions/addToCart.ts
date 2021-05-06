@@ -13,13 +13,12 @@ interface AddToCartOptions {
 
 const addToCart: AddToCartFunction = (
   state: CartState,
-  action: AddToCartAction,
-  { isInCart = isItemInCart }: AddToCartOptions
+  action: AddToCartAction
 ) => {
   const cart: CartItem[] = buildCart({
     cart: state.cart,
     payload: action.payload,
-    isInCart
+    isInCart: action.isInCart || isItemInCart
   });
 
   setCacheItem(state.useLocalStorage)('cart', JSON.stringify(cart));
@@ -34,8 +33,7 @@ export default addToCart;
 
 export type AddToCartFunction = (
   state: CartState,
-  action: AddToCartAction,
-  { isInCart }?: AddToCartOptions
+  action: AddToCartAction
 ) => {
   cart: CartItem[];
   show: boolean;

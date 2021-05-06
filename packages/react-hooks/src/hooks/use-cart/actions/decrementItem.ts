@@ -13,7 +13,7 @@ const decrementItem: DecrementItemFunction = (
   const cart: CartItem[] = state.cart.map((item) => {
     const payloadId =
       'variant' in action.payload
-        ? action.payload.variant.id
+        ? action.payload.variant?.id
         : action.payload.id;
 
     if (item.id === payloadId) {

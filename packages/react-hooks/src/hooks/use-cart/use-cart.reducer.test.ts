@@ -32,7 +32,7 @@ describe('useCart reducer', () => {
       });
       expect(result.cart[0]).toHaveProperty('metafields');
 
-      const metafieldKeys = result.cart[0].metafields.map((m) => m.key);
+      const metafieldKeys = result.cart[0].metafields?.map((m) => m.key);
       expect(metafieldKeys).toContain('shipping_interval_frequency');
     });
 
@@ -54,18 +54,18 @@ describe('useCart reducer', () => {
 
     it('should add to item localStorage cart', () => {
       const localStorageMock = (() => {
-        let store = {};
+        let store: any = {};
         return {
-          getItem: (key) => {
+          getItem: (key: string) => {
             return store[key];
           },
-          setItem: (key, value) => {
+          setItem: (key: string, value: string) => {
             store[key] = value.toString();
           },
           clear: () => {
             store = {};
           },
-          removeItem: (key) => {
+          removeItem: (key: string) => {
             delete store[key];
           }
         };
@@ -82,9 +82,9 @@ describe('useCart reducer', () => {
           payload: shopifyItem
         }
       );
-      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
-        formatCartItem(shopifyItem)
-      ]);
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([formatCartItem(shopifyItem)]);
     });
   });
   describe(`${UPDATE_ITEM}`, () => {
@@ -111,7 +111,9 @@ describe('useCart reducer', () => {
         type: UPDATE_ITEM,
         payload: { ...shopifyItem, title: 'Updated Title', quantity: 10 }
       });
-      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([
         { ...formatCartItem(shopifyItem), title: 'Updated Title', quantity: 10 }
       ]);
     });
@@ -143,7 +145,9 @@ describe('useCart reducer', () => {
         payload: shopifyItem
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        []
+      );
     });
   });
 
@@ -176,9 +180,9 @@ describe('useCart reducer', () => {
         payload: shopifyItem
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 2 }
-      ]);
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...formatCartItem(shopifyItem), quantity: 2 }]);
     });
   });
 
@@ -227,9 +231,9 @@ describe('useCart reducer', () => {
         payload: shopifyItem
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart'))).toEqual([
-        { ...formatCartItem(shopifyItem), quantity: 1 }
-      ]);
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...formatCartItem(shopifyItem), quantity: 1 }]);
     });
   });
 
@@ -287,3 +291,5 @@ describe('useCart reducer', () => {
   //   });
   // });
 });
+
+export default {};

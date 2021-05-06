@@ -10,9 +10,9 @@ const clearCheckoutData = (state: CheckoutState): CheckoutState => {
   return {
     ...state,
     checkoutComplete: false,
-    checkoutId: null,
-    checkoutSource: null,
-    checkoutUrl: null
+    checkoutId: '',
+    checkoutSource: '',
+    checkoutUrl: ''
   };
 };
 

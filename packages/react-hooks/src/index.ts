@@ -1,4 +1,4 @@
-import { useCheckout } from './hooks/use-checkout';
-import { useCart, CartProvider, isInCart } from './hooks/use-cart';
+import { useCart, CartProvider } from './hooks/use-cart';
+import { useCheckout, CheckoutProvider } from './hooks/use-checkout';
 
-export { useCheckout, useCart, CartProvider, isInCart };
+export { useCart, CartProvider, useCheckout, CheckoutProvider };

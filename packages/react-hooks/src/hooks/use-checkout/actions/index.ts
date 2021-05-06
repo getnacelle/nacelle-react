@@ -3,7 +3,6 @@
 // EXPORT ACTIONS
 // @index('./*.ts', (f, _) => `export { default as ${_.camelCase(f.name)} } from '${f.path}'`)
 export { default as clearCheckoutData } from './clearCheckoutData';
-export { default as getCheckout } from './getCheckout';
 export { default as setCheckoutComplete } from './setCheckoutComplete';
 export { default as setCheckoutData } from './setCheckoutData';
 export { default as setCheckoutId } from './setCheckoutId';

@@ -7,20 +7,18 @@ const updateItem: UpdateItemFunction = (
   state: CartState,
   action: UpdateItemAction
 ) => {
-  const cart: CartItem[] = state.cart.map((item) => {
+  const cart: CartItem[] = state.cart.map((item: any) => {
     const payloadId =
       'variant' in action.payload
-        ? action.payload.variant.id
+        ? action.payload.variant?.id
         : action.payload.id;
 
     if (item.id === payloadId) {
       Object.keys(item).forEach((key) => {
-        if (
-          action.payload[key] &&
-          key !== 'id' &&
-          item[key] !== action.payload[key]
-        ) {
-          item[key] = action.payload[key];
+        const value = (action.payload as any)[key];
+
+        if (value && key !== 'id' && item[key] !== value) {
+          item[key] = value;
         }
       });
     }

@@ -12,9 +12,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "baseUrl": "./src",
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "paths": { "~/*": ["./*"] },
+    "strict": true
   },
   "include": ["src/**/*", "jest.config.js"],
   "exclude": [

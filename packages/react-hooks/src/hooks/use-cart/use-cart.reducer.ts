@@ -54,8 +54,7 @@ function createCartReducer({
   incrementItem,
   removeFromCart,
   toggleCart,
-  updateItem,
-  isInCart
+  updateItem
 }: CreateCartReducerParams = {}) {
   const cartReducer = (
     state: CartState,
@@ -65,7 +64,7 @@ function createCartReducer({
       case ADD_TO_CART: {
         return addToCart
           ? addToCart(state, action)
-          : addToCartDefault(state, action, { isInCart });
+          : addToCartDefault(state, action);
       }
 
       case UPDATE_ITEM: {

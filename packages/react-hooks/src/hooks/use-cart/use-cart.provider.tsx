@@ -57,10 +57,15 @@ export const CartProvider: FC<CartProviderProps> = ({
   isInCart
 }) => {
   const isClient = typeof window !== 'undefined';
-  const cart =
-    useLocalStorage && isClient
-      ? JSON.parse(window.localStorage.getItem('cart')) || []
-      : [];
+  let cart = [];
+
+  if (useLocalStorage && isClient) {
+    const cartString = window.localStorage.getItem('cart');
+
+    if (cartString) {
+      cart = JSON.parse(cartString);
+    }
+  }
 
   const cartReducer = createCartReducer({
     addToCart,
@@ -81,7 +86,7 @@ export const CartProvider: FC<CartProviderProps> = ({
   const cartActions: CartActions = useMemo(
     () => ({
       addToCart: (payload: NacelleShopProduct): void =>
-        dispatch({ type: ADD_TO_CART, payload }),
+        dispatch({ type: ADD_TO_CART, payload, isInCart }),
       removeFromCart: (payload: NacelleShopProduct | CartItem) =>
         dispatch({ type: REMOVE_FROM_CART, payload }),
       updateItem: (payload: NacelleShopProduct | CartItem) =>
@@ -94,7 +99,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({ type: TOGGLE_CART, payload }),
       clearCart: (): void => dispatch({ type: CLEAR_CART })
     }),
-    []
+    [isInCart]
   );
 
   return (
@@ -111,7 +116,7 @@ export const CartProvider: FC<CartProviderProps> = ({
  *
  * @returns an object with the cart's current state
  */
-export function useCartState(): CartState {
+export function useCartState(): CartState | null {
   const context = useContext(CartContext);
   return context;
 }
@@ -129,7 +134,7 @@ export function useCartState(): CartState {
  * toggleCart() - toggles the cart's show status
  * clearCart() - removes all items from the cart
  */
-export function useCartActions(): CartActions {
+export function useCartActions(): CartActions | null {
   const context = useContext(CartActionContext);
   return context;
 }

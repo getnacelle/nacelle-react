@@ -7,6 +7,7 @@ import React, {
   FC
 } from 'react';
 import { useReducerAsync } from 'use-reducer-async';
+import 'abort-controller/polyfill';
 
 import { getCheckout, processCheckout } from './handlers';
 import { getCacheString, getCacheBoolean } from './utils';
@@ -52,6 +53,7 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
 }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
+  const hasFetchedCheckout = useRef(false);
   const [checkoutState, dispatch] = useReducerAsync(
     checkoutReducer,
     initialState,
@@ -107,7 +109,14 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
     const id = checkoutState.checkoutId || getCacheString('checkoutId');
     const url = checkoutState.checkoutUrl || getCacheString('checkoutUrl');
 
-    if (!complete && id && url && !isCheckingOut) {
+    if (
+      id &&
+      url &&
+      !complete &&
+      !isCheckingOut &&
+      !hasFetchedCheckout.current
+    ) {
+      hasFetchedCheckout.current = true;
       checkoutActions.getCheckout({ id, url });
     }
   }, [checkoutActions, checkoutState, isCheckingOut]);

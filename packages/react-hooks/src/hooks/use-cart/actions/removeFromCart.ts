@@ -11,7 +11,9 @@ const removeFromCart: RemoveFromCartFunction = (
   action: RemoveFromCartAction
 ) => {
   const payloadId =
-    'variant' in action.payload ? action.payload.variant.id : action.payload.id;
+    'variant' in action.payload
+      ? action.payload.variant?.id
+      : action.payload.id;
 
   const cart: CartItem[] = state.cart.filter((item) => item.id !== payloadId);
 

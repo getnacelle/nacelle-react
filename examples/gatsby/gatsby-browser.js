@@ -16,7 +16,7 @@ export const wrapPageElement = ({ element, props }) => (
 );
 
 export const wrapRootElement = ({ element }) => (
-  <CartProvider useLocalStorage>
+  <CartProvider>
     <CheckoutProvider credentials={checkoutCredentials}>
       <Global styles={styles.global} />
       <ProductSearchProvider>{element}</ProductSearchProvider>

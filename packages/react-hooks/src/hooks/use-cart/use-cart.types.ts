@@ -10,7 +10,6 @@ import { UpdateItemFunction } from './actions/updateItem';
 export type CartState = {
   cart: CartItem[];
   show: boolean;
-  useLocalStorage: boolean;
 };
 
 export type IsInCartFunction = (cart: CartItem[], payload: CartItem) => boolean;
@@ -34,6 +33,8 @@ export type CartActions = {
 export type AddToCartAction = {
   type: 'cart/add-to-cart';
   payload: CartItem;
+  storage: StorageTypes;
+  cacheKey: string;
   addToCart?: AddToCartFunction;
   isInCart?: IsInCartFunction;
 };
@@ -41,24 +42,32 @@ export type AddToCartAction = {
 export type UpdateItemAction = {
   type: 'cart/update-item';
   payload: CartItem;
+  storage: StorageTypes;
+  cacheKey: string;
   updateItem?: UpdateItemFunction;
 };
 
 export type IncrementItemAction = {
   type: 'cart/increment-item';
   payload: CartItem;
+  storage: StorageTypes;
+  cacheKey: string;
   incrementItem?: IncrementItemFunction;
 };
 
 export type DecrementItemAction = {
   type: 'cart/decrement-item';
   payload: CartItem;
+  storage: StorageTypes;
+  cacheKey: string;
   decrementItem?: DecrementItemFunction;
 };
 
 export type RemoveFromCartAction = {
   type: 'cart/remove-from-cart';
   payload: CartItem;
+  storage: StorageTypes;
+  cacheKey: string;
   removeFromCart?: RemoveFromCartFunction;
 };
 
@@ -71,6 +80,8 @@ export type ToggleVisibilityAction = {
 export type ClearCartAction = {
   type: 'cart/clear';
   clearCart?: ClearCartFunction;
+  storage: StorageTypes;
+  cacheKey?: string;
 };
 
 export type CartReducerAction =
@@ -88,6 +99,15 @@ const cartToggleStates = {
 } as const;
 
 export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];
+
+const storageTypes = {
+  session: 'session',
+  local: 'local'
+} as const;
+
+export type StorageTypes =
+  | typeof storageTypes[keyof typeof storageTypes]
+  | null;
 
 export type { AddToCartFunction } from './actions/addToCart';
 export type { ClearCartFunction } from './actions/clearCart';

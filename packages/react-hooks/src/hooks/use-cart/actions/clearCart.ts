@@ -1,9 +1,11 @@
-import { CartState } from '~/hooks/use-cart/use-cart.types';
+import { CartState, ClearCartAction } from '~/hooks/use-cart/use-cart.types';
+import { unsetCacheItem } from '../utils';
 
-const clearCart: ClearCartFunction = (state: CartState) => {
-  if (state.useLocalStorage) {
-    window.localStorage.removeItem('cart');
-  }
+const clearCart: ClearCartFunction = (
+  state: CartState,
+  action: ClearCartAction
+) => {
+  unsetCacheItem(action.storage)(action.cacheKey || 'cart');
 
   return {
     ...state,
@@ -14,9 +16,9 @@ const clearCart: ClearCartFunction = (state: CartState) => {
 export default clearCart;
 
 export type ClearCartFunction = (
-  state: CartState
+  state: CartState,
+  action: ClearCartAction
 ) => {
   cart: any[];
   show: boolean;
-  useLocalStorage: boolean;
 };

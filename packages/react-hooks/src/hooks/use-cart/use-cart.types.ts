@@ -33,8 +33,7 @@ export type CartActions = {
 export type AddToCartAction = {
   type: 'cart/add-to-cart';
   payload: CartItem;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey: string;
   addToCart?: AddToCartFunction;
   isInCart?: IsInCartFunction;
@@ -43,8 +42,7 @@ export type AddToCartAction = {
 export type UpdateItemAction = {
   type: 'cart/update-item';
   payload: CartItem;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey: string;
   updateItem?: UpdateItemFunction;
 };
@@ -52,8 +50,7 @@ export type UpdateItemAction = {
 export type IncrementItemAction = {
   type: 'cart/increment-item';
   payload: CartItem;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey: string;
   incrementItem?: IncrementItemFunction;
 };
@@ -61,8 +58,7 @@ export type IncrementItemAction = {
 export type DecrementItemAction = {
   type: 'cart/decrement-item';
   payload: CartItem;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey: string;
   decrementItem?: DecrementItemFunction;
 };
@@ -70,8 +66,7 @@ export type DecrementItemAction = {
 export type RemoveFromCartAction = {
   type: 'cart/remove-from-cart';
   payload: CartItem;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey: string;
   removeFromCart?: RemoveFromCartFunction;
 };
@@ -85,8 +80,7 @@ export type ToggleVisibilityAction = {
 export type ClearCartAction = {
   type: 'cart/clear';
   clearCart?: ClearCartFunction;
-  useSessionStorage: boolean;
-  useLocalStorage: boolean;
+  storage: StorageTypes;
   cacheKey?: string;
 };
 
@@ -105,6 +99,15 @@ const cartToggleStates = {
 } as const;
 
 export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];
+
+const storageTypes = {
+  session: 'session',
+  local: 'local'
+} as const;
+
+export type StorageTypes =
+  | typeof storageTypes[keyof typeof storageTypes]
+  | null;
 
 export type { AddToCartFunction } from './actions/addToCart';
 export type { ClearCartFunction } from './actions/clearCart';

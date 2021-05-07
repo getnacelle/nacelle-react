@@ -1,6 +1,6 @@
 import { CartItem } from '../../common/types';
 
-import { IsInCartFunction } from '../use-cart.types';
+import { IsInCartFunction, StorageTypes } from '../use-cart.types';
 
 /**
  * A utility function which will return true if the item is already in the cart
@@ -46,30 +46,20 @@ export function buildCart({
     : [...cart, { ...payload }];
 }
 
-export function setCacheItem(
-  useLocalStorage: boolean,
-  useSessionStorage: boolean
-) {
-  if (useLocalStorage) {
+export function setCacheItem(storage: StorageTypes | null) {
+  if (storage === 'local') {
     return window.localStorage.setItem.bind(localStorage);
-  }
-
-  if (useSessionStorage) {
+  } else if (storage === 'session') {
     return window.sessionStorage.setItem.bind(sessionStorage);
   }
 
   return () => {};
 }
 
-export function unsetCacheItem(
-  useLocalStorage: boolean,
-  useSessionStorage: boolean
-) {
-  if (useLocalStorage) {
+export function unsetCacheItem(storage: StorageTypes | null) {
+  if (storage === 'local') {
     return window.localStorage.removeItem.bind(localStorage);
-  }
-
-  if (useSessionStorage) {
+  } else if (storage === 'session') {
     return window.sessionStorage.removeItem.bind(sessionStorage);
   }
 

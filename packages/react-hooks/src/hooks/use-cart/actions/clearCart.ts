@@ -5,12 +5,7 @@ const clearCart: ClearCartFunction = (
   state: CartState,
   action: ClearCartAction
 ) => {
-  if (action.useLocalStorage || action.useSessionStorage) {
-    unsetCacheItem(
-      action.useLocalStorage,
-      action.useSessionStorage
-    )(action.cacheKey || 'cart');
-  }
+  unsetCacheItem(action.storage)(action.cacheKey || 'cart');
 
   return {
     ...state,

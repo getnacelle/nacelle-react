@@ -12,7 +12,8 @@ import {
   RemoveFromCartFunction,
   ToggleCartFunction,
   UpdateItemFunction,
-  IsInCartFunction
+  IsInCartFunction,
+  StorageTypes
 } from './use-cart.types';
 
 import cartReducer, {
@@ -30,8 +31,7 @@ export type CartContextValue = null | CartState;
 export type CartActionContextValue = null | CartActions;
 export type CartProviderProps = {
   children: JSX.Element | JSX.Element[];
-  useLocalStorage?: boolean;
-  useSessionStorage?: boolean;
+  storage?: StorageTypes;
   cacheKey?: string;
   addToCart?: AddToCartFunction;
   clearCart?: ClearCartFunction;
@@ -48,8 +48,7 @@ const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
   children,
-  useSessionStorage = true,
-  useLocalStorage = false,
+  storage = 'local',
   cacheKey = 'cart',
   addToCart,
   clearCart,
@@ -60,11 +59,19 @@ export const CartProvider: FC<CartProviderProps> = ({
   updateItem,
   isInCart
 }) => {
-  const isClient = typeof window !== 'undefined';
   let cart = [];
+  const isClient = typeof window !== 'undefined';
 
-  if (useLocalStorage && isClient) {
-    const cartString = window.localStorage.getItem('cart');
+  if (isClient) {
+    let cartString: string | null = '';
+
+    if (storage) {
+      if (storage === 'local') {
+        cartString = window.localStorage.getItem(cacheKey);
+      } else if (storage === 'session') {
+        cartString = window.sessionStorage.getItem(cacheKey);
+      }
+    }
 
     if (cartString) {
       cart = JSON.parse(cartString);
@@ -84,8 +91,7 @@ export const CartProvider: FC<CartProviderProps> = ({
           payload,
           isInCart,
           addToCart,
-          useSessionStorage,
-          useLocalStorage,
+          storage,
           cacheKey
         }),
       removeFromCart: (payload: CartItem) =>
@@ -93,8 +99,7 @@ export const CartProvider: FC<CartProviderProps> = ({
           type: REMOVE_FROM_CART,
           payload,
           removeFromCart,
-          useSessionStorage,
-          useLocalStorage,
+          storage,
           cacheKey
         }),
       updateItem: (payload: CartItem) =>
@@ -102,8 +107,7 @@ export const CartProvider: FC<CartProviderProps> = ({
           type: UPDATE_ITEM,
           payload,
           updateItem,
-          useSessionStorage,
-          useLocalStorage,
+          storage,
           cacheKey
         }),
       incrementItem: (payload: CartItem): void =>
@@ -111,8 +115,7 @@ export const CartProvider: FC<CartProviderProps> = ({
           type: INCREMENT_ITEM,
           payload,
           incrementItem,
-          useSessionStorage,
-          useLocalStorage,
+          storage,
           cacheKey
         }),
       decrementItem: (payload: CartItem): void =>
@@ -120,8 +123,7 @@ export const CartProvider: FC<CartProviderProps> = ({
           type: DECREMENT_ITEM,
           payload,
           decrementItem,
-          useSessionStorage,
-          useLocalStorage,
+          storage,
           cacheKey
         }),
       toggleCart: (payload: CartToggleStates) =>
@@ -130,8 +132,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: CLEAR_CART,
           clearCart,
-          useSessionStorage,
-          useLocalStorage
+          storage
         })
     }),
     [
@@ -143,8 +144,7 @@ export const CartProvider: FC<CartProviderProps> = ({
       decrementItem,
       toggleCart,
       clearCart,
-      useSessionStorage,
-      useLocalStorage,
+      storage,
       cacheKey
     ]
   );

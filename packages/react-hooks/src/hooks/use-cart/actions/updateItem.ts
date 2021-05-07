@@ -25,10 +25,7 @@ const updateItem: UpdateItemFunction = (
     return localItem || item;
   });
 
-  setCacheItem(action.useLocalStorage, action.useSessionStorage)(
-    action.cacheKey || 'cart',
-    JSON.stringify(cart)
-  );
+  setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));
 
   return {
     ...state,

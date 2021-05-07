@@ -53,8 +53,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
       expect(result.cart).toEqual([cartItem]);
@@ -64,8 +63,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
       expect(result.cart[0].product).toHaveProperty('metafields');
@@ -85,8 +83,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(cartState, {
         type: ADD_TO_CART,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -99,8 +96,7 @@ describe('useCart reducer', () => {
         {
           type: ADD_TO_CART,
           payload: cartItem,
-          useLocalStorage: true,
-          useSessionStorage: false,
+          storage: 'local',
           cacheKey: 'cart'
         }
       );
@@ -115,13 +111,42 @@ describe('useCart reducer', () => {
         {
           type: ADD_TO_CART,
           payload: cartItem,
-          useLocalStorage: false,
-          useSessionStorage: true,
+          storage: 'session',
           cacheKey: 'cart'
         }
       );
       expect(
         JSON.parse(window.sessionStorage.getItem('cart') as string)
+      ).toEqual([cartItem]);
+    });
+
+    it('should add to item localStorage cart using custom cacheKey', () => {
+      cartReducer(
+        { ...initialState },
+        {
+          type: ADD_TO_CART,
+          payload: cartItem,
+          storage: 'local',
+          cacheKey: 'new-cart'
+        }
+      );
+      expect(
+        JSON.parse(window.localStorage.getItem('new-cart') as string)
+      ).toEqual([cartItem]);
+    });
+
+    it('should add to item sessionStorage cart using custom cacheKey', () => {
+      cartReducer(
+        { ...initialState },
+        {
+          type: ADD_TO_CART,
+          payload: cartItem,
+          storage: 'session',
+          cacheKey: 'new-cart'
+        }
+      );
+      expect(
+        JSON.parse(window.sessionStorage.getItem('new-cart') as string)
       ).toEqual([cartItem]);
     });
   });
@@ -143,8 +168,7 @@ describe('useCart reducer', () => {
             title: 'Updated Title'
           }
         },
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -172,8 +196,7 @@ describe('useCart reducer', () => {
           },
           quantity: 10
         },
-        useLocalStorage: true,
-        useSessionStorage: false,
+        storage: 'local',
         cacheKey: 'cart'
       });
 
@@ -203,20 +226,19 @@ describe('useCart reducer', () => {
           },
           quantity: 10
         },
-        useLocalStorage: false,
-        useSessionStorage: true,
+        storage: 'session',
         cacheKey: 'cart'
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
-        [
-          {
-            ...cartItem,
-            quantity: 10,
-            product: { ...cartItem.product, title: 'Updated Title' }
-          }
-        ]
-      );
+      expect(
+        JSON.parse(window.sessionStorage.getItem('cart') as string)
+      ).toEqual([
+        {
+          ...cartItem,
+          quantity: 10,
+          product: { ...cartItem.product, title: 'Updated Title' }
+        }
+      ]);
     });
   });
 
@@ -230,8 +252,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(cartState, {
         type: REMOVE_FROM_CART,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -247,8 +268,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: REMOVE_FROM_CART,
         payload: cartItem,
-        useLocalStorage: true,
-        useSessionStorage: false,
+        storage: 'local',
         cacheKey: 'cart'
       });
 
@@ -266,8 +286,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: REMOVE_FROM_CART,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: true,
+        storage: 'session',
         cacheKey: 'cart'
       });
 
@@ -287,8 +306,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(cartState, {
         type: INCREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -306,8 +324,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: INCREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: true,
-        useSessionStorage: false,
+        storage: 'local',
         cacheKey: 'cart'
       });
 
@@ -325,8 +342,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: INCREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: true,
+        storage: 'session',
         cacheKey: 'cart'
       });
 
@@ -346,8 +362,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -363,8 +378,7 @@ describe('useCart reducer', () => {
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 
@@ -380,8 +394,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: DECREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: true,
-        useSessionStorage: false,
+        storage: 'local',
         cacheKey: 'cart'
       });
 
@@ -399,8 +412,7 @@ describe('useCart reducer', () => {
       cartReducer(cartState, {
         type: DECREMENT_ITEM,
         payload: cartItem,
-        useLocalStorage: false,
-        useSessionStorage: true,
+        storage: 'session',
         cacheKey: 'cart'
       });
 
@@ -419,8 +431,7 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: CLEAR_CART,
-        useLocalStorage: false,
-        useSessionStorage: false,
+        storage: null,
         cacheKey: 'cart'
       });
 

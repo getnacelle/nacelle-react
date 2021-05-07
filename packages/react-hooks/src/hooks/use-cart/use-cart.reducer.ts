@@ -32,8 +32,7 @@ export const CLEAR_CART = 'cart/clear';
 
 export const initialState: CartState = {
   cart: [],
-  show: false,
-  useLocalStorage: true
+  show: false
 };
 
 export interface CreateCartReducerParams {
@@ -84,8 +83,8 @@ const cartReducer = (
 
     case CLEAR_CART:
       return action.clearCart
-        ? action.clearCart(state)
-        : clearCartDefault(state);
+        ? action.clearCart(state, action)
+        : clearCartDefault(state, action);
 
     case TOGGLE_CART: {
       return action.toggleCart

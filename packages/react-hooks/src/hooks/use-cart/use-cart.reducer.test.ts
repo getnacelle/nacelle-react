@@ -21,7 +21,7 @@ describe('useCart reducer', () => {
   beforeEach(() => {
     jest.resetAllMocks();
 
-    const localStorageMock = (() => {
+    const storageMock = () => {
       let store: any = {};
       return {
         getItem: (key: string) => {
@@ -37,10 +37,14 @@ describe('useCart reducer', () => {
           delete store[key];
         }
       };
-    })();
+    };
+
+    Object.defineProperty(window, 'sessionStorage', {
+      value: storageMock()
+    });
 
     Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock
+      value: storageMock()
     });
   });
 
@@ -48,7 +52,10 @@ describe('useCart reducer', () => {
     it('should append an item to the cart', () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
       expect(result.cart).toEqual([cartItem]);
     });
@@ -56,7 +63,10 @@ describe('useCart reducer', () => {
     it(`should include a product's metafields when added to the cart`, () => {
       const result = cartReducer(initialState, {
         type: ADD_TO_CART,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
       expect(result.cart[0].product).toHaveProperty('metafields');
 
@@ -74,7 +84,10 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: ADD_TO_CART,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([{ ...cartItem, quantity: 2 }]);
@@ -85,11 +98,30 @@ describe('useCart reducer', () => {
         { ...initialState },
         {
           type: ADD_TO_CART,
-          payload: cartItem
+          payload: cartItem,
+          useLocalStorage: true,
+          useSessionStorage: false,
+          cacheKey: 'cart'
         }
       );
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([cartItem]);
+    });
+
+    it('should add to item sessionStorage cart', () => {
+      cartReducer(
+        { ...initialState },
+        {
+          type: ADD_TO_CART,
+          payload: cartItem,
+          useLocalStorage: false,
+          useSessionStorage: true,
+          cacheKey: 'cart'
+        }
+      );
+      expect(
+        JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([cartItem]);
     });
   });
@@ -110,7 +142,10 @@ describe('useCart reducer', () => {
             ...cartItem.product,
             title: 'Updated Title'
           }
-        }
+        },
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([
@@ -125,8 +160,7 @@ describe('useCart reducer', () => {
     it('should update some values of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [cartItem],
-        useLocalStorage: true
+        cart: [cartItem]
       };
       cartReducer(cartState, {
         type: UPDATE_ITEM,
@@ -137,7 +171,41 @@ describe('useCart reducer', () => {
             title: 'Updated Title'
           },
           quantity: 10
-        }
+        },
+        useLocalStorage: true,
+        useSessionStorage: false,
+        cacheKey: 'cart'
+      });
+
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [
+          {
+            ...cartItem,
+            quantity: 10,
+            product: { ...cartItem.product, title: 'Updated Title' }
+          }
+        ]
+      );
+    });
+
+    it('should update some values of an item in sessionStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+      cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: {
+          ...cartItem,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          },
+          quantity: 10
+        },
+        useLocalStorage: false,
+        useSessionStorage: true,
+        cacheKey: 'cart'
       });
 
       expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
@@ -161,7 +229,10 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: REMOVE_FROM_CART,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([]);
@@ -170,18 +241,39 @@ describe('useCart reducer', () => {
     it('should remove an item from localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [cartItem],
-        useLocalStorage: true
+        cart: [cartItem]
       };
 
       cartReducer(cartState, {
         type: REMOVE_FROM_CART,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: true,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
         []
       );
+    });
+
+    it('should remove an item from sessionStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+
+      cartReducer(cartState, {
+        type: REMOVE_FROM_CART,
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: true,
+        cacheKey: 'cart'
+      });
+
+      expect(
+        JSON.parse(window.sessionStorage.getItem('cart') as string)
+      ).toEqual([]);
     });
   });
 
@@ -194,7 +286,10 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: INCREMENT_ITEM,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([
@@ -205,17 +300,38 @@ describe('useCart reducer', () => {
     it('should increment the quantity of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [cartItem],
-        useLocalStorage: true
+        cart: [cartItem]
       };
 
       cartReducer(cartState, {
         type: INCREMENT_ITEM,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: true,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...cartItem, quantity: 2 }]);
+    });
+
+    it('should increment the quantity of an item in sessionStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+
+      cartReducer(cartState, {
+        type: INCREMENT_ITEM,
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: true,
+        cacheKey: 'cart'
+      });
+
+      expect(
+        JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([{ ...cartItem, quantity: 2 }]);
     });
   });
@@ -229,7 +345,10 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([{ ...cartItem, quantity: 1 }]);
@@ -243,7 +362,10 @@ describe('useCart reducer', () => {
 
       const result = cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([{ ...cartItem, quantity: 0 }]);
@@ -252,17 +374,38 @@ describe('useCart reducer', () => {
     it('should decrement the quantity of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...cartItem, quantity: 2 }],
-        useLocalStorage: true
+        cart: [{ ...cartItem, quantity: 2 }]
       };
 
       cartReducer(cartState, {
         type: DECREMENT_ITEM,
-        payload: cartItem
+        payload: cartItem,
+        useLocalStorage: true,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(
         JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...cartItem, quantity: 1 }]);
+    });
+
+    it('should decrement the quantity of an item in sessionStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [{ ...cartItem, quantity: 2 }]
+      };
+
+      cartReducer(cartState, {
+        type: DECREMENT_ITEM,
+        payload: cartItem,
+        useLocalStorage: false,
+        useSessionStorage: true,
+        cacheKey: 'cart'
+      });
+
+      expect(
+        JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([{ ...cartItem, quantity: 1 }]);
     });
   });
@@ -275,7 +418,10 @@ describe('useCart reducer', () => {
       };
 
       const result = cartReducer(cartState, {
-        type: CLEAR_CART
+        type: CLEAR_CART,
+        useLocalStorage: false,
+        useSessionStorage: false,
+        cacheKey: 'cart'
       });
 
       expect(result.cart).toEqual([]);

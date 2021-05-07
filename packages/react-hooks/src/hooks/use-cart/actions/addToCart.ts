@@ -13,7 +13,10 @@ const addToCart: AddToCartFunction = (
     isInCart: action.isInCart || isItemInCart
   });
 
-  setCacheItem(state.useLocalStorage)('cart', JSON.stringify(cart));
+  setCacheItem(action.useLocalStorage, action.useSessionStorage)(
+    action.cacheKey || 'cart',
+    JSON.stringify(cart)
+  );
 
   return {
     ...state,
@@ -29,5 +32,4 @@ export type AddToCartFunction = (
 ) => {
   cart: CartItem[];
   show: boolean;
-  useLocalStorage: boolean;
 };

@@ -25,7 +25,10 @@ const updateItem: UpdateItemFunction = (
     return localItem || item;
   });
 
-  setCacheItem(state.useLocalStorage)('cart', JSON.stringify(cart));
+  setCacheItem(action.useLocalStorage, action.useSessionStorage)(
+    action.cacheKey || 'cart',
+    JSON.stringify(cart)
+  );
 
   return {
     ...state,
@@ -41,5 +44,4 @@ export type UpdateItemFunction = (
 ) => {
   cart: CartItem[];
   show: boolean;
-  useLocalStorage: boolean;
 };

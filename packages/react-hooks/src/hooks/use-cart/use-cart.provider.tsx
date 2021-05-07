@@ -31,6 +31,8 @@ export type CartActionContextValue = null | CartActions;
 export type CartProviderProps = {
   children: JSX.Element | JSX.Element[];
   useLocalStorage?: boolean;
+  useSessionStorage?: boolean;
+  cacheKey?: string;
   addToCart?: AddToCartFunction;
   clearCart?: ClearCartFunction;
   decrementItem?: DecrementItemFunction;
@@ -46,7 +48,9 @@ const CartActionContext = React.createContext<CartActionContextValue>(null);
 
 export const CartProvider: FC<CartProviderProps> = ({
   children,
-  useLocalStorage = true,
+  useSessionStorage = true,
+  useLocalStorage = false,
+  cacheKey = 'cart',
   addToCart,
   clearCart,
   decrementItem,
@@ -69,25 +73,66 @@ export const CartProvider: FC<CartProviderProps> = ({
 
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,
-    cart,
-    useLocalStorage: useLocalStorage && isClient
+    cart
   });
 
   const cartActions: CartActions = useMemo(
     () => ({
       addToCart: (payload: CartItem): void =>
-        dispatch({ type: ADD_TO_CART, payload, isInCart, addToCart }),
+        dispatch({
+          type: ADD_TO_CART,
+          payload,
+          isInCart,
+          addToCart,
+          useSessionStorage,
+          useLocalStorage,
+          cacheKey
+        }),
       removeFromCart: (payload: CartItem) =>
-        dispatch({ type: REMOVE_FROM_CART, payload, removeFromCart }),
+        dispatch({
+          type: REMOVE_FROM_CART,
+          payload,
+          removeFromCart,
+          useSessionStorage,
+          useLocalStorage,
+          cacheKey
+        }),
       updateItem: (payload: CartItem) =>
-        dispatch({ type: UPDATE_ITEM, payload, updateItem }),
+        dispatch({
+          type: UPDATE_ITEM,
+          payload,
+          updateItem,
+          useSessionStorage,
+          useLocalStorage,
+          cacheKey
+        }),
       incrementItem: (payload: CartItem): void =>
-        dispatch({ type: INCREMENT_ITEM, payload, incrementItem }),
+        dispatch({
+          type: INCREMENT_ITEM,
+          payload,
+          incrementItem,
+          useSessionStorage,
+          useLocalStorage,
+          cacheKey
+        }),
       decrementItem: (payload: CartItem): void =>
-        dispatch({ type: DECREMENT_ITEM, payload, decrementItem }),
+        dispatch({
+          type: DECREMENT_ITEM,
+          payload,
+          decrementItem,
+          useSessionStorage,
+          useLocalStorage,
+          cacheKey
+        }),
       toggleCart: (payload: CartToggleStates) =>
         dispatch({ type: TOGGLE_CART, payload, toggleCart }),
-      clearCart: (): void => dispatch({ type: CLEAR_CART, clearCart })
+      clearCart: (): void =>
+        dispatch({
+          type: CLEAR_CART,
+          clearCart,
+          useSessionStorage,
+          useLocalStorage
+        })
     }),
     [
       isInCart,
@@ -97,7 +142,10 @@ export const CartProvider: FC<CartProviderProps> = ({
       incrementItem,
       decrementItem,
       toggleCart,
-      clearCart
+      clearCart,
+      useSessionStorage,
+      useLocalStorage,
+      cacheKey
     ]
   );
 

@@ -46,14 +46,32 @@ export function buildCart({
     : [...cart, { ...payload }];
 }
 
-export function setCacheItem(useLocalStorage: boolean) {
-  return useLocalStorage
-    ? window.localStorage.setItem.bind(localStorage)
-    : () => {};
+export function setCacheItem(
+  useLocalStorage: boolean,
+  useSessionStorage: boolean
+) {
+  if (useLocalStorage) {
+    return window.localStorage.setItem.bind(localStorage);
+  }
+
+  if (useSessionStorage) {
+    return window.sessionStorage.setItem.bind(sessionStorage);
+  }
+
+  return () => {};
 }
 
-export function unsetCacheItem(useLocalStorage: boolean) {
-  return useLocalStorage
-    ? window.localStorage.removeItem.bind(localStorage)
-    : () => {};
+export function unsetCacheItem(
+  useLocalStorage: boolean,
+  useSessionStorage: boolean
+) {
+  if (useLocalStorage) {
+    return window.localStorage.removeItem.bind(localStorage);
+  }
+
+  if (useSessionStorage) {
+    return window.sessionStorage.removeItem.bind(sessionStorage);
+  }
+
+  return () => {};
 }

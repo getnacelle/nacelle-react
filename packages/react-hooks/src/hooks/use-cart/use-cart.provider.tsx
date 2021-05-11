@@ -1,5 +1,6 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
-import { CartItem } from '../common/types';
+import { CartItem, AnyObject } from '../common/types';
+import { convertLegacyCartItem } from './utils';
 
 import {
   CartState,
@@ -59,7 +60,9 @@ export const CartProvider: FC<CartProviderProps> = ({
   updateItem,
   isInCart
 }) => {
-  let cart = [];
+  let cart: CartItem[] = [];
+  let unformattedCart: CartItem[] | AnyObject[];
+
   const isClient = typeof window !== 'undefined';
 
   if (isClient) {
@@ -74,7 +77,21 @@ export const CartProvider: FC<CartProviderProps> = ({
     }
 
     if (cartString) {
-      cart = JSON.parse(cartString);
+      unformattedCart = JSON.parse(cartString);
+
+      const hasLegacyCartItems = unformattedCart?.length
+        ? (unformattedCart as AnyObject[])
+            .map((i) => Boolean(i.productId))
+            .some((truthy) => truthy)
+        : false;
+
+      if (hasLegacyCartItems) {
+        cart = (unformattedCart as AnyObject[]).map((item) =>
+          convertLegacyCartItem(item)
+        );
+      } else {
+        cart = unformattedCart as CartItem[];
+      }
     }
   }
 

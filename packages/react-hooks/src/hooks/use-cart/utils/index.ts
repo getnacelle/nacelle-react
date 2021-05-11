@@ -1,5 +1,6 @@
-import { CartItem } from '../../common/types';
+import { ProductVariant, Media } from '@nacelle/types';
 
+import { CartItem, AnyObject } from '../../common/types';
 import { IsInCartFunction, StorageTypes } from '../use-cart.types';
 
 /**
@@ -64,4 +65,40 @@ export function unsetCacheItem(storage: StorageTypes | null) {
   }
 
   return () => {};
+}
+
+export function convertLegacyCartItem(legacyItem: AnyObject): CartItem {
+  const {
+    quantity,
+    productId,
+    handle,
+    image,
+    locale,
+    pimSyncSourceDomain,
+    pimSyncSourceProductId,
+    globalHandle,
+    availableForSale,
+    variants
+  } = legacyItem;
+
+  return {
+    quantity: Number.isInteger(quantity) ? (quantity as number) : 1,
+    product: {
+      id: productId as string,
+      featuredMedia: image as Media,
+      media: [image as Media],
+      handle: handle as string,
+      locale: locale as string,
+      globalHandle: globalHandle as string,
+      pimSyncSourceProductId: pimSyncSourceProductId as string,
+      pimSyncSourceDomain: pimSyncSourceDomain as string,
+      availableForSale:
+        typeof availableForSale === 'boolean' ? availableForSale : true,
+      indexedAt: 0,
+      variants: variants as ProductVariant[]
+    },
+    variant: {
+      ...(legacyItem.variant as ProductVariant)
+    }
+  };
 }

@@ -5,3 +5,7 @@ export interface CartItem {
   variant: ProductVariant;
   quantity: number;
 }
+
+export interface AnyObject {
+  [key: string]: AnyObject | string | unknown;
+}

@@ -77,11 +77,11 @@ function addFacetsToProducts(products) {
       .map((option) => ({ ...option, name: option.name.toLowerCase() }));
 
     const tagFacets = tags
-      .filter((tag) => tag.includes('filter'))
+      ?.filter((tag) => tag.includes('filter'))
       .reduce((filters, tag) => {
         const [, name, tagValues] = tag.split('_');
         const values = tagValues
-          .split('-')
+          ?.split('-')
           .map(
             (fragment) =>
               `${fragment.charAt(0).toUpperCase()}${fragment.substring(1)}`

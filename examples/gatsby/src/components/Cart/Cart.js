@@ -97,6 +97,10 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   };
 
   const removeItemFromCart = () => cartActions.removeFromCart(item);
+  const { featuredMedia: variantMedia } = item.variant;
+  const { featuredMedia: productMedia } = item.product;
+  const altText =
+    variantMedia.altText || productMedia.altText || item.product.title;
 
   return (
     <div css={styles.cartItem}>
@@ -106,8 +110,8 @@ const CartItem = ({ item, cartActions, isMobile }) => {
       >
         <Image
           styles={styles.cartItemThumbnail}
-          src={item.product.featuredMedia.thumbnailSrc}
-          alt={item.product.featuredMedia.altText || item.product.title}
+          src={variantMedia.thumbnailSrc || productMedia.thumbnailSrc}
+          alt={altText}
         />
       </Link>
 

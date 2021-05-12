@@ -70,11 +70,13 @@ function createSearchFilters(products) {
 function addFacetsToProducts(products) {
   return products.map(({ tags, variants, productType, ...product }) => {
     const variantFacets = variants
-      ?.map((variant) =>
-        variant.selectedOptions.filter((option) => option.name !== 'Title')
-      )
-      .reduce((filters, option) => filters.concat(option))
-      .map((option) => ({ ...option, name: option.name.toLowerCase() }));
+      ? variants
+          .map((variant) =>
+            variant.selectedOptions.filter((option) => option.name !== 'Title')
+          )
+          .reduce((filters, option) => filters.concat(option))
+          .map((option) => ({ ...option, name: option.name.toLowerCase() }))
+      : [];
 
     const tagFacets = tags
       ?.filter((tag) => tag.includes('filter'))

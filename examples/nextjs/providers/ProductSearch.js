@@ -79,19 +79,21 @@ function addFacetsToProducts(products) {
       : [];
 
     const tagFacets = tags
-      ?.filter((tag) => tag.includes('filter'))
-      .reduce((filters, tag) => {
-        const [, name, tagValues] = tag.split('_');
-        const values = tagValues
-          ?.split('-')
-          .map(
-            (fragment) =>
-              `${fragment.charAt(0).toUpperCase()}${fragment.substring(1)}`
-          )
-          .join(' ');
+      ? tags
+          .filter((tag) => tag.includes('filter'))
+          .reduce((filters, tag) => {
+            const [, name, tagValues] = tag.split('_');
+            const values = tagValues
+              ?.split('-')
+              .map(
+                (fragment) =>
+                  `${fragment.charAt(0).toUpperCase()}${fragment.substring(1)}`
+              )
+              .join(' ');
 
-        return [...filters, { name, value: values }];
-      }, []);
+            return [...filters, { name, value: values }];
+          }, [])
+      : [];
 
     return {
       ...product,

@@ -82,7 +82,7 @@ export const CartProvider: FC<CartProviderProps> = ({
 
       const hasLegacyCartItems = unformattedCart?.length
         ? unformattedCart
-            .map((i: any) => Boolean(i.productId))
+            .map((i: CartItem | LegacyCartItem) => 'productId' in i)
             .some((truthy) => truthy)
         : false;
 

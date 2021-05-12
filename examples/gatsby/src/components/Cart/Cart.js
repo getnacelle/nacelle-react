@@ -39,10 +39,10 @@ const Cart = () => {
         </Button>
       </header>
       <section css={styles.cartItems}>
-        {cart.map((item) => (
+        {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={item.id}
+            key={`${idx}::${item.id}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />

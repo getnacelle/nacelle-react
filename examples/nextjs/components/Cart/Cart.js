@@ -45,7 +45,7 @@ const Cart = () => {
         {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={`${item.variant.id}::${idx}`}
+            key={`${idx}::${item.variant.id}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />

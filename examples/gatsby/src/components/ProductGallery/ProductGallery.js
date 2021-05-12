@@ -12,10 +12,13 @@ const ProductGallery = ({ products }) => {
       styles={styles.grid}
     >
       {products.map(
-        (product) =>
+        (product, idx) =>
           product &&
           product.variants && (
-            <ProductCard product={product} key={product.remoteId} />
+            <ProductCard
+              product={product}
+              key={`${idx}::${product.remoteId}`}
+            />
           )
       )}
     </Grid>

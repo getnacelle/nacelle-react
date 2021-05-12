@@ -70,7 +70,7 @@ function createSearchFilters(products) {
 function addFacetsToProducts(products) {
   return products.map(({ tags, variants, productType, ...product }) => {
     const variantFacets = variants
-      .map((variant) =>
+      ?.map((variant) =>
         variant.selectedOptions.filter((option) => option.name !== 'Title')
       )
       .reduce((filters, option) => filters.concat(option))

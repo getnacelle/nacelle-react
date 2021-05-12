@@ -1,7 +1,9 @@
-import { ProductVariant, Media } from '@nacelle/types';
-
-import { CartItem, AnyObject } from '../../common/types';
-import { IsInCartFunction, StorageTypes } from '../use-cart.types';
+import { CartItem } from '../../common/types';
+import {
+  IsInCartFunction,
+  LegacyCartItem,
+  StorageTypes
+} from '../use-cart.types';
 
 /**
  * A utility function which will return true if the item is already in the cart
@@ -67,38 +69,83 @@ export function unsetCacheItem(storage: StorageTypes | null) {
   return () => {};
 }
 
-export function convertLegacyCartItem(legacyItem: AnyObject): CartItem {
+export function convertLegacyCartItem(legacyItem: LegacyCartItem): CartItem {
   const {
     quantity,
     productId,
-    handle,
     image,
-    locale,
-    pimSyncSourceDomain,
-    pimSyncSourceProductId,
-    globalHandle,
     availableForSale,
-    variants
+    createdAt,
+    description,
+    featuredMedia,
+    globalHandle,
+    handle,
+    indexedAt,
+    locale,
+    media,
+    metafields,
+    pimSyncSource,
+    pimSyncSourceDomain,
+    pimSyncSourceLocale,
+    pimSyncSourceProductId,
+    priceRange,
+    productType,
+    tags,
+    title,
+    updatedAt,
+    variants,
+    vendor,
+    compareAtPrice,
+    compareAtPriceCurrency,
+    id,
+    price,
+    priceCurrency,
+    selectedOptions,
+    sku,
+    swatchSrc,
+    weight,
+    weightUnit
   } = legacyItem;
 
   return {
     quantity: Number.isInteger(quantity) ? (quantity as number) : 1,
     product: {
-      id: productId as string,
-      featuredMedia: image as Media,
-      media: [image as Media],
-      handle: handle as string,
-      locale: locale as string,
-      globalHandle: globalHandle as string,
-      pimSyncSourceProductId: pimSyncSourceProductId as string,
-      pimSyncSourceDomain: pimSyncSourceDomain as string,
-      availableForSale:
-        typeof availableForSale === 'boolean' ? availableForSale : true,
-      indexedAt: 0,
-      variants: variants as ProductVariant[]
+      availableForSale,
+      createdAt,
+      description,
+      featuredMedia,
+      globalHandle,
+      handle,
+      id: productId,
+      indexedAt,
+      locale,
+      media,
+      metafields,
+      pimSyncSource,
+      pimSyncSourceDomain,
+      pimSyncSourceLocale,
+      pimSyncSourceProductId,
+      priceRange,
+      productType,
+      tags,
+      title,
+      updatedAt,
+      variants,
+      vendor
     },
     variant: {
-      ...(legacyItem.variant as ProductVariant)
+      ...legacyItem.variant,
+      compareAtPrice,
+      compareAtPriceCurrency,
+      featuredMedia: image,
+      id,
+      price,
+      priceCurrency,
+      selectedOptions,
+      sku,
+      swatchSrc,
+      weight,
+      weightUnit
     }
   };
 }

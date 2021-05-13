@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkout } from '@nacelle/types';
 import { MetafieldInput } from '@nacelle/types';
-import { CartItem } from '../common/types';
+import { CartItem, AnyObject } from '../common/types';
 
 /**
  * @param nacelleSpaceId: the target Nacelle Space ID (string)
@@ -12,10 +12,6 @@ export interface Credentials {
   nacelleSpaceId: string;
   nacelleGraphqlToken: string;
   nacelleEndpoint: string;
-}
-
-export interface AnyObject {
-  [key: string]: AnyObject | string | unknown;
 }
 
 export interface GraphQLRequestParams {

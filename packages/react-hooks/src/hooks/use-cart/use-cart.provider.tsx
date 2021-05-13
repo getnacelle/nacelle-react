@@ -1,5 +1,7 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
 import { CartItem } from '../common/types';
+import { LegacyCartItem } from './use-cart.types';
+import { convertLegacyCartItem } from './utils';
 
 import {
   CartState,
@@ -59,7 +61,9 @@ export const CartProvider: FC<CartProviderProps> = ({
   updateItem,
   isInCart
 }) => {
-  let cart = [];
+  let cart: CartItem[] = [];
+  let unformattedCart: CartItem[] | LegacyCartItem[];
+
   const isClient = typeof window !== 'undefined';
 
   if (isClient) {
@@ -74,7 +78,21 @@ export const CartProvider: FC<CartProviderProps> = ({
     }
 
     if (cartString) {
-      cart = JSON.parse(cartString);
+      unformattedCart = JSON.parse(cartString);
+
+      const hasLegacyCartItems = unformattedCart?.length
+        ? unformattedCart
+            .map((i: CartItem | LegacyCartItem) => 'productId' in i)
+            .some((truthy) => truthy)
+        : false;
+
+      if (hasLegacyCartItems) {
+        cart = (unformattedCart as LegacyCartItem[]).map((item) =>
+          convertLegacyCartItem(item)
+        );
+      } else {
+        cart = unformattedCart as CartItem[];
+      }
     }
   }
 

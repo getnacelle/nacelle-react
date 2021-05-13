@@ -1,6 +1,9 @@
 import { CartItem } from '../../common/types';
-
-import { IsInCartFunction, StorageTypes } from '../use-cart.types';
+import {
+  IsInCartFunction,
+  LegacyCartItem,
+  StorageTypes
+} from '../use-cart.types';
 
 /**
  * A utility function which will return true if the item is already in the cart
@@ -64,4 +67,85 @@ export function unsetCacheItem(storage: StorageTypes | null) {
   }
 
   return () => {};
+}
+
+export function convertLegacyCartItem(legacyItem: LegacyCartItem): CartItem {
+  const {
+    quantity,
+    productId,
+    image,
+    availableForSale,
+    createdAt,
+    description,
+    featuredMedia,
+    globalHandle,
+    handle,
+    indexedAt,
+    locale,
+    media,
+    metafields,
+    pimSyncSource,
+    pimSyncSourceDomain,
+    pimSyncSourceLocale,
+    pimSyncSourceProductId,
+    priceRange,
+    productType,
+    tags,
+    title,
+    updatedAt,
+    variants,
+    vendor,
+    compareAtPrice,
+    compareAtPriceCurrency,
+    id,
+    price,
+    priceCurrency,
+    selectedOptions,
+    sku,
+    swatchSrc,
+    weight,
+    weightUnit
+  } = legacyItem;
+
+  return {
+    quantity: Number.isInteger(quantity) ? (quantity as number) : 1,
+    product: {
+      availableForSale,
+      createdAt,
+      description,
+      featuredMedia,
+      globalHandle,
+      handle,
+      id: productId,
+      indexedAt,
+      locale,
+      media,
+      metafields,
+      pimSyncSource,
+      pimSyncSourceDomain,
+      pimSyncSourceLocale,
+      pimSyncSourceProductId,
+      priceRange,
+      productType,
+      tags,
+      title,
+      updatedAt,
+      variants,
+      vendor
+    },
+    variant: {
+      ...legacyItem.variant,
+      compareAtPrice,
+      compareAtPriceCurrency,
+      featuredMedia: image,
+      id,
+      price,
+      priceCurrency,
+      selectedOptions,
+      sku,
+      swatchSrc,
+      weight,
+      weightUnit
+    }
+  };
 }

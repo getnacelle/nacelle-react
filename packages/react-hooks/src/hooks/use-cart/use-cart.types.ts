@@ -1,3 +1,7 @@
+import {
+  NacelleShopProduct,
+  CartItem as NacelleCartItem
+} from '@nacelle/types';
 import { CartItem } from '../common/types';
 import { AddToCartFunction } from './actions/addToCart';
 import { ClearCartFunction } from './actions/clearCart';
@@ -108,6 +112,8 @@ const storageTypes = {
 export type StorageTypes =
   | typeof storageTypes[keyof typeof storageTypes]
   | null;
+
+export type LegacyCartItem = NacelleShopProduct & NacelleCartItem;
 
 export type { AddToCartFunction } from './actions/addToCart';
 export type { ClearCartFunction } from './actions/clearCart';

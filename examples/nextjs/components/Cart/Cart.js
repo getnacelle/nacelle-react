@@ -45,7 +45,7 @@ const Cart = () => {
         {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={`${item.variant.id}::${idx}`}
+            key={`${idx}::${item.variant.id}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />
@@ -100,13 +100,18 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   };
 
   const removeItemFromCart = () => cartActions.removeFromCart(item);
+  const { featuredMedia: variantMedia } = item.variant;
+  const { featuredMedia: productMedia } = item.product;
+  const altText =
+    variantMedia.altText || productMedia.altText || item.product.title;
 
   return (
     <div css={styles.cartItem}>
       <Link href={`/products/${item.product.handle}`}>
         <a css={[styles.thumbnailContainer, isMobile && { paddingLeft: 0 }]}>
           <Image
-            src={item.product.featuredMedia.thumbnailSrc}
+            src={variantMedia.thumbnailSrc || productMedia.thumbnailSrc}
+            alt={altText}
             width="100"
             height="70"
             css={styles.cartItemThumbnail}

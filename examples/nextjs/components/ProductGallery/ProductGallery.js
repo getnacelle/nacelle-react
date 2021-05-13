@@ -11,10 +11,10 @@ const ProductGallery = ({ products }) => {
       columns="repeat(auto-fit, minmax(20em, 1fr))"
       styles={styles.grid}
     >
-      {products.map((product) => (
+      {products.map((product, idx) => (
         <ProductCard
           product={product}
-          key={product.id}
+          key={`${idx}::${product.remoteId}`}
           width={320}
           height={240}
         />

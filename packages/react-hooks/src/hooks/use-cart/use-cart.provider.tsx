@@ -116,6 +116,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: REMOVE_FROM_CART,
           payload,
+          isInCart,
           removeFromCart,
           storage,
           cacheKey
@@ -124,6 +125,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: UPDATE_ITEM,
           payload,
+          isInCart,
           updateItem,
           storage,
           cacheKey
@@ -132,6 +134,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: INCREMENT_ITEM,
           payload,
+          isInCart,
           incrementItem,
           storage,
           cacheKey
@@ -140,6 +143,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: DECREMENT_ITEM,
           payload,
+          isInCart,
           decrementItem,
           storage,
           cacheKey

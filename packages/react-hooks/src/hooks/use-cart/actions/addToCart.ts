@@ -7,10 +7,11 @@ const addToCart: AddToCartFunction = (
   state: CartState,
   action: AddToCartAction
 ) => {
+  const isInCart = action.isInCart || isItemInCart;
   const cart: CartItem[] = buildCart({
     cart: state.cart,
     payload: action.payload,
-    isInCart: action.isInCart || isItemInCart
+    isInCart
   });
 
   setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));

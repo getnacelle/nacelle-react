@@ -49,6 +49,7 @@ export type UpdateItemAction = {
   storage: StorageTypes;
   cacheKey: string;
   updateItem?: UpdateItemFunction;
+  isInCart?: IsInCartFunction;
 };
 
 export type IncrementItemAction = {
@@ -57,6 +58,7 @@ export type IncrementItemAction = {
   storage: StorageTypes;
   cacheKey: string;
   incrementItem?: IncrementItemFunction;
+  isInCart?: IsInCartFunction;
 };
 
 export type DecrementItemAction = {
@@ -65,6 +67,7 @@ export type DecrementItemAction = {
   storage: StorageTypes;
   cacheKey: string;
   decrementItem?: DecrementItemFunction;
+  isInCart?: IsInCartFunction;
 };
 
 export type RemoveFromCartAction = {
@@ -73,6 +76,7 @@ export type RemoveFromCartAction = {
   storage: StorageTypes;
   cacheKey: string;
   removeFromCart?: RemoveFromCartFunction;
+  isInCart?: IsInCartFunction;
 };
 
 export type ToggleVisibilityAction = {

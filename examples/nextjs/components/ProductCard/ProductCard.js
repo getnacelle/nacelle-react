@@ -31,6 +31,7 @@ const ProductCard = ({
   width,
   children
 }) => {
+  const [engraving, setEngraving] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [, { addToCart, toggleCart }] = useCart();
   const device = useDetectDevice();
@@ -43,7 +44,14 @@ const ProductCard = ({
   );
 
   const addItemToCart = () => {
-    const item = { product, variant: productVariant, quantity };
+    const variant = {
+      ...productVariant,
+      metafields: [
+        ...productVariant.metafields,
+        { key: 'engrave', value: engraving }
+      ]
+    };
+    const item = { product, variant, quantity };
     const stay = 'open';
 
     addToCart(item);
@@ -83,6 +91,7 @@ const ProductCard = ({
               <p css={styles.productDesc}>{stripHtml(product.description)}</p>
             )}
             <Grid columns={2} styles={!showDescription && { marginTop: 16 }}>
+              <input onChange={(e) => setEngraving(e.target.value)} />
               <ItemQuantity
                 quantity={quantity}
                 incrementFn={incrementQty}

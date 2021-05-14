@@ -116,6 +116,7 @@ const CartItem = ({ item, cartActions, isMobile }) => {
             height="70"
             css={styles.cartItemThumbnail}
           />
+          <div>{item.variant?.metafields[0]?.value}</div>
         </a>
       </Link>
 
@@ -153,8 +154,8 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 };
 
 function calculateSubTotal(cart) {
-  const cartLocale = cart.length ? cart[0].product.locale : 'en-us';
-  const cartCurrency = cart.length ? cart[0].variant.priceCurrency : 'USD';
+  const cartLocale = cart.length ? cart[0].product?.locale : 'en-us';
+  const cartCurrency = cart.length ? cart[0].variant?.priceCurrency : 'USD';
   const formatPrice = formatCurrency(cartLocale, cartCurrency);
 
   const total = cart.reduce((subTotal, item) => {

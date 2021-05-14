@@ -15,9 +15,44 @@ const checkoutCredentials = {
   nacelleEndpoint: process.env.NACELLE_ENDPOINT
 };
 
+function extractEngraveTextFromMetafields(metafields) {
+  const metafield = metafields.find((m) => m.key === 'engrave');
+
+  if (!metafield) {
+    return null;
+  } else {
+    return metafield.value;
+  }
+}
+
+function isInCart(cart, payload) {
+  const idx = cart.findIndex((item) => item.variant.id === payload.variant.id);
+  console.log(`IDX: ${idx}`);
+  const itemIdInCart = idx > -1;
+  console.log(`ITEM_ID_IN_CART: ${itemIdInCart}`);
+
+  if (!itemIdInCart) {
+    return false;
+  }
+
+  const payloadEngraveText = extractEngraveTextFromMetafields(
+    payload.variant.metafields
+  );
+  console.log(`PAYLOAD_ENGRAVE_TEXT: ${payloadEngraveText}`);
+  const itemInCartEngraveText = extractEngraveTextFromMetafields(
+    cart[idx].variant.metafields
+  );
+  console.log(`ITEM_IN_CART_ENGRAVE_TEXT: ${itemInCartEngraveText}`);
+
+  console.log(
+    `IS_IN_CART? ${payloadEngraveText === itemInCartEngraveText}\n\n`
+  );
+  return payloadEngraveText === itemInCartEngraveText;
+}
+
 function MyApp({ Component, pageProps, space, products }) {
   return (
-    <CartProvider>
+    <CartProvider isInCart={isInCart}>
       <CheckoutProvider credentials={checkoutCredentials}>
         <Global styles={styles.global} />
         <ProductSearchProvider products={products}>

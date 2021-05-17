@@ -23,32 +23,6 @@ export interface BuildCartParams {
   isInCart: IsInCartFunction;
 }
 
-/**
- * A utility function to build the cart with a new added item
- *
- * @param cart the current cart state
- * @param payload a Shopify item
- *
- * @returns a cart object containing the new added product
- */
-export function buildCart({
-  cart,
-  payload,
-  isInCart
-}: BuildCartParams): CartItem[] {
-  return isInCart(cart, payload)
-    ? cart.map((item) => {
-        const payloadId = payload.variant?.id;
-
-        if (item.variant.id !== payloadId) {
-          return item;
-        }
-
-        return { ...item, quantity: item.quantity + (payload.quantity || 1) };
-      })
-    : [...cart, { ...payload }];
-}
-
 export function setCacheItem(storage: StorageTypes | null) {
   if (storage === 'local') {
     return window.localStorage.setItem.bind(localStorage);

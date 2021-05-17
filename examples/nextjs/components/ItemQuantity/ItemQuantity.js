@@ -15,11 +15,7 @@ const ItemQuantity = ({
         <Button styles={styles.counterSwitch} onClick={incrementFn}>
           +
         </Button>
-        <Button
-          styles={styles.counterSwitch}
-          onClick={decrementFn}
-          disabled={quantity === 1}
-        >
+        <Button styles={styles.counterSwitch} onClick={decrementFn}>
           -
         </Button>
       </div>

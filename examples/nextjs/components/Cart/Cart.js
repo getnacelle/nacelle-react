@@ -89,14 +89,11 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   };
 
   const decrementQty = () => {
-    if (itemQuantity < 2) {
+    if (itemQuantity < 1) {
       return null;
     }
 
-    const qty = itemQuantity > 2 ? itemQuantity - 1 : 1;
-
     cartActions.decrementItem(item);
-    return updateQuantity(qty);
   };
 
   const removeItemFromCart = () => cartActions.removeFromCart(item);

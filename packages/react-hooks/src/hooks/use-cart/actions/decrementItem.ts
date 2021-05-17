@@ -10,18 +10,20 @@ const decrementItem: DecrementItemFunction = (
   state: CartState,
   action: DecrementItemAction
 ) => {
-  const cart: CartItem[] = state.cart.map((item) => {
-    const isInCart = action.isInCart || isItemInCart;
+  const cart: CartItem[] = state.cart
+    .map((item) => {
+      const isInCart = action.isInCart || isItemInCart;
 
-    if (isInCart([item], action.payload)) {
-      return {
-        ...item,
-        quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
-      };
-    }
+      if (isInCart([item], action.payload)) {
+        return {
+          ...item,
+          quantity: item.quantity - 1
+        };
+      }
 
-    return item;
-  });
+      return item;
+    })
+    .filter((item) => item.quantity);
 
   setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));
 

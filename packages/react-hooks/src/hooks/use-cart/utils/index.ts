@@ -1,9 +1,5 @@
 import { CartItem } from '../../common/types';
-import {
-  IsInCartFunction,
-  LegacyCartItem,
-  StorageTypes
-} from '../use-cart.types';
+import { LegacyCartItem, StorageTypes } from '../use-cart.types';
 
 /**
  * A utility function which will return true if the item is already in the cart
@@ -15,12 +11,6 @@ import {
  */
 export function isItemInCart(cart: CartItem[], payload: CartItem): boolean {
   return cart.findIndex((item) => item.variant.id === payload.variant?.id) > -1;
-}
-
-export interface BuildCartParams {
-  cart: CartItem[];
-  payload: CartItem;
-  isInCart: IsInCartFunction;
 }
 
 export function setCacheItem(storage: StorageTypes | null) {

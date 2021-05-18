@@ -1,6 +1,6 @@
 import { CartItem } from '../../common/types';
 
-import { setCacheItem } from '~/hooks/use-cart/utils';
+import { isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
 import {
   CartState,
   RemoveFromCartAction
@@ -10,10 +10,10 @@ const removeFromCart: RemoveFromCartFunction = (
   state: CartState,
   action: RemoveFromCartAction
 ) => {
-  const payloadId = action.payload.variant?.id;
+  const isInCart = action.isInCart || isItemInCart;
 
   const cart: CartItem[] = state.cart.filter(
-    (item) => item.variant.id !== payloadId
+    (item) => !isInCart([item], action.payload)
   );
 
   setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));

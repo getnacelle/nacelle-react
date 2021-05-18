@@ -1,6 +1,6 @@
 import { CartItem } from '../../common/types';
 
-import { setCacheItem } from '~/hooks/use-cart/utils';
+import { isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
 import {
   CartState,
   DecrementItemAction
@@ -10,18 +10,20 @@ const decrementItem: DecrementItemFunction = (
   state: CartState,
   action: DecrementItemAction
 ) => {
-  const cart: CartItem[] = state.cart.map((item) => {
-    const payloadId = action.payload.variant.id;
+  const cart: CartItem[] = state.cart
+    .map((item) => {
+      const isInCart = action.isInCart || isItemInCart;
 
-    if (item.variant.id === payloadId) {
-      return {
-        ...item,
-        quantity: item.quantity >= 1 ? item.quantity - 1 : item.quantity
-      };
-    }
+      if (isInCart([item], action.payload)) {
+        return {
+          ...item,
+          quantity: item.quantity - 1
+        };
+      }
 
-    return item;
-  });
+      return item;
+    })
+    .filter((item) => item.quantity);
 
   setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));
 

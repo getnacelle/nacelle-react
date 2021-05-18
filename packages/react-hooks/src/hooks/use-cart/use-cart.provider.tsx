@@ -1,21 +1,21 @@
 import React, { useReducer, useMemo, useContext, FC } from 'react';
 import { CartItem } from '../common/types';
-import { LegacyCartItem } from './use-cart.types';
-import { convertLegacyCartItem } from './utils';
+import { convertLegacyCartItem, isItemInCart } from './utils';
 
 import {
-  CartState,
-  CartActions,
-  CartToggleStates,
   AddToCartFunction,
+  CartActions,
+  CartState,
+  CartToggleStates,
   ClearCartFunction,
   DecrementItemFunction,
   IncrementItemFunction,
-  RemoveFromCartFunction,
-  ToggleCartFunction,
-  UpdateItemFunction,
   IsInCartFunction,
-  StorageTypes
+  LegacyCartItem,
+  RemoveFromCartFunction,
+  StorageTypes,
+  ToggleCartFunction,
+  UpdateItemFunction
 } from './use-cart.types';
 
 import cartReducer, {
@@ -47,6 +47,7 @@ export type CartProviderProps = {
 
 const CartContext = React.createContext<CartContextValue>(null);
 const CartActionContext = React.createContext<CartActionContextValue>(null);
+const IsInCartContext = React.createContext<IsInCartFunction>(isItemInCart);
 
 export const CartProvider: FC<CartProviderProps> = ({
   children,
@@ -116,6 +117,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: REMOVE_FROM_CART,
           payload,
+          isInCart,
           removeFromCart,
           storage,
           cacheKey
@@ -124,6 +126,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: UPDATE_ITEM,
           payload,
+          isInCart,
           updateItem,
           storage,
           cacheKey
@@ -132,6 +135,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: INCREMENT_ITEM,
           payload,
+          isInCart,
           incrementItem,
           storage,
           cacheKey
@@ -140,6 +144,7 @@ export const CartProvider: FC<CartProviderProps> = ({
         dispatch({
           type: DECREMENT_ITEM,
           payload,
+          isInCart,
           decrementItem,
           storage,
           cacheKey
@@ -170,7 +175,9 @@ export const CartProvider: FC<CartProviderProps> = ({
   return (
     <CartContext.Provider value={state}>
       <CartActionContext.Provider value={cartActions}>
-        {children}
+        <IsInCartContext.Provider value={isInCart || isItemInCart}>
+          {children}
+        </IsInCartContext.Provider>
       </CartActionContext.Provider>
     </CartContext.Provider>
   );
@@ -182,8 +189,7 @@ export const CartProvider: FC<CartProviderProps> = ({
  * @returns an object with the cart's current state
  */
 export function useCartState(): CartState | null {
-  const context = useContext(CartContext);
-  return context;
+  return useContext(CartContext);
 }
 
 /**
@@ -200,6 +206,14 @@ export function useCartState(): CartState | null {
  * clearCart() - removes all items from the cart
  */
 export function useCartActions(): CartActions | null {
-  const context = useContext(CartActionContext);
-  return context;
+  return useContext(CartActionContext);
+}
+
+/**
+ * Provides access to the active isInCart function
+ *
+ * @returns a function which determines whether a line item is already in the cart
+ */
+export function useIsInCart(): IsInCartFunction {
+  return useContext(IsInCartContext);
 }

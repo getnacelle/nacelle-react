@@ -1,6 +1,6 @@
 import { CartItem } from '../../common/types';
 
-import { setCacheItem } from '~/hooks/use-cart/utils';
+import { isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
 import {
   CartState,
   IncrementItemAction
@@ -11,9 +11,9 @@ const incrementItem: IncrementItemFunction = (
   action: IncrementItemAction
 ) => {
   const cart: CartItem[] = state.cart.map((item) => {
-    const payloadId = action.payload.variant.id;
+    const isInCart = action.isInCart || isItemInCart;
 
-    if (item.variant.id === payloadId) {
+    if (isInCart([item], action.payload)) {
       return { ...item, quantity: item.quantity + 1 };
     }
 

@@ -1,6 +1,6 @@
 import { CartItem } from '../../common/types';
 
-import { setCacheItem } from '~/hooks/use-cart/utils';
+import { isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
 import { CartState, UpdateItemAction } from '~/hooks/use-cart/use-cart.types';
 
 const updateItem: UpdateItemFunction = (
@@ -8,10 +8,10 @@ const updateItem: UpdateItemFunction = (
   action: UpdateItemAction
 ) => {
   const cart: CartItem[] = state.cart.map((item) => {
-    const payloadId = action.payload.variant?.id;
+    const isInCart = action.isInCart || isItemInCart;
     let localItem: any = null;
 
-    if (item.variant.id === payloadId) {
+    if (isInCart(state.cart, action.payload)) {
       localItem = { ...item };
       Object.keys(item).forEach((key) => {
         const value = (action.payload as any)[key];

@@ -369,10 +369,10 @@ describe('useCart reducer', () => {
       expect(result.cart).toEqual([{ ...cartItem, quantity: 1 }]);
     });
 
-    it('should not decrement the quantity below 0', () => {
+    it('should remove an item from the cart when its quantity is decremented to 0', () => {
       const cartState = {
         ...initialState,
-        cart: [{ ...cartItem, quantity: 0 }]
+        cart: [{ ...cartItem, quantity: 1 }]
       };
 
       const result = cartReducer(cartState, {
@@ -382,7 +382,7 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(result.cart).toEqual([{ ...cartItem, quantity: 0 }]);
+      expect(result.cart).toEqual([]);
     });
 
     it('should decrement the quantity of an item in localStorage cart', () => {

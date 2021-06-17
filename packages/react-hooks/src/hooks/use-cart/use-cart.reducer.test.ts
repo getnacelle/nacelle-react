@@ -100,9 +100,9 @@ describe('useCart reducer', () => {
           cacheKey: 'cart'
         }
       );
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([cartItem]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [cartItem]
+      );
     });
 
     it('should add to item sessionStorage cart', () => {
@@ -181,6 +181,36 @@ describe('useCart reducer', () => {
       ]);
     });
 
+    it('should update only the values of the target item in the cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem, { ...cartItem, variant: { id: '2' } }]
+      };
+
+      const result = cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: {
+          ...cartItem,
+          quantity: 10,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          }
+        },
+        storage: null,
+        cacheKey: 'cart'
+      });
+
+      expect(result.cart).toEqual([
+        {
+          ...cartItem,
+          quantity: 10,
+          product: { ...cartItem.product, title: 'Updated Title' }
+        },
+        { ...cartItem, variant: { id: '2' } }
+      ]);
+    });
+
     it('should update some values of an item in localStorage cart', () => {
       const cartState = {
         ...initialState,
@@ -207,6 +237,37 @@ describe('useCart reducer', () => {
             quantity: 10,
             product: { ...cartItem.product, title: 'Updated Title' }
           }
+        ]
+      );
+    });
+
+    it('should update only the values of the target item in localStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem, { ...cartItem, variant: { id: '2' } }]
+      };
+      cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: {
+          ...cartItem,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          },
+          quantity: 10
+        },
+        storage: 'local',
+        cacheKey: 'cart'
+      });
+
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [
+          {
+            ...cartItem,
+            quantity: 10,
+            product: { ...cartItem.product, title: 'Updated Title' }
+          },
+          { ...cartItem, variant: { id: '2' } }
         ]
       );
     });
@@ -328,9 +389,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...cartItem, quantity: 2 }]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [{ ...cartItem, quantity: 2 }]
+      );
     });
 
     it('should increment the quantity of an item in sessionStorage cart', () => {
@@ -398,9 +459,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...cartItem, quantity: 1 }]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [{ ...cartItem, quantity: 1 }]
+      );
     });
 
     it('should decrement the quantity of an item in sessionStorage cart', () => {

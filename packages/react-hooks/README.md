@@ -184,7 +184,7 @@ An array containing:
     - `'closed'` - if `cartState.show` was `false`, it will remain `false`; if `cartState.show` was `true`, it will change to `false`
 - `clearCart()` - removes all items from the cart
 
-3. `isInCart` - a helper function that determines if a line item is in the cart, via `isInCart(cart, item)`. If a custom `isInCart` function is given to the `<CartProvider />` via the `isInCart` prop, the custom function will be returned instead of the default `isInCart` function.
+3. `isInCart` - a helper function that determines if a line item is in the cart, via `isInCart(cart, item)`. If a custom `isSameItem` function is given to the `<CartProvider />` via the `isSameItem` prop, the custom function will be used by the `isInCart` function.
 
 ##### Example Usage
 

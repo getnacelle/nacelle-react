@@ -16,7 +16,12 @@ export type CartState = {
   show: boolean;
 };
 
-export type IsInCartFunction = (cart: CartItem[], payload: CartItem) => boolean;
+export type IsSameItemFunction = (itemA: CartItem, itemB?: CartItem) => boolean;
+export type IsInCartFunction = (
+  cart: CartItem[],
+  payload: CartItem,
+  itemCompareFunction?: IsSameItemFunction
+) => boolean;
 
 export interface BuildCartParams {
   cart: CartItem[];
@@ -50,6 +55,7 @@ export type UpdateItemAction = {
   cacheKey: string;
   updateItem?: UpdateItemFunction;
   isInCart?: IsInCartFunction;
+  isSameItem?: IsSameItemFunction;
 };
 
 export type IncrementItemAction = {
@@ -106,7 +112,8 @@ const cartToggleStates = {
   closed: 'closed'
 } as const;
 
-export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];
+export type CartToggleStates =
+  typeof cartToggleStates[keyof typeof cartToggleStates];
 
 const storageTypes = {
   session: 'session',

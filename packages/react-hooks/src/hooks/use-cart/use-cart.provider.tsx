@@ -1,4 +1,4 @@
-import React, { useReducer, useMemo, useContext, FC } from 'react';
+import React, { useReducer, useMemo, useContext, FC, useCallback } from 'react';
 import { CartItem } from '../common/types';
 import { convertLegacyCartItem, isItemInCart } from './utils';
 
@@ -11,6 +11,7 @@ import {
   DecrementItemFunction,
   IncrementItemFunction,
   IsInCartFunction,
+  IsSameItemFunction,
   LegacyCartItem,
   RemoveFromCartFunction,
   StorageTypes,
@@ -42,7 +43,7 @@ export type CartProviderProps = {
   removeFromCart?: RemoveFromCartFunction;
   toggleCart?: ToggleCartFunction;
   updateItem?: UpdateItemFunction;
-  isInCart?: IsInCartFunction;
+  isSameItem?: IsSameItemFunction;
 };
 
 const CartContext = React.createContext<CartContextValue>(null);
@@ -60,7 +61,7 @@ export const CartProvider: FC<CartProviderProps> = ({
   removeFromCart,
   toggleCart,
   updateItem,
-  isInCart
+  isSameItem
 }) => {
   let cart: CartItem[] = [];
   let unformattedCart: CartItem[] | LegacyCartItem[];
@@ -101,6 +102,13 @@ export const CartProvider: FC<CartProviderProps> = ({
     ...initialState,
     cart
   });
+
+  const isInCart: IsInCartFunction = useCallback(
+    (cart: CartItem[], item: CartItem): boolean => {
+      return isItemInCart(cart, item, isSameItem);
+    },
+    [isSameItem]
+  );
 
   const cartActions: CartActions = useMemo(
     () => ({
@@ -175,7 +183,7 @@ export const CartProvider: FC<CartProviderProps> = ({
   return (
     <CartContext.Provider value={state}>
       <CartActionContext.Provider value={cartActions}>
-        <IsInCartContext.Provider value={isInCart || isItemInCart}>
+        <IsInCartContext.Provider value={isItemInCart}>
           {children}
         </IsInCartContext.Provider>
       </CartActionContext.Provider>

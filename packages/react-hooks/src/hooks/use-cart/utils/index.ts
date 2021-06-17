@@ -1,5 +1,21 @@
 import { CartItem } from '../../common/types';
-import { LegacyCartItem, StorageTypes } from '../use-cart.types';
+import {
+  IsSameItemFunction,
+  LegacyCartItem,
+  StorageTypes
+} from '../use-cart.types';
+
+/**
+ * A utility method which will return true if the the two provided items are
+ * the same item
+ * @param itemA a CartItem
+ * @param itemB a CartItem
+ *
+ * @returns a boolean indicating if the two items are the same
+ */
+export function isSameItem(itemA: CartItem, itemB?: CartItem): boolean {
+  return itemA.variant.id === itemB?.variant?.id;
+}
 
 /**
  * A utility function which will return true if the item is already in the cart
@@ -9,8 +25,13 @@ import { LegacyCartItem, StorageTypes } from '../use-cart.types';
  *
  * @returns a boolean indiciating if the item is already in the cart
  */
-export function isItemInCart(cart: CartItem[], payload: CartItem): boolean {
-  return cart.findIndex((item) => item.variant.id === payload.variant?.id) > -1;
+export function isItemInCart(
+  cart: CartItem[],
+  payload: CartItem,
+  itemCompareFunction?: IsSameItemFunction
+): boolean {
+  const compare = itemCompareFunction || isSameItem;
+  return cart.findIndex((item) => compare(item, payload)) > -1;
 }
 
 export function setCacheItem(storage: StorageTypes | null) {

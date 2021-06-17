@@ -1,17 +1,27 @@
 import { CartItem } from '../../common/types';
 
-import { isItemInCart, setCacheItem } from '~/hooks/use-cart/utils';
+import {
+  setCacheItem,
+  isItemInCart,
+  isSameItem as isSameItemDefault
+} from '~/hooks/use-cart/utils';
 import { CartState, UpdateItemAction } from '~/hooks/use-cart/use-cart.types';
 
 const updateItem: UpdateItemFunction = (
   state: CartState,
   action: UpdateItemAction
 ) => {
-  const cart: CartItem[] = state.cart.map((item) => {
-    const isInCart = action.isInCart || isItemInCart;
-    let localItem: any = null;
+  const isInCart = action.isInCart || isItemInCart;
 
-    if (isInCart(state.cart, action.payload)) {
+  if (!isInCart(state.cart, action.payload)) {
+    return state;
+  }
+
+  const cart: CartItem[] = state.cart.map((item) => {
+    let localItem: any = null;
+    const isSameItem = action.isSameItem || isSameItemDefault;
+
+    if (isSameItem(item, action.payload)) {
       localItem = { ...item };
       Object.keys(item).forEach((key) => {
         const value = (action.payload as any)[key];

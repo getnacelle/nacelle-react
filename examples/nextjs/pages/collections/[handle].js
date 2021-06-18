@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { useRouter } from 'next/router';
 
-import $nacelle from 'services/nacelle.js';
+import { nacelleClient } from 'services';
 import { dataToPaths } from 'utils';
 import ContentSections from 'components/ContentSections';
 import ProductGallery from 'components/ProductGallery';
@@ -27,7 +27,7 @@ export default Collection;
 
 export async function getStaticPaths() {
   try {
-    const collections = await $nacelle.data.allCollections();
+    const collections = await nacelleClient.data.allCollections();
     const paths = dataToPaths({ data: collections });
 
     return {
@@ -40,7 +40,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { handle }, preview }) {
-  const collection = await $nacelle.data
+  const collection = await nacelleClient.data
     .collection({ handle, preview })
     .catch(() => {
       console.warn(`no collection with handle '${handle}' found.`);
@@ -55,14 +55,14 @@ export async function getStaticProps({ params: { handle }, preview }) {
 
   const handles = defaultProductList?.handles;
 
-  const products = await $nacelle.data
+  const products = await nacelleClient.data
     .products({ handles, preview })
     .catch(() => {
       console.warn(`no products found for collection '${handle}'.`);
       return [];
     });
 
-  const page = await $nacelle.data.page({ handle, preview }).catch(() => {
+  const page = await nacelleClient.data.page({ handle, preview }).catch(() => {
     console.warn(`no page with handle '${handle}' found.`);
     return null;
   });

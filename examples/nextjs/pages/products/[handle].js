@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-import $nacelle from 'services/nacelle';
+import { nacelleClient } from 'services';
 import { dataToPaths } from 'utils';
 import ProductCard from 'components/ProductCard';
 import * as styles from 'styles/pages.styles';
@@ -65,7 +65,7 @@ export default ProductDetail;
 
 export async function getStaticPaths() {
   try {
-    const products = await $nacelle.data.allProducts();
+    const products = await nacelleClient.data.allProducts();
     const paths = dataToPaths({ data: products });
 
     return {
@@ -78,10 +78,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { handle }, preview }) {
-  const product = await $nacelle.data.product({ handle, preview }).catch(() => {
-    console.warn(`no product with handle '${handle}' found.`);
-    return null;
-  });
+  const product = await nacelleClient.data
+    .product({ handle, preview })
+    .catch(() => {
+      console.warn(`no product with handle '${handle}' found.`);
+      return null;
+    });
 
   return {
     props: { product },

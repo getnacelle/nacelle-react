@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import $nacelle from 'services/nacelle.js';
+import { nacelleClient } from 'services';
 import { dataToPaths } from 'utils';
 
 const Blog = ({ articles }) => {
@@ -19,7 +19,7 @@ export default Blog;
 
 export async function getStaticPaths() {
   try {
-    const allContent = await $nacelle.data.allContent();
+    const allContent = await nacelleClient.data.allContent();
     const articles = allContent.filter((entry) => entry.type === 'article');
     const paths = dataToPaths({
       data: articles,
@@ -36,7 +36,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { handle, blogHandle } }) {
-  const articles = await $nacelle.data
+  const articles = await nacelleClient.data
     .article({
       handle,
       blogHandle

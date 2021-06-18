@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import $nacelle from 'services/nacelle.js';
+import { nacelleClient } from 'services';
 import { dataToPaths } from 'utils';
 
 const Page = ({ page }) => {
@@ -19,7 +19,7 @@ export default Page;
 
 export async function getStaticPaths() {
   try {
-    const allContent = await $nacelle.data.allContent();
+    const allContent = await nacelleClient.data.allContent();
     const pages = allContent.filter((entry) => entry.type === 'page');
     const paths = dataToPaths({ data: pages });
 
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { handle }, preview }) {
-  const page = await $nacelle.data.page({ handle, preview }).catch(() => {
+  const page = await nacelleClient.data.page({ handle, preview }).catch(() => {
     console.warn(`no page with handle '${handle}' found.`);
     return null;
   });

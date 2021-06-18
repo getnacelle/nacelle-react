@@ -1,0 +1,19 @@
+{
+  // Run formatter when you save code changes
+  "editor.formatOnSave": true,
+  // show eslint icon at bottom toolbar
+  "eslint.alwaysShowStatus": true,
+  // Disable default formatting (ESLint formatting will be used instead)
+  "[javascript]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnSave": false
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnSave": false
+  },
+  // Auto-fix issues with ESLint when you save code changes
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

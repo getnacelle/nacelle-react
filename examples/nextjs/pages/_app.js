@@ -10,9 +10,9 @@ import { ProductSearchProvider } from 'providers/ProductSearch';
 import * as styles from 'styles/global.styles';
 
 const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
+  nacelleSpaceId: process.env.NEXT_PUBLIC_NACELLE_SPACE_ID,
+  nacelleGraphqlToken: process.env.NEXT_PUBLIC_NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.NEXT_PUBLIC_NACELLE_ENDPOINT
 };
 
 function MyApp({ Component, pageProps, space, products }) {

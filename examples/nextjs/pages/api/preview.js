@@ -3,11 +3,12 @@
 //
 // For example: `/api/preview?secret=my-preview-mode-secret&path=/pages/first-draft`
 
-import nacelleClient from 'services/nacelle';
+import { getPathFromData, handleRedirect } from 'utils/preview';
 
 export default async function handler(req, res) {
-  const previewModeSecret = 'my-preview-mode-secret'; // IMPORTANT! Update this value.
+  const previewModeSecret = process.env.PREVIEW_MODE_SECRET;
   const { secret, path = '/' } = req.query;
+  const locale = req.query.locale?.toLowerCase() || 'en-us';
 
   if (!secret) {
     return res.status(400).json({
@@ -25,79 +26,40 @@ export default async function handler(req, res) {
     });
   }
 
-  if (path === '/') {
-    // Set cookies to enable Preview Mode
-    res.setPreviewData({});
-    console.info('[nacelle] preview mode enabled');
-    res.redirect('/');
-  }
-
-  // Redirecting to req.query.path might lead to open redirect vulnerabilities.
-  // Instead, we'll use the handle from the provided path to fetch data with
-  // the Nacelle Client JS SDK. If a result is found, we'll redirect to the
-  // path associated with the data fetched with the Nacelle Client JS SDK.
-
-  async function getPathFromIndexedData({ path, locale = 'en-us', method }) {
-    const [, pathPrefix, handle] = path.split('/');
-    const data = await nacelleClient.data[method]({ handle, locale }).catch(
-      (err) => {
-        console.warn(err);
-        return null;
-      }
-    );
-    const newPath = data?.handle ? `/${pathPrefix}/${data.handle}` : null;
-    return { newPath, handle };
-  }
-
-  function handleRedirect({ res, newPath, handle, method }) {
-    // Redirect to the path from the fetched data
-    if (newPath) {
-      // Set cookies to enable Preview Mode
-      res.setPreviewData({});
-      console.info('[nacelle] preview mode enabled');
-      res.redirect(newPath);
-    } else {
-      return res.status(400).json({
-        message:
-          'Cannot enable preview mode. ' +
-          `No ${method} found with handle: '${handle}'`
-      });
-    }
-  }
-
+  // Configure data fetching & redirect for a variety of paths.
+  // This section can be customized to meet unique use cases.
   if (path.startsWith('/products/')) {
     const method = 'product';
-    const { newPath, handle } = await getPathFromIndexedData({ path, method });
-    handleRedirect({ res, newPath, handle, method });
-  }
+    const { newPath, handle } = await getPathFromData({ path, method, locale });
 
-  if (path.startsWith('/collections/')) {
+    handleRedirect({ res, newPath, method, handle, locale });
+  } else if (path.startsWith('/collections/')) {
     const method = 'collection';
-    const { newPath, handle } = await getPathFromIndexedData({ path, method });
-    handleRedirect({ res, newPath, handle, method });
-  }
+    const { newPath, handle } = await getPathFromData({ path, method, locale });
 
-  if (path.startsWith('/pages/')) {
+    handleRedirect({ res, newPath, method, handle, locale });
+  } else if (path.startsWith('/pages/')) {
     const method = 'page';
-    const { newPath, handle } = await getPathFromIndexedData({ path, method });
+    const { newPath, handle } = await getPathFromData({ path, method, locale });
 
     if (path.startsWith('/pages/homepage')) {
       handleRedirect({ res, newPath: '/', handle, method });
     } else {
-      handleRedirect({ res, newPath, handle, method });
+      handleRedirect({ res, newPath, method, handle, locale });
     }
-  }
-
-  if (path.startsWith('/articles/')) {
+  } else if (path.startsWith('/articles/')) {
     const method = 'article';
-    const { newPath, handle } = await getPathFromIndexedData({ path, method });
-    handleRedirect({ res, newPath, handle, method });
-  }
+    const { newPath, handle } = await getPathFromData({ path, method, locale });
 
-  if (path === '/') {
-    // Set cookies to enable Preview Mode
-    res.setPreviewData({});
-    console.info('[nacelle] preview mode enabled');
-    res.redirect('/');
+    handleRedirect({ res, newPath, method, handle, locale });
+  } else {
+    // If path doesn't match any of the blocks above, redirect to home page
+    handleRedirect({
+      res,
+      newPath: '/',
+      method: 'n/a',
+      handle: 'n/a',
+      locale: 'n/a'
+    });
   }
 }

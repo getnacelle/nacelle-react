@@ -1,25 +1,29 @@
 import React from 'react';
 
-import $nacelle from 'services/nacelle';
+import { nacelleClient } from 'services';
 import ContentSections from 'components/ContentSections';
 
 export default function Home({ page }) {
-  return page ? (
+  return (
     <>
       <ContentSections sections={page.sections} />
     </>
-  ) : null;
+  );
 }
 
-export async function getStaticProps({ preview }) {
-  const page = await $nacelle.data
-    .page({ handle: 'homepage', preview })
-    .catch(() => {
-      console.warn(`no page with handle 'homepage' found.`);
-      return null;
+export async function getStaticProps({ previewData }) {
+  try {
+    const page = await nacelleClient.data.page({
+      handle: 'homepage',
+      previewData
     });
 
-  return {
-    props: { page }
-  };
+    return {
+      props: { page }
+    };
+  } catch {
+    return {
+      notFound: true
+    };
+  }
 }

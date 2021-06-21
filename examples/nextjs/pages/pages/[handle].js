@@ -1,17 +1,8 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import $nacelle from 'services/nacelle.js';
+import { nacelleClient } from 'services';
 import { dataToPaths } from 'utils';
 
 const Page = ({ page }) => {
-  const router = useRouter();
-
-  // If the page is not yet generated, this will be displayed
-  // initially until getStaticProps() finishes running
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
   return page && <pre>{JSON.stringify(page, null, 2)}</pre>;
 };
 
@@ -19,33 +10,36 @@ export default Page;
 
 export async function getStaticPaths() {
   try {
-    const allContent = await $nacelle.data.allContent();
+    const allContent = await nacelleClient.data.allContent();
     const pages = allContent.filter((entry) => entry.type === 'page');
     const paths = dataToPaths({ data: pages });
 
     return {
       paths,
-      fallback: true
+      fallback: 'blocking'
     };
   } catch (err) {
     throw new Error(`could not fetch content:\n${err.message}`);
   }
 }
 
-export async function getStaticProps({ params: { handle }, preview }) {
-  const page = await $nacelle.data.page({ handle, preview }).catch(() => {
-    console.warn(`no page with handle '${handle}' found.`);
-    return null;
-  });
+export async function getStaticProps({ params: { handle }, previewData }) {
+  try {
+    const page = await nacelleClient.data.page({ handle, previewData });
 
-  return {
-    props: { page },
-    revalidate: 60 * 60 * 24 // 1 day in seconds
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every day
-    //
-    // For more information, check out the docs:
-    // https://nextjs.org/docs/basic-features/data-fetching#incremental-static-regeneration
-  };
+    return {
+      props: { page },
+      revalidate: 60 * 60 * 24 // 1 day in seconds
+      // Next.js will attempt to re-generate the page:
+      // - When a request comes in
+      // - At most once every day
+      //
+      // For more information, check out the docs:
+      // https://nextjs.org/docs/basic-features/data-fetching#incremental-static-regeneration
+    };
+  } catch (err) {
+    return {
+      notFound: true
+    };
+  }
 }

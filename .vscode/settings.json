@@ -1,0 +1,6 @@
+{
+  // Run formatter when you save code changes
+  "editor.formatOnSave": true,
+  // show eslint icon at bottom toolbar
+  "eslint.alwaysShowStatus": true
+}

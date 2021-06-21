@@ -5,14 +5,14 @@ import { CartProvider } from '@nacelle/react-hooks';
 import { CheckoutProvider } from '@nacelle/react-hooks';
 
 import Layout from 'components/Layout';
-import $nacelle from 'services/nacelle.js';
+import { nacelleClient } from 'services';
 import { ProductSearchProvider } from 'providers/ProductSearch';
 import * as styles from 'styles/global.styles';
 
 const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
+  nacelleSpaceId: process.env.NEXT_PUBLIC_NACELLE_SPACE_ID,
+  nacelleGraphqlToken: process.env.NEXT_PUBLIC_NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.NEXT_PUBLIC_NACELLE_ENDPOINT
 };
 
 function MyApp({ Component, pageProps, space, products }) {
@@ -33,8 +33,8 @@ function MyApp({ Component, pageProps, space, products }) {
 export default MyApp;
 MyApp.getInitialProps = async (appContext) => {
   // calls page's `getInitialProps` and fills `appProps.pageProps`
-  const space = await $nacelle.data.space();
-  const products = await $nacelle.data.allProducts();
+  const space = await nacelleClient.data.space();
+  const products = await nacelleClient.data.allProducts();
   const appProps = await App.getInitialProps(appContext);
 
   return { ...appProps, space, products };

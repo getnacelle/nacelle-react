@@ -18,8 +18,17 @@ export default function handleRedirect({
   // Redirect to the path from the fetched data
   if (newPath) {
     // Set cookies to enable Preview Mode
-    res.setPreviewData({});
+    res.setPreviewData({
+      contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID,
+      contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,
+      myShopifyDomain: process.env.MYSHOPIFY_DOMAIN.split('//')
+        .pop()
+        .split('.')
+        .shift(),
+      shopifyStorefrontAccessToken: process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
+    });
     console.info('[nacelle] preview mode enabled');
+
     res.redirect(newPath);
   } else {
     return res.status(400).json({

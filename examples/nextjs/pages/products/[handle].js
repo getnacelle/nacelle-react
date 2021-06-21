@@ -70,12 +70,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params: { handle }, previewData }) {
   try {
-    const product = await nacelleClient.data
-      .product({ handle, previewData })
-      .catch(() => {
-        console.warn(`no product with handle '${handle}' found.`);
-        return null;
-      });
+    const product = await nacelleClient.data.product({ handle, previewData });
 
     return {
       props: { product },

@@ -25,12 +25,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params: { handle }, previewData }) {
   try {
-    const page = await nacelleClient.data
-      .page({ handle, previewData })
-      .catch(() => {
-        console.warn(`no page with handle '${handle}' found.`);
-        return null;
-      });
+    const page = await nacelleClient.data.page({ handle, previewData });
 
     return {
       props: { page },

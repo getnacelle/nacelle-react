@@ -8,7 +8,7 @@ import ProductGallery from 'components/ProductGallery';
 const Collection = ({ products, page }) => {
   return (
     <Fragment>
-      {page && <ContentSections sections={page.sections} />}
+      {page?.sections && <ContentSections sections={page.sections} />}
       <ProductGallery products={products} />
     </Fragment>
   );
@@ -32,19 +32,14 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params: { handle }, previewData }) {
   try {
-    const products = await nacelleClient.data
-      .collectionPage({ handle, previewData, paginate: true, itemsPerPage: 24 })
-      .catch(() => {
-        console.warn(`no collection with handle '${handle}' found.`);
-        return null;
-      });
+    const products = await nacelleClient.data.collectionPage({
+      handle,
+      previewData,
+      paginate: true,
+      itemsPerPage: 24
+    });
 
-    const page = await nacelleClient.data
-      .page({ handle, previewData })
-      .catch(() => {
-        console.warn(`no page with handle '${handle}' found.`);
-        return null;
-      });
+    const page = await nacelleClient.data.page({ handle, previewData });
 
     return {
       props: { products, page },

@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
+    "@nacelle/contentful-preview-connector": "^1.0.0",
     "@nacelle/react-components": "^5.0.0",
     "@nacelle/react-hooks": "^5.1.1",
+    "@nacelle/shopify-connector": "^0.0.7",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
     "next": "^10.1.3",

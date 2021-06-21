@@ -4,6 +4,8 @@
 
 // EXPORT PREVIEW MODE UTILS
 // @index('./*.js', (f, _) => `export { default as ${_.camelCase(f.name)} } from '${f.path}';`)
+export { default as createContentfulClient } from './createContentfulClient';
+export { default as createShopifyClient } from './createShopifyClient';
 export { default as getPathFromData } from './getPathFromData';
 export { default as handleRedirect } from './handleRedirect';
 // @endindex

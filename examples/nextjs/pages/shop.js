@@ -13,10 +13,10 @@ export default function Shop({ page, products }) {
   );
 }
 
-export async function getStaticProps({ preview }) {
+export async function getStaticProps({ previewData }) {
   try {
     const products = await nacelleClient.data.allProducts();
-    const page = await nacelleClient.data.page({ handle: 'shop', preview });
+    const page = await nacelleClient.data.page({ handle: 'shop', previewData });
     return {
       props: { products, page }
     };

@@ -11,9 +11,9 @@ export default function Home({ page }) {
   ) : null;
 }
 
-export async function getStaticProps({ preview }) {
+export async function getStaticProps({ previewData }) {
   const page = await nacelleClient.data
-    .page({ handle: 'homepage', preview })
+    .page({ handle: 'homepage', previewData })
     .catch(() => {
       console.warn(`no page with handle 'homepage' found.`);
       return null;

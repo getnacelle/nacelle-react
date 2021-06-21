@@ -183,7 +183,7 @@ export const CartProvider: FC<CartProviderProps> = ({
   return (
     <CartContext.Provider value={state}>
       <CartActionContext.Provider value={cartActions}>
-        <IsInCartContext.Provider value={isItemInCart}>
+        <IsInCartContext.Provider value={isInCart}>
           {children}
         </IsInCartContext.Provider>
       </CartActionContext.Provider>

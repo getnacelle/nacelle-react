@@ -33,16 +33,12 @@ export default async function handler(req, res) {
     const { newPath, handle } = await getPathFromData({ path, method, locale });
 
     handleRedirect({ res, newPath, method, handle, locale });
-  }
-
-  if (path.startsWith('/collections/')) {
+  } else if (path.startsWith('/collections/')) {
     const method = 'collection';
     const { newPath, handle } = await getPathFromData({ path, method, locale });
 
     handleRedirect({ res, newPath, method, handle, locale });
-  }
-
-  if (path.startsWith('/pages/')) {
+  } else if (path.startsWith('/pages/')) {
     const method = 'page';
     const { newPath, handle } = await getPathFromData({ path, method, locale });
 
@@ -51,17 +47,19 @@ export default async function handler(req, res) {
     } else {
       handleRedirect({ res, newPath, method, handle, locale });
     }
-  }
-
-  if (path.startsWith('/articles/')) {
+  } else if (path.startsWith('/articles/')) {
     const method = 'article';
     const { newPath, handle } = await getPathFromData({ path, method, locale });
 
     handleRedirect({ res, newPath, method, handle, locale });
+  } else {
+    // If path doesn't match any of the blocks above, redirect to home page
+    handleRedirect({
+      res,
+      newPath: '/',
+      method: 'n/a',
+      handle: 'n/a',
+      locale: 'n/a'
+    });
   }
-
-  // If path doesn't match any of the blocks above, redirect to home page
-  res.setPreviewData({});
-  console.info('[nacelle] preview mode enabled');
-  res.redirect('/');
 }

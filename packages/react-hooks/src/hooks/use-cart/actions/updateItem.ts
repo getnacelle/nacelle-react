@@ -11,7 +11,7 @@ const updateItem: UpdateItemFunction = (
     const isInCart = action.isInCart || isItemInCart;
     let localItem: any = null;
 
-    if (isInCart(state.cart, action.payload)) {
+    if (isInCart([item], action.payload)) {
       localItem = { ...item };
       Object.keys(item).forEach((key) => {
         const value = (action.payload as any)[key];

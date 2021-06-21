@@ -4,22 +4,26 @@ import { nacelleClient } from 'services';
 import ContentSections from 'components/ContentSections';
 
 export default function Home({ page }) {
-  return page ? (
+  return (
     <>
       <ContentSections sections={page.sections} />
     </>
-  ) : null;
+  );
 }
 
 export async function getStaticProps({ previewData }) {
-  const page = await nacelleClient.data
-    .page({ handle: 'homepage', previewData })
-    .catch(() => {
-      console.warn(`no page with handle 'homepage' found.`);
-      return null;
+  try {
+    const page = await nacelleClient.data.page({
+      handle: 'homepage',
+      previewData
     });
 
-  return {
-    props: { page }
-  };
+    return {
+      props: { page }
+    };
+  } catch {
+    return {
+      notFound: true
+    };
+  }
 }

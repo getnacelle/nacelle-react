@@ -1,4 +1,12 @@
-export const previewData = {};
+export const previewData = {
+  contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID,
+  contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,
+  myShopifyDomain: process.env.MYSHOPIFY_DOMAIN.split('//')
+    .pop()
+    .split('.')
+    .shift(),
+  shopifyStorefrontAccessToken: process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
+};
 
 /**
  * Handle redirect to newPath, or provide error message specific to

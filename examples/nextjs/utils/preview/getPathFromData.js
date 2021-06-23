@@ -1,4 +1,5 @@
 import { nacelleClient } from 'services';
+import { previewData } from './handleRedirect';
 /**
  *  Redirecting to req.query.path might lead to open redirect vulnerabilities.
  * Instead, we'll use the handle from the provided path to fetch data with
@@ -18,7 +19,7 @@ export default async function getPathFromData({
   const data = await nacelleClient.data[method]({
     handle,
     locale,
-    preview: true
+    previewData
   }).catch((err) => {
     console.warn(err);
     return null;

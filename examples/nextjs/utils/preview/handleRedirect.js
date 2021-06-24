@@ -1,7 +1,7 @@
 export const previewData = {
   contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID,
   contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,
-  myShopifyDomain: process.env.MYSHOPIFY_DOMAIN.split('//')
+  myShopifyDomain: process.env.MYSHOPIFY_DOMAIN?.split('//')
     .pop()
     .split('.')
     .shift(),

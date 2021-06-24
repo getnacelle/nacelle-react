@@ -27,7 +27,7 @@ export default function handleRedirect({
 }) {
   // Redirect to the path from the fetched data
   if (newPath) {
-    // Set cookies to enable Preview Mode
+    // Set cookies to enable Preview Mode and redirect to secure path
     res.setPreviewData(previewData);
     console.info('[nacelle] preview mode enabled');
 

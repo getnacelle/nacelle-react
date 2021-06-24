@@ -26,12 +26,16 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params: { handle, blogHandle } }) {
+export async function getStaticProps({
+  params: { handle, blogHandle },
+  previewData
+}) {
   try {
     const articles = await nacelleClient.data
       .article({
         handle,
-        blogHandle
+        blogHandle,
+        previewData
       })
       .catch(() => {
         console.warn(

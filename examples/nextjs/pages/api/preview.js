@@ -47,19 +47,32 @@ export default async function handler(req, res) {
     } else {
       handleRedirect({ res, newPath, method, handle, locale });
     }
-  } else if (path.startsWith('/articles/')) {
-    const method = 'article';
-    const { newPath, handle } = await getPathFromData({ path, method, locale });
-
-    handleRedirect({ res, newPath, method, handle, locale });
   } else {
-    // If path doesn't match any of the blocks above, redirect to home page
-    handleRedirect({
-      res,
-      newPath: '/',
-      method: 'n/a',
-      handle: 'n/a',
-      locale: 'n/a'
-    });
+    try {
+      const method = 'article';
+
+      // blogHandle example: in `/wellness/eat-avocados`, the blogHandle is `wellness`
+      const [, blogHandle] = [...path.matchAll(/([\w|-]+)/g)]
+        .map((matches) => matches[0])
+        .reverse();
+
+      const { newPath, handle } = await getPathFromData({
+        path,
+        method,
+        blogHandle,
+        locale
+      });
+
+      handleRedirect({ res, newPath, method, handle, locale });
+    } catch (err) {
+      // If path doesn't match any of the blocks above and isn't a blog article, redirect to home page
+      handleRedirect({
+        res,
+        newPath: '/',
+        method: 'n/a',
+        handle: 'n/a',
+        locale: 'n/a'
+      });
+    }
   }
 }

@@ -1,3 +1,5 @@
+export const previewData = {};
+
 /**
  * Handle redirect to newPath, or provide error message specific to
  * the path, handle, and method being used to fetch the newPath.
@@ -17,8 +19,8 @@ export default function handleRedirect({
 }) {
   // Redirect to the path from the fetched data
   if (newPath) {
-    // Set cookies to enable Preview Mode
-    res.setPreviewData({});
+    // Set cookies to enable Preview Mode and redirect to secure path
+    res.setPreviewData(previewData);
     console.info('[nacelle] preview mode enabled');
     res.redirect(newPath);
   } else {

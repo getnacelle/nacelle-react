@@ -100,9 +100,9 @@ describe('useCart reducer', () => {
           cacheKey: 'cart'
         }
       );
-      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
-        [cartItem]
-      );
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([cartItem]);
     });
 
     it('should add to item sessionStorage cart', () => {
@@ -312,6 +312,35 @@ describe('useCart reducer', () => {
         }
       ]);
     });
+
+    it('should update to a falsy value of an item in the cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+
+      const result = cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: {
+          ...cartItem,
+          quantity: 10,
+          product: {
+            ...cartItem.product,
+            title: ''
+          }
+        },
+        storage: null,
+        cacheKey: 'cart'
+      });
+
+      expect(result.cart).toEqual([
+        {
+          ...cartItem,
+          quantity: 10,
+          product: { ...cartItem.product, title: '' }
+        }
+      ]);
+    });
   });
 
   describe(`${REMOVE_FROM_CART}`, () => {
@@ -400,9 +429,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
-        [{ ...cartItem, quantity: 2 }]
-      );
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...cartItem, quantity: 2 }]);
     });
 
     it('should increment the quantity of an item in sessionStorage cart', () => {
@@ -470,9 +499,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
-        [{ ...cartItem, quantity: 1 }]
-      );
+      expect(
+        JSON.parse(window.localStorage.getItem('cart') as string)
+      ).toEqual([{ ...cartItem, quantity: 1 }]);
     });
 
     it('should decrement the quantity of an item in sessionStorage cart', () => {

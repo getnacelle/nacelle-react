@@ -16,7 +16,7 @@ const updateItem: UpdateItemFunction = (
       Object.keys(item).forEach((key) => {
         const value = (action.payload as any)[key];
 
-        if (value && key !== 'id' && localItem[key] !== value) {
+        if (key !== 'id' && localItem[key] !== value) {
           localItem[key] = value;
         }
       });

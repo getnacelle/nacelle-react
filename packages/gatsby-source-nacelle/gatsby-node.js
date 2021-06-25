@@ -30,6 +30,7 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
   const {
     nacelleSpaceId,
     nacelleGraphqlToken,
+    nacelleEndpoint,
     contentfulPreviewSpaceId,
     contentfulPreviewApiToken
   } = pluginOptions;
@@ -38,24 +39,21 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
     previewMode: cmsPreviewEnabled(pluginOptions),
     nacelleSpaceId,
     nacelleGraphqlToken,
+    nacelleEndpoint,
     contentfulPreviewSpaceId,
     contentfulPreviewApiToken
   });
 
-  const [
-    spaceData,
-    productData,
-    collectionData,
-    contentData
-  ] = await Promise.all([
-    // fetch data from Nacelle's Hail Frequency API
-    client.data.space(),
-    client.data.allProducts(),
-    client.data.allCollections(),
-    client.data.allContent()
-  ]).catch((err) => {
-    throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
-  });
+  const [spaceData, productData, collectionData, contentData] =
+    await Promise.all([
+      // fetch data from Nacelle's Hail Frequency API
+      client.data.space(),
+      client.data.allProducts(),
+      client.data.allCollections(),
+      client.data.allContent()
+    ]).catch((err) => {
+      throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
+    });
 
   await Promise.all([
     // use Nacelle data to create Gatsby nodes

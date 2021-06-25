@@ -3,6 +3,7 @@ const NacelleClient = require('@nacelle/client-js-sdk').default;
 module.exports = function nacelleClient({
   nacelleSpaceId = '',
   nacelleGraphqlToken = '',
+  nacelleEndpoint = '',
   contentfulPreviewSpaceId = '',
   contentfulPreviewApiToken = '',
   previewMode = false
@@ -10,7 +11,7 @@ module.exports = function nacelleClient({
   const clientSettings = {
     id: nacelleSpaceId || process.env.NACELLE_SPACE_ID,
     token: nacelleGraphqlToken || process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: 'https://hailfrequency.com/v2/graphql',
+    nacelleEndpoint: nacelleEndpoint || 'https://hailfrequency.com/v3/graphql',
     useStatic: false
   };
 
@@ -22,8 +23,8 @@ module.exports = function nacelleClient({
     contentfulPreviewSpaceId &&
     contentfulPreviewApiToken
   ) {
-    const NacelleContentfulPreviewConnector = require('@nacelle/contentful-preview-connector')
-      .default;
+    const NacelleContentfulPreviewConnector =
+      require('@nacelle/contentful-preview-connector').default;
 
     // Initialize the Preview Connector
     // Note: the Contentful Preview API token is not the same as your Content Delivery API token

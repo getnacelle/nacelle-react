@@ -9,6 +9,12 @@ import {
   ProcessCheckoutAction
 } from 'hooks/use-checkout/use-checkout.types';
 
+declare global {
+  interface Window {
+    ga?: Function;
+  }
+}
+
 const processCheckout: ActionHandler = ({ dispatch }) => async (
   action: ProcessCheckoutAction
 ): Promise<void> => {
@@ -87,7 +93,26 @@ const processCheckout: ActionHandler = ({ dispatch }) => async (
       action.setIsCheckingOut(false);
 
       if (checkoutResult?.data?.processCheckout?.url) {
-        window.location.href = checkoutResult.data.processCheckout.url;
+        // if i'm reading this right, copy addCheckoutParams and getLinkerParam
+        // behavior from nuxt starter store/checkout.js and we're good
+        let redirectUrl = checkoutResult.data.processCheckout.url;
+        // not sure if there is a similar object available to react
+        let userData;
+        const queryOperator = redirectUrl.includes('?') ? '&' : '?';
+        const linkerParam = await new Promise((resolve) => {
+          const gaClient = typeof window === 'object' ? window.ga : undefined;
+          if (typeof gaClient !== 'undefined') {
+            gaClient((tracker: { get: Function }) =>
+              resolve(tracker.get('linkerParam'))
+            );
+          }
+        });
+        if (linkerParam) {
+          redirectUrl += `${queryOperator}c=${JSON.stringify(
+            userData
+          )}&${linkerParam}`;
+        }
+        window.location.href = redirectUrl;
       }
     }
   }

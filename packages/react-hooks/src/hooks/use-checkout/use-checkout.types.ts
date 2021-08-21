@@ -169,20 +169,3 @@ export type AsyncActionHandler<AsyncActionType> = ActionHandler<
   Reducer<CheckoutState, Actions>,
   AsyncActionType
 >;
-
-export type AsyncActionHandlers<
-  R extends Reducer<any, any>,
-  AsyncAction extends { type: string }
-> = {
-  [T in AsyncAction['type']]: AsyncAction extends infer A
-    ? A extends {
-        type: T;
-      }
-      ? (s: {
-          dispatch: Dispatch<ReducerAction<R>>;
-          getState: () => ReducerState<R>;
-          signal: AbortSignal;
-        }) => (a: A) => Promise<void>
-      : never
-    : never;
-};

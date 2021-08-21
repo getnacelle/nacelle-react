@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, Reducer, ReducerState, ReducerAction } from 'react';
 import { Checkout } from '@nacelle/types';
 import { MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
@@ -62,11 +62,16 @@ export interface ProcessCheckoutInput {
   source?: string;
 }
 
-export interface CheckoutState {
+export interface CheckoutProperties {
   checkoutComplete: boolean;
   checkoutId: string;
   checkoutSource: string;
   checkoutUrl: string;
+}
+
+export interface CheckoutState extends CheckoutProperties {
+  checkoutSuccess: Promise<CheckoutProperties | void>;
+  checkoutError: CheckoutError | null;
 }
 
 export type GetCheckoutAction = {
@@ -109,26 +114,40 @@ export type SetCheckoutUrlAction = {
   payload: string;
 };
 
+export type SetCheckoutErrorAction = {
+  type: 'checkout/set-checkout-error';
+  payload: CheckoutError | null;
+};
+
+export type SetCheckoutSuccessAction = {
+  type: 'checkout/set-checkout-success';
+  payload: Promise<CheckoutProperties>;
+};
+
 export type SetCheckoutDataAction = {
   type: 'checkout/set-checkout-data';
   payload: CheckoutState;
 };
 
-export type CheckoutReducerAction =
+export type Actions =
   | ClearCheckoutDataAction
-  | GetCheckoutAction
-  | ProcessCheckoutAction
-  | SetCheckoutDataAction
   | SetCheckoutCompleteAction
+  | SetCheckoutDataAction
+  | SetCheckoutErrorAction
   | SetCheckoutIdAction
   | SetCheckoutSourceAction
+  | SetCheckoutSuccessAction
   | SetCheckoutUrlAction;
 
-export interface CheckoutActions {
+export type AsyncActions = GetCheckoutAction | ProcessCheckoutAction;
+
+export type CheckoutReducerAction = Actions | AsyncActions;
+
+export type CheckoutActions = {
   clearCheckoutData: () => void;
   getCheckout: (payload: GetCheckoutInput) => void;
   processCheckout: (payload: ProcessCheckoutInput) => void;
-}
+};
 
 export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
 
@@ -136,8 +155,34 @@ export interface ActionHandlerParams {
   dispatch: CheckoutDispatch;
 }
 
-export type ActionHandler = ({
-  dispatch
+export type ActionHandler<R extends Reducer<any, any>, AsyncActions> = ({
+  dispatch,
+  getState,
+  signal
 }: {
-  dispatch: any;
-}) => (action: any) => Promise<void>;
+  dispatch: Dispatch<ReducerAction<R>>;
+  getState: () => ReducerState<R>;
+  signal: AbortSignal;
+}) => (action: AsyncActions) => Promise<void>;
+
+export type AsyncActionHandler<AsyncActionType> = ActionHandler<
+  Reducer<CheckoutState, Actions>,
+  AsyncActionType
+>;
+
+export type AsyncActionHandlers<
+  R extends Reducer<any, any>,
+  AsyncAction extends { type: string }
+> = {
+  [T in AsyncAction['type']]: AsyncAction extends infer A
+    ? A extends {
+        type: T;
+      }
+      ? (s: {
+          dispatch: Dispatch<ReducerAction<R>>;
+          getState: () => ReducerState<R>;
+          signal: AbortSignal;
+        }) => (a: A) => Promise<void>
+      : never
+    : never;
+};

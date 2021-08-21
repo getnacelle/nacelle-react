@@ -2,6 +2,7 @@ import { Reducer } from 'react';
 import {
   clearCheckoutData,
   setCheckoutData,
+  setCheckoutError,
   setCheckoutComplete,
   setCheckoutId,
   setCheckoutSource,
@@ -16,12 +17,16 @@ export const initialState: CheckoutState = {
   checkoutComplete: isClient ? getCacheBoolean('checkoutComplete') : false,
   checkoutId: isClient ? getCacheString('checkoutId') : '',
   checkoutUrl: isClient ? getCacheString('checkoutUrl') : '',
-  checkoutSource: isClient ? getCacheString('checkoutSource') : ''
+  checkoutSource: isClient ? getCacheString('checkoutSource') : '',
+  checkoutError: null,
+  checkoutSuccess: new Promise(() => {})
 };
 
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';
 export const SET_CHECKOUT_COMPLETE = 'checkout/set-checkout-complete';
 export const SET_CHECKOUT_DATA = 'checkout/set-checkout-data';
+export const SET_CHECKOUT_ERROR = 'checkout/set-checkout-error';
+export const SET_CHECKOUT_SUCCESS = 'checkout/set-checkout-success';
 export const SET_CHECKOUT_ID = 'checkout/set-checkout-id';
 export const SET_CHECKOUT_SOURCE = 'checkout/set-checkout-source';
 export const SET_CHECKOUT_URL = 'checkout/set-checkout-url';
@@ -46,6 +51,10 @@ const checkoutReducer: Reducer<CheckoutState, CheckoutReducerAction> = (
 
     case SET_CHECKOUT_DATA: {
       return setCheckoutData(state, action);
+    }
+
+    case SET_CHECKOUT_ERROR: {
+      return setCheckoutError(state, action);
     }
 
     case SET_CHECKOUT_ID: {

@@ -4,15 +4,22 @@ import React, {
   useMemo,
   useEffect,
   useContext,
-  FC
+  FC,
+  Reducer
 } from 'react';
-import { useReducerAsync } from 'use-reducer-async';
+import { useReducerAsync, AsyncActionHandlers } from 'use-reducer-async';
 import 'abort-controller/polyfill';
 
-import { getCheckout, processCheckout } from './async-handlers';
+import {
+  getCheckout as getCheckoutActionHandler,
+  processCheckout as processCheckoutActionHandler
+} from './async-handlers';
 import { getCacheString, getCacheBoolean } from './utils';
 import {
+  Actions,
+  AsyncActions,
   CheckoutActions,
+  CheckoutProperties,
   CheckoutState,
   Credentials,
   GetCheckoutInput,
@@ -32,19 +39,21 @@ export type CheckoutActionContextValue = null | CheckoutActions;
 export type CheckoutProviderProps = {
   children: JSX.Element | JSX.Element[];
   credentials: Credentials;
+  redirectUserToCheckout: boolean;
 };
 
-const CheckoutDataContext = React.createContext<CheckoutContextValue>(
-  initialState
-);
-const CheckoutActionContext = React.createContext<CheckoutActionContextValue>(
-  null
-);
+const CheckoutDataContext =
+  React.createContext<CheckoutContextValue>(initialState);
+const CheckoutActionContext =
+  React.createContext<CheckoutActionContextValue>(null);
 const IsCheckingOutContext = React.createContext<boolean>(false);
 
-const asyncActionHandlers = {
-  [GET_CHECKOUT]: getCheckout,
-  [PROCESS_CHECKOUT]: processCheckout
+const asyncActionHandlers: AsyncActionHandlers<
+  Reducer<CheckoutState, Actions>,
+  AsyncActions
+> = {
+  [GET_CHECKOUT]: getCheckoutActionHandler,
+  [PROCESS_CHECKOUT]: processCheckoutActionHandler
 };
 
 export const CheckoutProvider: FC<CheckoutProviderProps> = ({
@@ -63,28 +72,45 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
   const checkoutActions = useMemo(
     () => ({
       clearCheckoutData: (): void => dispatch({ type: CLEAR_CHECKOUT_DATA }),
-      getCheckout: (payload: GetCheckoutInput): void =>
-        dispatch({ type: GET_CHECKOUT, payload, credentials }),
-      processCheckout: (payload: ProcessCheckoutInput): void =>
+      getCheckout: (payload: GetCheckoutInput): CheckoutProperties => {
+        dispatch({ type: GET_CHECKOUT, payload, credentials });
+
+        return {
+          checkoutComplete: checkoutState.checkoutComplete,
+          checkoutId: checkoutState.checkoutId,
+          checkoutSource: checkoutState.checkoutSource,
+          checkoutUrl: checkoutState.checkoutUrl
+        };
+      },
+      processCheckout: (payload: ProcessCheckoutInput) => {
         dispatch({
           type: PROCESS_CHECKOUT,
-          payload,
           credentials,
+          payload,
           isMounted,
           isCheckingOut,
           setIsCheckingOut
-        })
+        });
+
+        return checkoutState.checkoutSuccess;
+      }
     }),
-    [dispatch, credentials, isCheckingOut]
+    [
+      checkoutState.checkoutComplete,
+      checkoutState.checkoutId,
+      checkoutState.checkoutSource,
+      checkoutState.checkoutSuccess,
+      checkoutState.checkoutUrl,
+      credentials,
+      dispatch,
+      isCheckingOut
+    ]
   );
 
   // throw an error if credentials are missing
   useEffect(() => {
-    const {
-      nacelleEndpoint,
-      nacelleSpaceId,
-      nacelleGraphqlToken
-    } = credentials;
+    const { nacelleEndpoint, nacelleSpaceId, nacelleGraphqlToken } =
+      credentials;
 
     if (!nacelleEndpoint || !nacelleSpaceId || !nacelleGraphqlToken) {
       throw new Error(

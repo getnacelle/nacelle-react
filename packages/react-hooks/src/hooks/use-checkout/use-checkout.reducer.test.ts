@@ -86,13 +86,22 @@ describe('useCheckout reducer', () => {
 
   it('should set all properties of checkoutState', async () => {
     const url = 'https://endofie.party';
+    const checkoutComplete = complete;
+    const checkoutId = id;
+    const checkoutSource = source;
+    const checkoutUrl = url;
+    const CheckoutProperties = {
+      checkoutComplete,
+      checkoutId,
+      checkoutSource,
+      checkoutUrl
+    };
     const checkoutState = checkoutReducer(initialState, {
       type: SET_CHECKOUT_DATA,
       payload: {
-        checkoutComplete: complete,
-        checkoutId: id,
-        checkoutSource: source,
-        checkoutUrl: url
+        ...CheckoutProperties,
+        checkoutError: null,
+        checkoutSuccess: Promise.resolve(CheckoutProperties)
       }
     });
 

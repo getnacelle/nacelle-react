@@ -1,6 +1,6 @@
 import { GraphQLRequestParams } from '../use-checkout.types';
 
-export async function hailFrequencyRequest({
+export async function nacelleStorefrontRequest({
   credentials,
   query,
   variables

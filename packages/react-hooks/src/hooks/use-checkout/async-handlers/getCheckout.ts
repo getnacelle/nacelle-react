@@ -1,4 +1,4 @@
-import { hailFrequencyRequest } from '../utils';
+import { nacelleStorefrontRequest } from '../utils';
 import { GET_CHECKOUT_QUERY } from '../queries';
 import {
   SET_CHECKOUT_COMPLETE,
@@ -6,23 +6,24 @@ import {
 } from '../use-checkout.reducer';
 
 import {
-  ActionHandler,
+  AsyncActionHandler,
   GetCheckoutAction,
   GetCheckoutResponse
 } from 'hooks/use-checkout/use-checkout.types';
 
-const getCheckout: ActionHandler = ({ dispatch }) => async (
-  action: GetCheckoutAction
-): Promise<void> => {
-  if (typeof window !== 'undefined') {
+const getCheckout: AsyncActionHandler<GetCheckoutAction> =
+  ({ dispatch }) =>
+  async (action: GetCheckoutAction): Promise<void> => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const { id, url } = action.payload;
-    const response = await hailFrequencyRequest({
+    const checkoutResult: GetCheckoutResponse = await nacelleStorefrontRequest({
       credentials: action.credentials,
       query: GET_CHECKOUT_QUERY,
       variables: { id, url }
-    });
-
-    const checkoutResult: GetCheckoutResponse = await response.json();
+    }).then((res) => res.json());
 
     if (!checkoutResult.errors && checkoutResult.data?.getCheckout) {
       dispatch({
@@ -35,7 +36,6 @@ const getCheckout: ActionHandler = ({ dispatch }) => async (
         payload: checkoutResult.data.getCheckout.source
       });
     }
-  }
-};
+  };
 
 export default getCheckout;

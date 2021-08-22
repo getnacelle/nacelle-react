@@ -2,7 +2,7 @@ import { Reducer } from 'react';
 import {
   clearCheckoutData,
   setCheckoutData,
-  setCheckoutError,
+  setProcessCheckoutError,
   setCheckoutComplete,
   setCheckoutId,
   setCheckoutSource,
@@ -18,18 +18,21 @@ export const initialState: CheckoutState = {
   checkoutId: isClient ? getCacheString('checkoutId') : '',
   checkoutUrl: isClient ? getCacheString('checkoutUrl') : '',
   checkoutSource: isClient ? getCacheString('checkoutSource') : '',
-  checkoutError: null,
-  checkoutSuccess: new Promise(() => {})
+  processCheckoutError: null,
+  getCheckoutSuccess: new Promise(() => {}),
+  processCheckoutSuccess: new Promise(() => {})
 };
 
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';
 export const SET_CHECKOUT_COMPLETE = 'checkout/set-checkout-complete';
 export const SET_CHECKOUT_DATA = 'checkout/set-checkout-data';
-export const SET_CHECKOUT_ERROR = 'checkout/set-checkout-error';
-export const SET_CHECKOUT_SUCCESS = 'checkout/set-checkout-success';
 export const SET_CHECKOUT_ID = 'checkout/set-checkout-id';
 export const SET_CHECKOUT_SOURCE = 'checkout/set-checkout-source';
 export const SET_CHECKOUT_URL = 'checkout/set-checkout-url';
+export const SET_GET_CHECKOUT_SUCCESS = 'checkout/set-get-checkout-success';
+export const SET_PROCESS_CHECKOUT_ERROR = 'checkout/set-checkout-error';
+export const SET_PROCESS_CHECKOUT_SUCCESS =
+  'checkout/set-process-checkout-success';
 
 // note: GET_CHECKOUT and PROCESS_CHECKOUT are async actions which are
 // handled separately, by the useReducerAsync hook, in ./use-checkout.provider.tsx
@@ -53,8 +56,8 @@ const checkoutReducer: Reducer<CheckoutState, CheckoutReducerAction> = (
       return setCheckoutData(state, action);
     }
 
-    case SET_CHECKOUT_ERROR: {
-      return setCheckoutError(state, action);
+    case SET_PROCESS_CHECKOUT_ERROR: {
+      return setProcessCheckoutError(state, action);
     }
 
     case SET_CHECKOUT_ID: {

@@ -1,7 +1,20 @@
 import React, { Dispatch, Reducer, ReducerState, ReducerAction } from 'react';
-import { Checkout } from '@nacelle/types';
-import { MetafieldInput } from '@nacelle/types';
+import { GraphQLError } from 'graphql';
+import { Checkout, MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
+import {
+  CLEAR_CHECKOUT_DATA,
+  SET_CHECKOUT_COMPLETE,
+  SET_CHECKOUT_DATA,
+  SET_PROCESS_CHECKOUT_ERROR,
+  SET_CHECKOUT_ID,
+  SET_CHECKOUT_SOURCE,
+  SET_CHECKOUT_URL,
+  SET_GET_CHECKOUT_SUCCESS,
+  SET_PROCESS_CHECKOUT_SUCCESS,
+  GET_CHECKOUT,
+  PROCESS_CHECKOUT
+} from './use-checkout.reducer';
 
 /**
  * @param nacelleSpaceId: the target Nacelle Space ID (string)
@@ -20,20 +33,11 @@ export interface GraphQLRequestParams {
   variables: AnyObject;
 }
 
-export interface CheckoutError {
-  message: string;
-  extensions: {
-    variables: string;
-    field: string;
-    code: string;
-  };
-}
-
 export interface ProcessCheckoutResponse {
   data: {
     processCheckout: Checkout;
   };
-  errors: CheckoutError[];
+  errors: GraphQLError[];
 }
 
 export interface GetCheckoutResponse {
@@ -45,7 +49,7 @@ export interface GetCheckoutResponse {
       source: string;
     };
   };
-  errors: CheckoutError[];
+  errors: GraphQLError[];
 }
 
 export interface GetCheckoutInput {
@@ -70,63 +74,70 @@ export interface CheckoutProperties {
 }
 
 export interface CheckoutState extends CheckoutProperties {
-  checkoutSuccess: Promise<CheckoutProperties | void>;
-  checkoutError: CheckoutError | null;
+  getCheckoutSuccess: Promise<CheckoutProperties | void>;
+  processCheckoutSuccess: Promise<CheckoutProperties | void>;
+  processCheckoutError: GraphQLError | Error | null;
 }
 
 export type GetCheckoutAction = {
-  type: 'checkout/get-checkout';
+  type: typeof GET_CHECKOUT;
   credentials: Credentials;
   payload: GetCheckoutInput;
 };
 
 export type ProcessCheckoutAction = {
-  type: 'checkout/process-checkout';
+  type: typeof PROCESS_CHECKOUT;
   credentials: Credentials;
   payload: ProcessCheckoutInput;
   isCheckingOut: boolean;
   setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
   isMounted: React.MutableRefObject<boolean>;
+  redirectUserToCheckout: boolean;
 };
 
 export type ClearCheckoutDataAction = {
-  type: 'checkout/clear-checkout-data';
+  type: typeof CLEAR_CHECKOUT_DATA;
   payload?: null;
 };
 
 export type SetCheckoutCompleteAction = {
-  type: 'checkout/set-checkout-complete';
+  type: typeof SET_CHECKOUT_COMPLETE;
   payload: boolean;
 };
 
 export type SetCheckoutIdAction = {
-  type: 'checkout/set-checkout-id';
+  type: typeof SET_CHECKOUT_ID;
   payload: string;
 };
 
 export type SetCheckoutSourceAction = {
-  type: 'checkout/set-checkout-source';
+  type: typeof SET_CHECKOUT_SOURCE;
   payload: string;
 };
 
 export type SetCheckoutUrlAction = {
-  type: 'checkout/set-checkout-url';
+  type: typeof SET_CHECKOUT_URL;
   payload: string;
 };
 
 export type SetCheckoutErrorAction = {
-  type: 'checkout/set-checkout-error';
-  payload: CheckoutError | null;
-};
-
-export type SetCheckoutSuccessAction = {
-  type: 'checkout/set-checkout-success';
-  payload: Promise<CheckoutProperties>;
+  type: typeof SET_PROCESS_CHECKOUT_ERROR;
+  payload: GraphQLError | Error | null;
 };
 
 export type SetCheckoutDataAction = {
-  type: 'checkout/set-checkout-data';
+  type: typeof SET_CHECKOUT_DATA;
   payload: CheckoutState;
+};
+
+export type SetGetCheckoutSuccessAction = {
+  type: typeof SET_GET_CHECKOUT_SUCCESS;
+  payload: Promise<CheckoutProperties>;
+};
+
+export type SetProcessCheckoutSuccessAction = {
+  type: typeof SET_PROCESS_CHECKOUT_SUCCESS;
+  payload: Promise<CheckoutProperties>;
 };
 
 export type Actions =
@@ -136,8 +147,9 @@ export type Actions =
   | SetCheckoutErrorAction
   | SetCheckoutIdAction
   | SetCheckoutSourceAction
-  | SetCheckoutSuccessAction
-  | SetCheckoutUrlAction;
+  | SetCheckoutUrlAction
+  | SetGetCheckoutSuccessAction
+  | SetProcessCheckoutSuccessAction;
 
 export type AsyncActions = GetCheckoutAction | ProcessCheckoutAction;
 

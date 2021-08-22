@@ -32,6 +32,7 @@
     "@nacelle/react-dev-utils": "^5.0.0",
     "@nacelle/types": "^3.0.0",
     "eslint": "^7.6.0",
+    "graphql": "^15.5.1",
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",

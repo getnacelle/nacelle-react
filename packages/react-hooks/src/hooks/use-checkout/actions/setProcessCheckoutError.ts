@@ -1,13 +1,13 @@
 import { CheckoutState, SetCheckoutErrorAction } from '../use-checkout.types';
 
-const setCheckoutError = (
+const setProcessCheckoutError = (
   state: CheckoutState,
   action: SetCheckoutErrorAction
 ): CheckoutState => {
   return {
     ...state,
-    checkoutError: action.payload
+    processCheckoutError: action.payload
   };
 };
 
-export default setCheckoutError;
+export default setProcessCheckoutError;

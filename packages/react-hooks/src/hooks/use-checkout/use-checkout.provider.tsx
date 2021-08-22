@@ -58,7 +58,8 @@ const asyncActionHandlers: AsyncActionHandlers<
 
 export const CheckoutProvider: FC<CheckoutProviderProps> = ({
   children,
-  credentials
+  credentials,
+  redirectUserToCheckout = true
 }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
@@ -89,21 +90,23 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
           payload,
           isMounted,
           isCheckingOut,
-          setIsCheckingOut
+          setIsCheckingOut,
+          redirectUserToCheckout
         });
 
-        return checkoutState.checkoutSuccess;
+        return checkoutState.processCheckoutSuccess;
       }
     }),
     [
       checkoutState.checkoutComplete,
       checkoutState.checkoutId,
       checkoutState.checkoutSource,
-      checkoutState.checkoutSuccess,
+      checkoutState.processCheckoutSuccess,
       checkoutState.checkoutUrl,
       credentials,
       dispatch,
-      isCheckingOut
+      isCheckingOut,
+      redirectUserToCheckout
     ]
   );
 

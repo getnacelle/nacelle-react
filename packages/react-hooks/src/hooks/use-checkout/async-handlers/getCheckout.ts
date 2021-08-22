@@ -2,14 +2,15 @@ import { nacelleStorefrontRequest } from '../utils';
 import { GET_CHECKOUT_QUERY } from '../queries';
 import {
   SET_CHECKOUT_COMPLETE,
-  SET_CHECKOUT_SOURCE
+  SET_CHECKOUT_SOURCE,
+  SET_GET_CHECKOUT_SUCCESS
 } from '../use-checkout.reducer';
-
 import {
   AsyncActionHandler,
+  CheckoutProperties,
   GetCheckoutAction,
   GetCheckoutResponse
-} from 'hooks/use-checkout/use-checkout.types';
+} from '../use-checkout.types';
 
 const getCheckout: AsyncActionHandler<GetCheckoutAction> =
   ({ dispatch }) =>
@@ -17,23 +18,60 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
     if (typeof window === 'undefined') {
       return;
     }
+    try {
+      const { id, url } = action.payload;
+      const checkoutResult: GetCheckoutResponse =
+        await nacelleStorefrontRequest({
+          credentials: action.credentials,
+          query: GET_CHECKOUT_QUERY,
+          variables: { id, url }
+        }).then((res) => res.json());
 
-    const { id, url } = action.payload;
-    const checkoutResult: GetCheckoutResponse = await nacelleStorefrontRequest({
-      credentials: action.credentials,
-      query: GET_CHECKOUT_QUERY,
-      variables: { id, url }
-    }).then((res) => res.json());
+      // if errors are returned by the API, handle them
+      const hasErrors =
+        typeof checkoutResult.errors !== 'undefined' &&
+        Array.isArray(checkoutResult.errors) &&
+        checkoutResult.errors.length;
 
-    if (!checkoutResult.errors && checkoutResult.data?.getCheckout) {
+      if (hasErrors) {
+        dispatch({
+          type: SET_GET_CHECKOUT_SUCCESS,
+          payload: Promise.reject(checkoutResult.errors[0].message)
+        });
+
+        return;
+      }
+
+      if (checkoutResult.data?.getCheckout) {
+        const { completed, source } = checkoutResult.data.getCheckout;
+        const checkoutProperties: CheckoutProperties = {
+          checkoutComplete: completed,
+          checkoutId: id,
+          checkoutSource: source,
+          checkoutUrl: url
+        };
+
+        dispatch({
+          type: SET_CHECKOUT_COMPLETE,
+          payload: checkoutProperties.checkoutComplete
+        });
+
+        dispatch({
+          type: SET_CHECKOUT_SOURCE,
+          payload: checkoutProperties.checkoutSource
+        });
+
+        dispatch({
+          type: SET_GET_CHECKOUT_SUCCESS,
+          payload: Promise.resolve(checkoutProperties)
+        });
+
+        return;
+      }
+    } catch (err) {
       dispatch({
-        type: SET_CHECKOUT_COMPLETE,
-        payload: checkoutResult.data.getCheckout.completed
-      });
-
-      dispatch({
-        type: SET_CHECKOUT_SOURCE,
-        payload: checkoutResult.data.getCheckout.source
+        type: SET_GET_CHECKOUT_SUCCESS,
+        payload: Promise.reject(err)
       });
     }
   };

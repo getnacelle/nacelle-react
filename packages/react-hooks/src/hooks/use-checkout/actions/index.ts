@@ -5,9 +5,10 @@
 export { default as clearCheckoutData } from './clearCheckoutData';
 export { default as setCheckoutComplete } from './setCheckoutComplete';
 export { default as setCheckoutData } from './setCheckoutData';
-export { default as setCheckoutError } from './setCheckoutError';
 export { default as setCheckoutId } from './setCheckoutId';
 export { default as setCheckoutSource } from './setCheckoutSource';
-export { default as setCheckoutSuccess } from './setCheckoutSuccess';
 export { default as setCheckoutUrl } from './setCheckoutUrl';
+export { default as setGetCheckoutSuccess } from './setGetCheckoutSuccess';
+export { default as setProcessCheckoutError } from './setProcessCheckoutError';
+export { default as setProcessCheckoutSuccess } from './setProcessCheckoutSuccess';
 // @endindex

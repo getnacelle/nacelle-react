@@ -99,9 +99,10 @@ describe('useCheckout reducer', () => {
     const checkoutState = checkoutReducer(initialState, {
       type: SET_CHECKOUT_DATA,
       payload: {
+        ...initialState,
         ...CheckoutProperties,
-        checkoutError: null,
-        checkoutSuccess: Promise.resolve(CheckoutProperties)
+        processCheckoutError: null,
+        processCheckoutSuccess: Promise.resolve(CheckoutProperties)
       }
     });
 

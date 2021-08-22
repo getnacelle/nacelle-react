@@ -18,8 +18,8 @@ export const initialState: CheckoutState = {
   checkoutId: isClient ? getCacheString('checkoutId') : '',
   checkoutUrl: isClient ? getCacheString('checkoutUrl') : '',
   checkoutSource: isClient ? getCacheString('checkoutSource') : '',
-  processCheckoutError: null,
   getCheckoutSuccess: new Promise(() => {}),
+  processCheckoutError: null,
   processCheckoutSuccess: new Promise(() => {})
 };
 

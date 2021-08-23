@@ -18,8 +18,21 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
     if (typeof window === 'undefined') {
       return;
     }
+
     try {
       const { id, url } = action.payload;
+
+      if (!id || !url) {
+        dispatch({
+          type: SET_GET_CHECKOUT_SUCCESS,
+          payload: Promise.reject(
+            `Could not fetch checkout with id: '${id}', url: '${url}'`
+          )
+        });
+
+        return;
+      }
+
       const checkoutResult: GetCheckoutResponse =
         await nacelleStorefrontRequest({
           credentials: action.credentials,
@@ -68,6 +81,15 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
 
         return;
       }
+
+      dispatch({
+        type: SET_GET_CHECKOUT_SUCCESS,
+        payload: Promise.reject(
+          'Checkout response did not include `data.getCheckout`'
+        )
+      });
+
+      return;
     } catch (err) {
       dispatch({
         type: SET_GET_CHECKOUT_SUCCESS,

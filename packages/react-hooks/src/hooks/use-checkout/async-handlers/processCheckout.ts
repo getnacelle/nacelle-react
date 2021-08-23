@@ -83,9 +83,10 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
         });
         dispatch({
           type: SET_PROCESS_CHECKOUT_SUCCESS,
-          payload: Promise.reject(new Error(error.message))
+          payload: Promise.reject(error.message)
         });
         action.setIsCheckingOut(false);
+
         return;
       }
 
@@ -127,16 +128,24 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
             processCheckoutSuccess: Promise.resolve(checkoutSuccessPayload)
           }
         });
-      }
-
-      if (action.isMounted) {
+        action.setIsCheckingOut(false);
+      } else {
+        dispatch({
+          type: SET_PROCESS_CHECKOUT_SUCCESS,
+          payload: Promise.reject(
+            'Checkout response did not incude `data.processCheckout`'
+          )
+        });
         action.setIsCheckingOut(false);
 
-        if (action.redirectUserToCheckout && checkoutUrl) {
-          window.location.href = checkoutUrl;
-        }
+        return;
+      }
+
+      if (action.redirectUserToCheckout && action.isMounted && checkoutUrl) {
+        window.location.href = checkoutUrl;
       }
     } catch (err) {
+      action.setIsCheckingOut(false);
       dispatch({
         type: SET_PROCESS_CHECKOUT_ERROR,
         payload: err

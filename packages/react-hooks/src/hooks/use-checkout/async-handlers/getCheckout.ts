@@ -1,9 +1,8 @@
 import { nacelleStorefrontRequest } from '../utils';
 import { GET_CHECKOUT_QUERY } from '../queries';
 import {
-  SET_CHECKOUT_COMPLETE,
-  SET_CHECKOUT_SOURCE,
-  SET_GET_CHECKOUT_SUCCESS
+  SET_GET_CHECKOUT_SUCCESS,
+  SET_GET_CHECKOUT_DATA
 } from '../use-checkout.reducer';
 import {
   AsyncActionHandler,
@@ -65,18 +64,12 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
         };
 
         dispatch({
-          type: SET_CHECKOUT_COMPLETE,
-          payload: checkoutProperties.checkoutComplete
-        });
-
-        dispatch({
-          type: SET_CHECKOUT_SOURCE,
-          payload: checkoutProperties.checkoutSource
-        });
-
-        dispatch({
-          type: SET_GET_CHECKOUT_SUCCESS,
-          payload: Promise.resolve(checkoutProperties)
+          type: SET_GET_CHECKOUT_DATA,
+          payload: {
+            checkoutComplete: checkoutProperties.checkoutComplete,
+            checkoutSource: checkoutProperties.checkoutSource,
+            getCheckoutSuccess: Promise.resolve(checkoutProperties)
+          }
         });
 
         return;

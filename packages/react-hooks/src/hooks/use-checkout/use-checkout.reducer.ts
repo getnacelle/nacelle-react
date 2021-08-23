@@ -1,12 +1,11 @@
 import { Reducer } from 'react';
 import {
   clearCheckoutData,
-  setCheckoutData,
+  setGetCheckoutData,
+  setGetCheckoutSuccess,
+  setProcessCheckoutData,
   setProcessCheckoutError,
-  setCheckoutComplete,
-  setCheckoutId,
-  setCheckoutSource,
-  setCheckoutUrl
+  setProcessCheckoutSuccess
 } from './actions';
 import { getCacheBoolean, getCacheString } from './utils';
 
@@ -24,13 +23,10 @@ export const initialState: CheckoutState = {
 };
 
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';
-export const SET_CHECKOUT_COMPLETE = 'checkout/set-checkout-complete';
-export const SET_CHECKOUT_DATA = 'checkout/set-checkout-data';
-export const SET_CHECKOUT_ID = 'checkout/set-checkout-id';
-export const SET_CHECKOUT_SOURCE = 'checkout/set-checkout-source';
-export const SET_CHECKOUT_URL = 'checkout/set-checkout-url';
+export const SET_GET_CHECKOUT_DATA = 'checkout/set-get-checkout-data';
 export const SET_GET_CHECKOUT_SUCCESS = 'checkout/set-get-checkout-success';
-export const SET_PROCESS_CHECKOUT_ERROR = 'checkout/set-checkout-error';
+export const SET_PROCESS_CHECKOUT_DATA = 'checkout/set-process-checkout-data';
+export const SET_PROCESS_CHECKOUT_ERROR = 'checkout/set-process-checkout-error';
 export const SET_PROCESS_CHECKOUT_SUCCESS =
   'checkout/set-process-checkout-success';
 
@@ -48,28 +44,24 @@ const checkoutReducer: Reducer<CheckoutState, CheckoutReducerAction> = (
       return clearCheckoutData(state);
     }
 
-    case SET_CHECKOUT_COMPLETE: {
-      return setCheckoutComplete(state, action);
+    case SET_GET_CHECKOUT_DATA: {
+      return setGetCheckoutData(state, action);
     }
 
-    case SET_CHECKOUT_DATA: {
-      return setCheckoutData(state, action);
+    case SET_GET_CHECKOUT_SUCCESS: {
+      return setGetCheckoutSuccess(state, action);
+    }
+
+    case SET_PROCESS_CHECKOUT_DATA: {
+      return setProcessCheckoutData(state, action);
     }
 
     case SET_PROCESS_CHECKOUT_ERROR: {
       return setProcessCheckoutError(state, action);
     }
 
-    case SET_CHECKOUT_ID: {
-      return setCheckoutId(state, action);
-    }
-
-    case SET_CHECKOUT_SOURCE: {
-      return setCheckoutSource(state, action);
-    }
-
-    case SET_CHECKOUT_URL: {
-      return setCheckoutUrl(state, action);
+    case SET_PROCESS_CHECKOUT_SUCCESS: {
+      return setProcessCheckoutSuccess(state, action);
     }
 
     default:

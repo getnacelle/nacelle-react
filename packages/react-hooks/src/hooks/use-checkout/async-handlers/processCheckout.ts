@@ -1,7 +1,7 @@
 import { nacelleStorefrontRequest } from '../utils';
 import { PROCESS_CHECKOUT_QUERY } from '../queries';
 import {
-  SET_CHECKOUT_DATA,
+  SET_PROCESS_CHECKOUT_DATA,
   SET_PROCESS_CHECKOUT_ERROR,
   SET_PROCESS_CHECKOUT_SUCCESS
 } from '../use-checkout.reducer';
@@ -28,6 +28,7 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
     }
 
     try {
+      action.setIsCheckingOut(true);
       const checkoutState = getState();
 
       // clear out any errors from previous `processCheckout()`
@@ -48,8 +49,6 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
           ...(item.variant.metafields || [])
         ].map((m) => ({ key: m.key, value: m.value }))
       }));
-
-      action.setIsCheckingOut(true);
 
       const id = checkoutId || window.localStorage.getItem('checkoutId');
 
@@ -120,7 +119,7 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
         };
 
         dispatch({
-          type: SET_CHECKOUT_DATA,
+          type: SET_PROCESS_CHECKOUT_DATA,
           payload: {
             ...checkoutState,
             ...checkoutSuccessPayload,
@@ -129,6 +128,10 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
           }
         });
         action.setIsCheckingOut(false);
+
+        if (action.redirectUserToCheckout && action.isMounted && checkoutUrl) {
+          window.location.href = checkoutUrl;
+        }
       } else {
         dispatch({
           type: SET_PROCESS_CHECKOUT_SUCCESS,
@@ -140,16 +143,16 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
 
         return;
       }
-
-      if (action.redirectUserToCheckout && action.isMounted && checkoutUrl) {
-        window.location.href = checkoutUrl;
-      }
     } catch (err) {
-      action.setIsCheckingOut(false);
+      dispatch({
+        type: SET_PROCESS_CHECKOUT_SUCCESS,
+        payload: Promise.reject(err)
+      });
       dispatch({
         type: SET_PROCESS_CHECKOUT_ERROR,
         payload: err
       });
+      action.setIsCheckingOut(false);
     }
   };
 

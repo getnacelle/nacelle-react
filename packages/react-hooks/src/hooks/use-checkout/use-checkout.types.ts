@@ -4,16 +4,13 @@ import { Checkout, MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
 import {
   CLEAR_CHECKOUT_DATA,
-  SET_CHECKOUT_COMPLETE,
-  SET_CHECKOUT_DATA,
+  SET_PROCESS_CHECKOUT_DATA,
   SET_PROCESS_CHECKOUT_ERROR,
-  SET_CHECKOUT_ID,
-  SET_CHECKOUT_SOURCE,
-  SET_CHECKOUT_URL,
   SET_GET_CHECKOUT_SUCCESS,
   SET_PROCESS_CHECKOUT_SUCCESS,
   GET_CHECKOUT,
-  PROCESS_CHECKOUT
+  PROCESS_CHECKOUT,
+  SET_GET_CHECKOUT_DATA
 } from './use-checkout.reducer';
 
 /**
@@ -74,18 +71,28 @@ export interface CheckoutProperties {
 }
 
 export interface CheckoutState extends CheckoutProperties {
-  getCheckoutSuccess: Promise<CheckoutProperties | void>;
-  processCheckoutSuccess: Promise<CheckoutProperties | void>;
+  processCheckoutSuccess: Promise<CheckoutProperties | GraphQLError | void>;
   processCheckoutError: GraphQLError | Error | null;
+  getCheckoutSuccess: Promise<CheckoutProperties | void>;
 }
 
-export type GetCheckoutAction = {
+export type GetCheckoutProperties = Pick<
+  CheckoutState,
+  'checkoutComplete' | 'checkoutSource' | 'getCheckoutSuccess'
+>;
+
+export type ProcessCheckoutProperties = Omit<
+  CheckoutState,
+  'getCheckoutSuccess'
+>;
+
+export interface GetCheckoutAction {
   type: typeof GET_CHECKOUT;
   credentials: Credentials;
   payload: GetCheckoutInput;
-};
+}
 
-export type ProcessCheckoutAction = {
+export interface ProcessCheckoutAction {
   type: typeof PROCESS_CHECKOUT;
   credentials: Credentials;
   payload: ProcessCheckoutInput;
@@ -93,62 +100,44 @@ export type ProcessCheckoutAction = {
   setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
   isMounted: React.MutableRefObject<boolean>;
   redirectUserToCheckout: boolean;
-};
+}
 
-export type ClearCheckoutDataAction = {
+export interface ClearCheckoutDataAction {
   type: typeof CLEAR_CHECKOUT_DATA;
   payload?: null;
-};
+}
 
-export type SetCheckoutCompleteAction = {
-  type: typeof SET_CHECKOUT_COMPLETE;
-  payload: boolean;
-};
-
-export type SetCheckoutIdAction = {
-  type: typeof SET_CHECKOUT_ID;
-  payload: string;
-};
-
-export type SetCheckoutSourceAction = {
-  type: typeof SET_CHECKOUT_SOURCE;
-  payload: string;
-};
-
-export type SetCheckoutUrlAction = {
-  type: typeof SET_CHECKOUT_URL;
-  payload: string;
-};
-
-export type SetCheckoutErrorAction = {
+export interface SetCheckoutErrorAction {
   type: typeof SET_PROCESS_CHECKOUT_ERROR;
   payload: GraphQLError | Error | null;
-};
+}
 
-export type SetCheckoutDataAction = {
-  type: typeof SET_CHECKOUT_DATA;
-  payload: CheckoutState;
-};
+export interface SetGetCheckoutDataAction {
+  type: typeof SET_GET_CHECKOUT_DATA;
+  payload: GetCheckoutProperties;
+}
 
-export type SetGetCheckoutSuccessAction = {
+export interface SetGetCheckoutSuccessAction {
   type: typeof SET_GET_CHECKOUT_SUCCESS;
   payload: Promise<CheckoutProperties>;
-};
+}
 
-export type SetProcessCheckoutSuccessAction = {
+export interface SetProcessCheckoutDataAction {
+  type: typeof SET_PROCESS_CHECKOUT_DATA;
+  payload: ProcessCheckoutProperties;
+}
+
+export interface SetProcessCheckoutSuccessAction {
   type: typeof SET_PROCESS_CHECKOUT_SUCCESS;
   payload: Promise<CheckoutProperties>;
-};
+}
 
 export type Actions =
   | ClearCheckoutDataAction
-  | SetCheckoutCompleteAction
-  | SetCheckoutDataAction
   | SetCheckoutErrorAction
-  | SetCheckoutIdAction
-  | SetCheckoutSourceAction
-  | SetCheckoutUrlAction
   | SetGetCheckoutSuccessAction
+  | SetGetCheckoutDataAction
+  | SetProcessCheckoutDataAction
   | SetProcessCheckoutSuccessAction;
 
 export type AsyncActions = GetCheckoutAction | ProcessCheckoutAction;

@@ -1,15 +1,20 @@
 import { setCacheItem } from '../utils';
-import { CheckoutState, SetCheckoutDataAction } from '../use-checkout.types';
+import {
+  CheckoutState,
+  SetProcessCheckoutDataAction
+} from '../use-checkout.types';
 
 const setCheckoutData = (
   state: CheckoutState,
-  action: SetCheckoutDataAction
+  action: SetProcessCheckoutDataAction
 ): CheckoutState => {
   const {
     checkoutComplete,
     checkoutId,
     checkoutSource,
-    checkoutUrl
+    checkoutUrl,
+    processCheckoutSuccess,
+    processCheckoutError
   } = action.payload;
 
   setCacheItem('checkoutComplete', checkoutComplete.toString());
@@ -22,7 +27,9 @@ const setCheckoutData = (
     checkoutComplete,
     checkoutId,
     checkoutSource,
-    checkoutUrl
+    checkoutUrl,
+    processCheckoutSuccess,
+    processCheckoutError
   };
 };
 

@@ -2,14 +2,13 @@ import { Reducer } from 'react';
 import {
   clearCheckoutData,
   setGetCheckoutData,
-  setGetCheckoutSuccess,
   setProcessCheckoutData,
-  setProcessCheckoutError,
-  setProcessCheckoutSuccess
+  setProcessCheckoutError
 } from './actions';
 import { getCacheBoolean, getCacheString } from './utils';
 
 import { CheckoutState, CheckoutReducerAction } from './use-checkout.types';
+import setGetCheckoutError from './actions/setGetCheckoutError';
 
 const isClient = typeof window !== 'undefined';
 export const initialState: CheckoutState = {
@@ -17,18 +16,20 @@ export const initialState: CheckoutState = {
   checkoutId: isClient ? getCacheString('checkoutId') : '',
   checkoutUrl: isClient ? getCacheString('checkoutUrl') : '',
   checkoutSource: isClient ? getCacheString('checkoutSource') : '',
-  getCheckoutSuccess: new Promise(() => {}),
+  getCheckoutError: null,
+  getCheckoutSuccess: null,
   processCheckoutError: null,
-  processCheckoutSuccess: new Promise(() => {})
+  processCheckoutSuccess: null
 };
 
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';
 export const SET_GET_CHECKOUT_DATA = 'checkout/set-get-checkout-data';
-export const SET_GET_CHECKOUT_SUCCESS = 'checkout/set-get-checkout-success';
+export const SET_GET_CHECKOUT_ERROR = 'checkout/set-get-checkout-error';
+export const SET_GET_CHECKOUT_STATUS = 'checkout/set-get-checkout-status';
 export const SET_PROCESS_CHECKOUT_DATA = 'checkout/set-process-checkout-data';
 export const SET_PROCESS_CHECKOUT_ERROR = 'checkout/set-process-checkout-error';
-export const SET_PROCESS_CHECKOUT_SUCCESS =
-  'checkout/set-process-checkout-success';
+export const SET_PROCESS_CHECKOUT_STATUS =
+  'checkout/set-process-checkout-status';
 
 // note: GET_CHECKOUT and PROCESS_CHECKOUT are async actions which are
 // handled separately, by the useReducerAsync hook, in ./use-checkout.provider.tsx
@@ -48,8 +49,8 @@ const checkoutReducer: Reducer<CheckoutState, CheckoutReducerAction> = (
       return setGetCheckoutData(state, action);
     }
 
-    case SET_GET_CHECKOUT_SUCCESS: {
-      return setGetCheckoutSuccess(state, action);
+    case SET_GET_CHECKOUT_ERROR: {
+      return setGetCheckoutError(state, action);
     }
 
     case SET_PROCESS_CHECKOUT_DATA: {
@@ -58,10 +59,6 @@ const checkoutReducer: Reducer<CheckoutState, CheckoutReducerAction> = (
 
     case SET_PROCESS_CHECKOUT_ERROR: {
       return setProcessCheckoutError(state, action);
-    }
-
-    case SET_PROCESS_CHECKOUT_SUCCESS: {
-      return setProcessCheckoutSuccess(state, action);
     }
 
     default:

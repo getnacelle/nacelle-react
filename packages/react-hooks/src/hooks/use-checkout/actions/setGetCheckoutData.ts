@@ -5,8 +5,7 @@ const setGetCheckoutData = (
   state: CheckoutState,
   action: SetGetCheckoutDataAction
 ): CheckoutState => {
-  const { checkoutComplete, checkoutSource, getCheckoutSuccess } =
-    action.payload;
+  const { checkoutComplete, checkoutSource } = action.payload;
   setCacheItem('checkoutComplete', checkoutComplete.toString());
   setCacheItem('checkoutSource', checkoutSource);
 
@@ -14,7 +13,8 @@ const setGetCheckoutData = (
     ...state,
     checkoutComplete,
     checkoutSource,
-    getCheckoutSuccess
+    getCheckoutSuccess: Promise.resolve(true),
+    getCheckoutError: null
   };
 };
 

@@ -2,14 +2,12 @@ import { nacelleStorefrontRequest } from '../utils';
 import { PROCESS_CHECKOUT_QUERY } from '../queries';
 import {
   SET_PROCESS_CHECKOUT_DATA,
-  SET_PROCESS_CHECKOUT_ERROR,
-  SET_PROCESS_CHECKOUT_SUCCESS
+  SET_PROCESS_CHECKOUT_ERROR
 } from '../use-checkout.reducer';
 
 import { CheckoutInput as NacelleCheckoutInput } from '@nacelle/types';
 import {
   AsyncActionHandler,
-  CheckoutProperties,
   ProcessCheckoutResponse,
   ProcessCheckoutAction
 } from '../use-checkout.types';
@@ -29,10 +27,9 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
 
     try {
       action.setIsCheckingOut(true);
-      const checkoutState = getState();
 
       // clear out any errors from previous `processCheckout()`
-      if (checkoutState.processCheckoutError) {
+      if (getState().processCheckoutError) {
         dispatch({ type: SET_PROCESS_CHECKOUT_ERROR, payload: null });
       }
 
@@ -80,10 +77,7 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
           type: SET_PROCESS_CHECKOUT_ERROR,
           payload: error
         });
-        dispatch({
-          type: SET_PROCESS_CHECKOUT_SUCCESS,
-          payload: Promise.reject(error.message)
-        });
+
         action.setIsCheckingOut(false);
 
         return;
@@ -111,47 +105,33 @@ const processCheckout: AsyncActionHandler<ProcessCheckoutAction> =
         const checkoutId = id;
         const checkoutComplete = completed;
         const checkoutSource = String(source);
-        const checkoutSuccessPayload: CheckoutProperties = {
-          checkoutComplete,
-          checkoutId,
-          checkoutSource,
-          checkoutUrl
-        };
 
         dispatch({
           type: SET_PROCESS_CHECKOUT_DATA,
           payload: {
-            ...checkoutState,
-            ...checkoutSuccessPayload,
-            processCheckoutError: null,
-            processCheckoutSuccess: Promise.resolve(checkoutSuccessPayload)
+            checkoutComplete,
+            checkoutId,
+            checkoutSource,
+            checkoutUrl
           }
         });
+
         action.setIsCheckingOut(false);
 
         if (action.redirectUserToCheckout && action.isMounted && checkoutUrl) {
           window.location.href = checkoutUrl;
         }
       } else {
-        dispatch({
-          type: SET_PROCESS_CHECKOUT_SUCCESS,
-          payload: Promise.reject(
-            'Checkout response did not incude `data.processCheckout`'
-          )
-        });
-        action.setIsCheckingOut(false);
-
-        return;
+        throw new Error(
+          'Checkout response did not incude `data.processCheckout`'
+        );
       }
     } catch (err) {
-      dispatch({
-        type: SET_PROCESS_CHECKOUT_SUCCESS,
-        payload: Promise.reject(err)
-      });
       dispatch({
         type: SET_PROCESS_CHECKOUT_ERROR,
         payload: err
       });
+
       action.setIsCheckingOut(false);
     }
   };

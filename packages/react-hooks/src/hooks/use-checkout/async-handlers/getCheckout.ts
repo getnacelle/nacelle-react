@@ -1,8 +1,8 @@
 import { nacelleStorefrontRequest } from '../utils';
 import { GET_CHECKOUT_QUERY } from '../queries';
 import {
-  SET_GET_CHECKOUT_SUCCESS,
-  SET_GET_CHECKOUT_DATA
+  SET_GET_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_ERROR
 } from '../use-checkout.reducer';
 import {
   AsyncActionHandler,
@@ -23,10 +23,10 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
 
       if (!id || !url) {
         dispatch({
-          type: SET_GET_CHECKOUT_SUCCESS,
-          payload: Promise.reject(
-            `Could not fetch checkout with id: '${id}', url: '${url}'`
-          )
+          type: SET_GET_CHECKOUT_ERROR,
+          payload: {
+            message: `Could not fetch checkout with id: '${id}', url: '${url}'`
+          }
         });
 
         return;
@@ -47,8 +47,8 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
 
       if (hasErrors) {
         dispatch({
-          type: SET_GET_CHECKOUT_SUCCESS,
-          payload: Promise.reject(checkoutResult.errors[0].message)
+          type: SET_GET_CHECKOUT_ERROR,
+          payload: { message: checkoutResult.errors[0].message }
         });
 
         return;
@@ -67,8 +67,7 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
           type: SET_GET_CHECKOUT_DATA,
           payload: {
             checkoutComplete: checkoutProperties.checkoutComplete,
-            checkoutSource: checkoutProperties.checkoutSource,
-            getCheckoutSuccess: Promise.resolve(checkoutProperties)
+            checkoutSource: checkoutProperties.checkoutSource
           }
         });
 
@@ -76,17 +75,17 @@ const getCheckout: AsyncActionHandler<GetCheckoutAction> =
       }
 
       dispatch({
-        type: SET_GET_CHECKOUT_SUCCESS,
-        payload: Promise.reject(
-          'Checkout response did not include `data.getCheckout`'
-        )
+        type: SET_GET_CHECKOUT_ERROR,
+        payload: {
+          message: 'Checkout response did not include `data.getCheckout`'
+        }
       });
-
-      return;
     } catch (err) {
       dispatch({
-        type: SET_GET_CHECKOUT_SUCCESS,
-        payload: Promise.reject(err)
+        type: SET_GET_CHECKOUT_ERROR,
+        payload: {
+          message: err
+        }
       });
     }
   };

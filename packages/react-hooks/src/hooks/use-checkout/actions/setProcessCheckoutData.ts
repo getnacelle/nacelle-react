@@ -8,14 +8,8 @@ const setCheckoutData = (
   state: CheckoutState,
   action: SetProcessCheckoutDataAction
 ): CheckoutState => {
-  const {
-    checkoutComplete,
-    checkoutId,
-    checkoutSource,
-    checkoutUrl,
-    processCheckoutSuccess,
-    processCheckoutError
-  } = action.payload;
+  const { checkoutComplete, checkoutId, checkoutSource, checkoutUrl } =
+    action.payload;
 
   setCacheItem('checkoutComplete', checkoutComplete.toString());
   setCacheItem('checkoutId', checkoutId);
@@ -28,8 +22,8 @@ const setCheckoutData = (
     checkoutId,
     checkoutSource,
     checkoutUrl,
-    processCheckoutSuccess,
-    processCheckoutError
+    processCheckoutSuccess: Promise.resolve(true),
+    processCheckoutError: null
   };
 };
 

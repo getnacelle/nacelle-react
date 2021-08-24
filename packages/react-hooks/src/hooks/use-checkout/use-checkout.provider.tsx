@@ -19,11 +19,8 @@ import {
   Actions,
   AsyncActions,
   CheckoutActions,
-  CheckoutProperties,
   CheckoutState,
-  Credentials,
-  GetCheckoutInput,
-  ProcessCheckoutInput
+  Credentials
 } from './use-checkout.types';
 
 import checkoutReducer, {
@@ -70,20 +67,31 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
     asyncActionHandlers
   );
 
-  const checkoutActions = useMemo(
-    () => ({
-      clearCheckoutData: (): void => dispatch({ type: CLEAR_CHECKOUT_DATA }),
-      getCheckout: (payload: GetCheckoutInput): CheckoutProperties => {
+  const checkoutActions = useMemo<CheckoutActions>(() => {
+    const checkoutProperties = {
+      checkoutComplete: checkoutState.checkoutComplete,
+      checkoutId: checkoutState.checkoutId,
+      checkoutSource: checkoutState.checkoutSource,
+      checkoutUrl: checkoutState.checkoutUrl
+    };
+
+    return {
+      clearCheckoutData: () => dispatch({ type: CLEAR_CHECKOUT_DATA }),
+      getCheckout: async (payload) => {
         dispatch({ type: GET_CHECKOUT, payload, credentials });
 
-        return {
-          checkoutComplete: checkoutState.checkoutComplete,
-          checkoutId: checkoutState.checkoutId,
-          checkoutSource: checkoutState.checkoutSource,
-          checkoutUrl: checkoutState.checkoutUrl
-        };
+        const success = await checkoutState.getCheckoutSuccess;
+
+        if (success) {
+          return checkoutProperties;
+        }
+
+        throw new Error(
+          checkoutState.getCheckoutError?.message ||
+            'Could not fetch checkout data with `getCheckout`'
+        );
       },
-      processCheckout: (payload: ProcessCheckoutInput) => {
+      processCheckout: async (payload) => {
         dispatch({
           type: PROCESS_CHECKOUT,
           credentials,
@@ -94,21 +102,32 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
           redirectUserToCheckout
         });
 
-        return checkoutState.processCheckoutSuccess;
+        const success = await checkoutState.processCheckoutSuccess;
+
+        if (success) {
+          return checkoutProperties;
+        }
+
+        throw new Error(
+          checkoutState.processCheckoutError?.message ||
+            'Could not process checkout via `processCheckout`'
+        );
       }
-    }),
-    [
-      checkoutState.checkoutComplete,
-      checkoutState.checkoutId,
-      checkoutState.checkoutSource,
-      checkoutState.processCheckoutSuccess,
-      checkoutState.checkoutUrl,
-      credentials,
-      dispatch,
-      isCheckingOut,
-      redirectUserToCheckout
-    ]
-  );
+    };
+  }, [
+    checkoutState.checkoutComplete,
+    checkoutState.checkoutId,
+    checkoutState.checkoutSource,
+    checkoutState.checkoutUrl,
+    checkoutState.getCheckoutError,
+    checkoutState.getCheckoutSuccess,
+    checkoutState.processCheckoutError,
+    checkoutState.processCheckoutSuccess,
+    credentials,
+    dispatch,
+    isCheckingOut,
+    redirectUserToCheckout
+  ]);
 
   // throw an error if credentials are missing
   useEffect(() => {

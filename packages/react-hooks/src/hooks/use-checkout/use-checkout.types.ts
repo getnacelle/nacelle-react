@@ -1,16 +1,14 @@
 import React, { Dispatch, Reducer, ReducerState, ReducerAction } from 'react';
-import { GraphQLError } from 'graphql';
 import { Checkout, MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
 import {
   CLEAR_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_ERROR,
   SET_PROCESS_CHECKOUT_DATA,
   SET_PROCESS_CHECKOUT_ERROR,
-  SET_GET_CHECKOUT_SUCCESS,
-  SET_PROCESS_CHECKOUT_SUCCESS,
   GET_CHECKOUT,
-  PROCESS_CHECKOUT,
-  SET_GET_CHECKOUT_DATA
+  PROCESS_CHECKOUT
 } from './use-checkout.reducer';
 
 /**
@@ -28,6 +26,26 @@ export interface GraphQLRequestParams {
   credentials: Credentials;
   query: string;
   variables: AnyObject;
+}
+
+interface GraphQLErrorLocation {
+  line: number;
+  column: number;
+}
+
+interface GraphQLErrorExtension {
+  [key: string]:
+    | GraphQLErrorExtension
+    | GraphQLErrorExtension[]
+    | string
+    | string[];
+}
+
+export interface GraphQLError {
+  message: string;
+  locations?: GraphQLErrorLocation[];
+  path?: string[];
+  extensions?: GraphQLErrorExtension[];
 }
 
 export interface ProcessCheckoutResponse {
@@ -71,19 +89,33 @@ export interface CheckoutProperties {
 }
 
 export interface CheckoutState extends CheckoutProperties {
-  processCheckoutSuccess: Promise<CheckoutProperties | GraphQLError | void>;
-  processCheckoutError: GraphQLError | Error | null;
-  getCheckoutSuccess: Promise<CheckoutProperties | void>;
+  getCheckoutError: GraphQLError | null;
+  getCheckoutSuccess: Promise<boolean> | null;
+  processCheckoutError: GraphQLError | null;
+  processCheckoutSuccess: Promise<boolean> | null;
 }
 
 export type GetCheckoutProperties = Pick<
   CheckoutState,
-  'checkoutComplete' | 'checkoutSource' | 'getCheckoutSuccess'
+  | 'checkoutComplete'
+  | 'checkoutSource'
+  | 'getCheckoutError'
+  | 'getCheckoutSuccess'
 >;
 
-export type ProcessCheckoutProperties = Omit<
+export type GetCheckoutDataPayload = Pick<
+  GetCheckoutProperties,
+  'checkoutComplete' | 'checkoutSource'
+>;
+
+export type ProcessCheckoutProperties = Pick<
   CheckoutState,
-  'getCheckoutSuccess'
+  | 'checkoutComplete'
+  | 'checkoutId'
+  | 'checkoutSource'
+  | 'checkoutUrl'
+  | 'processCheckoutError'
+  | 'processCheckoutSuccess'
 >;
 
 export interface GetCheckoutAction {
@@ -107,48 +139,46 @@ export interface ClearCheckoutDataAction {
   payload?: null;
 }
 
-export interface SetCheckoutErrorAction {
-  type: typeof SET_PROCESS_CHECKOUT_ERROR;
-  payload: GraphQLError | Error | null;
-}
-
 export interface SetGetCheckoutDataAction {
   type: typeof SET_GET_CHECKOUT_DATA;
-  payload: GetCheckoutProperties;
+  payload: GetCheckoutDataPayload;
 }
 
-export interface SetGetCheckoutSuccessAction {
-  type: typeof SET_GET_CHECKOUT_SUCCESS;
-  payload: Promise<CheckoutProperties>;
+export interface SetGetCheckoutErrorAction {
+  type: typeof SET_GET_CHECKOUT_ERROR;
+  payload: GraphQLError | null;
 }
 
 export interface SetProcessCheckoutDataAction {
   type: typeof SET_PROCESS_CHECKOUT_DATA;
-  payload: ProcessCheckoutProperties;
+  payload: CheckoutProperties;
 }
 
-export interface SetProcessCheckoutSuccessAction {
-  type: typeof SET_PROCESS_CHECKOUT_SUCCESS;
-  payload: Promise<CheckoutProperties>;
+export interface SetProcessCheckoutErrorAction {
+  type: typeof SET_PROCESS_CHECKOUT_ERROR;
+  payload: GraphQLError | null;
 }
 
 export type Actions =
   | ClearCheckoutDataAction
-  | SetCheckoutErrorAction
-  | SetGetCheckoutSuccessAction
   | SetGetCheckoutDataAction
+  | SetGetCheckoutErrorAction
   | SetProcessCheckoutDataAction
-  | SetProcessCheckoutSuccessAction;
+  | SetProcessCheckoutErrorAction;
 
 export type AsyncActions = GetCheckoutAction | ProcessCheckoutAction;
 
 export type CheckoutReducerAction = Actions | AsyncActions;
 
-export type CheckoutActions = {
+export interface CheckoutActions {
   clearCheckoutData: () => void;
-  getCheckout: (payload: GetCheckoutInput) => void;
-  processCheckout: (payload: ProcessCheckoutInput) => void;
-};
+  getCheckout: (
+    payload: GetCheckoutInput
+  ) => Promise<CheckoutProperties | GraphQLError>;
+  processCheckout: (
+    payload: ProcessCheckoutInput
+  ) => Promise<CheckoutProperties | GraphQLError>;
+}
 
 export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
 

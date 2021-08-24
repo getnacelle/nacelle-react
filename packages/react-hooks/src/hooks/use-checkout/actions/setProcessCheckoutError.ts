@@ -1,12 +1,16 @@
-import { CheckoutState, SetCheckoutErrorAction } from '../use-checkout.types';
+import {
+  CheckoutState,
+  SetProcessCheckoutErrorAction
+} from '../use-checkout.types';
 
 const setProcessCheckoutError = (
   state: CheckoutState,
-  action: SetCheckoutErrorAction
+  action: SetProcessCheckoutErrorAction
 ): CheckoutState => {
   return {
     ...state,
-    processCheckoutError: action.payload
+    processCheckoutError: action.payload,
+    processCheckoutSuccess: Promise.resolve(false)
   };
 };
 

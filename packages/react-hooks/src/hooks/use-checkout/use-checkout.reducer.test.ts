@@ -41,20 +41,10 @@ describe('useCheckout reducer', () => {
     const checkoutId = id;
     const checkoutSource = source;
     const checkoutUrl = url;
-    const CheckoutProperties = {
-      checkoutComplete,
-      checkoutId,
-      checkoutSource,
-      checkoutUrl
-    };
+
     const checkoutState = checkoutReducer(initialState, {
       type: SET_PROCESS_CHECKOUT_DATA,
-      payload: {
-        ...initialState,
-        ...CheckoutProperties,
-        processCheckoutError: null,
-        processCheckoutSuccess: Promise.resolve(CheckoutProperties)
-      }
+      payload: { checkoutComplete, checkoutId, checkoutSource, checkoutUrl }
     });
 
     expect(checkoutState.checkoutComplete).toEqual(complete);

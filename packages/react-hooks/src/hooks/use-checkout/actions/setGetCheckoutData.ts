@@ -13,8 +13,8 @@ const setGetCheckoutData = (
     ...state,
     checkoutComplete,
     checkoutSource,
-    getCheckoutSuccess: Promise.resolve(true),
-    getCheckoutError: null
+    getCheckoutError: null,
+    getCheckoutSuccess: Promise.resolve(true)
   };
 };
 

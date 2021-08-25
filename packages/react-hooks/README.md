@@ -64,19 +64,28 @@ An array containing:
 - `checkoutId` (string) - the checkout ID
 - `checkoutSource` (string) - the checkout provider (e.g. 'Shopify')
 - `checkoutUrl` (string) - the url of the checkout page
+- `getCheckoutError` (GraphQLError | null) - error returned from the API when fetching the `checkoutComplete` and `checkoutSource`
+- `processCheckoutError` (GraphQLError | null) - error returned from the API when processing a checkout
 
 2. `checkoutActions`: an object containing the following properties:
 
 - `processCheckout({ lineItems, checkoutId?, discountCodes?, metafields?, note?, source? })`: (function) when called, initiates checkout processing
-  - Accepts a configuration object with the following properties:
+  - Accepts an object with the following properties:
     - `lineItems` (_required_): an array containing objects representing items in the cart, where each object contains a `product` (_object_), `variant` (_object_) and `quantity`
     - `checkoutId` (_optional_): a string representing the checkout identification token from a previously-initiated checkout sequence
     - `metafields` (_optional_): an array of key-value pairs of metadata associated with the checkout
     - `note` (_optional_): a string representing the order note
     - `discountCodes` (_optional_): an array of strings representing the discount codes to be applied
     - `source` (_optional_): a string representing the name of the checkout service provider
-- `getCheckout({ id, url })` (function) when called with a checkout `id` and `url`, updates the `checkoutData.checkoutComplete` (note: `useCheckout` runs this function automatically - it is provided only to satisfy custom use cases)
-- `clearCheckoutData`: (function) when called, resets the `checkoutData` and clears `checkoutData` values stored in `localStorage`
+  - Either rejects with an error message, or returns a promise which resolves to an object containing the `checkoutComplete`, `checkoutId`, `checkoutSource`, and `checkoutUrl`
+- `getCheckout({ id, url })` (function) when called with a checkout `id` and `url`, updates the `checkoutData.checkoutComplete` (note: `useCheckout` runs this function automatically - it is provided only to satisfy special use cases)
+  - Accepts an object with the following properties:
+    - `id` (_required_): a string representing the checkout identification token from a previously-initiated checkout sequence
+    - `url` (_required_): a string representing the checkout URL from a previously-initiated checkout sequence
+  - Either rejects with an error message, or returns a promise which resolves to an object containing the `checkoutComplete`, `checkoutId`, `checkoutSource`, and `checkoutUrl`
+- `clearCheckoutData`: (function) when called, resets the `checkoutData` and clears `checkoutData` values stored in browser storage
+  - Accepts: nothing
+  - Returns: nothing
 
 3. `isCheckingOut`: a boolean that indicates whether or not checkout information is presently being exchanged with Nacelle's Hail Frequency API
 

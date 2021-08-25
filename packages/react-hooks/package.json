@@ -35,7 +35,8 @@
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.1"
+    "rollup": "^2.23.1",
+    "tslib": "^2.3.1"
   },
   "repository": {
     "type": "git",
@@ -57,9 +58,5 @@
   "gitHead": "3153c14f529fa9f691e7cd2e6c44cee74d1a78db",
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "abort-controller": "^3.0.0",
-    "use-reducer-async": "^2.0.1"
   }
 }

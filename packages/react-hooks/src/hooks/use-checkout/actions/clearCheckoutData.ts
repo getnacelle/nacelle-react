@@ -12,7 +12,9 @@ const clearCheckoutData = (state: CheckoutState): CheckoutState => {
     checkoutComplete: false,
     checkoutId: '',
     checkoutSource: '',
-    checkoutUrl: ''
+    checkoutUrl: '',
+    getCheckoutError: null,
+    processCheckoutError: null
   };
 };
 

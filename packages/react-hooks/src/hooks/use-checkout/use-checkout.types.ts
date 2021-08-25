@@ -1,7 +1,13 @@
 import React from 'react';
-import { Checkout } from '@nacelle/types';
-import { MetafieldInput } from '@nacelle/types';
+import { Checkout, MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
+import {
+  CLEAR_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_ERROR,
+  SET_PROCESS_CHECKOUT_DATA,
+  SET_PROCESS_CHECKOUT_ERROR
+} from './use-checkout.reducer';
 
 /**
  * @param nacelleSpaceId: the target Nacelle Space ID (string)
@@ -20,20 +26,31 @@ export interface GraphQLRequestParams {
   variables: AnyObject;
 }
 
-export interface CheckoutError {
+interface GraphQLErrorLocation {
+  line: number;
+  column: number;
+}
+
+interface GraphQLErrorExtension {
+  [key: string]:
+    | GraphQLErrorExtension
+    | GraphQLErrorExtension[]
+    | string
+    | string[];
+}
+
+export interface GraphQLError {
   message: string;
-  extensions: {
-    variables: string;
-    field: string;
-    code: string;
-  };
+  locations?: GraphQLErrorLocation[];
+  path?: string[];
+  extensions?: GraphQLErrorExtension[];
 }
 
 export interface ProcessCheckoutResponse {
   data: {
     processCheckout: Checkout;
   };
-  errors: CheckoutError[];
+  errors: GraphQLError[];
 }
 
 export interface GetCheckoutResponse {
@@ -45,99 +62,97 @@ export interface GetCheckoutResponse {
       source: string;
     };
   };
-  errors: CheckoutError[];
+  errors: GraphQLError[];
 }
 
-export interface GetCheckoutInput {
+export interface GetCheckoutRequestInput {
+  credentials: Credentials;
   id: string;
   url: string;
+  getCheckoutError: GraphQLError | null;
+  setGetCheckoutError: (getCheckoutError: GraphQLError | null) => void;
 }
 
-export interface ProcessCheckoutInput {
+export type GetCheckoutInput = Pick<GetCheckoutRequestInput, 'id' | 'url'>;
+
+export interface ProcessCheckoutRequestInput {
+  credentials: Credentials;
   lineItems: CartItem[];
+  isCheckingOut: boolean;
+  setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
+  processCheckoutError: GraphQLError | null;
+  setProcessCheckoutError: (processCheckoutError: GraphQLError | null) => void;
   checkoutId?: string;
   discountCodes?: string[];
   metafields?: MetafieldInput[];
-  note?: string;
   source?: string;
+  note?: string;
 }
 
-export interface CheckoutState {
+export type ProcessCheckoutInput = Pick<
+  ProcessCheckoutRequestInput,
+  'lineItems' | 'discountCodes' | 'metafields' | 'note'
+>;
+
+export interface CheckoutProperties {
   checkoutComplete: boolean;
   checkoutId: string;
   checkoutSource: string;
   checkoutUrl: string;
 }
 
-export type GetCheckoutAction = {
-  type: 'checkout/get-checkout';
-  credentials: Credentials;
-  payload: GetCheckoutInput;
-};
+export interface CheckoutState extends CheckoutProperties {
+  getCheckoutError: GraphQLError | null;
+  processCheckoutError: GraphQLError | null;
+}
 
-export type ProcessCheckoutAction = {
-  type: 'checkout/process-checkout';
-  credentials: Credentials;
-  payload: ProcessCheckoutInput;
-  isCheckingOut: boolean;
-  setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
-  isMounted: React.MutableRefObject<boolean>;
-};
+export type GetCheckoutDataPayload = Pick<
+  CheckoutState,
+  'checkoutComplete' | 'checkoutSource'
+>;
 
-export type ClearCheckoutDataAction = {
-  type: 'checkout/clear-checkout-data';
+export interface ClearCheckoutDataAction {
+  type: typeof CLEAR_CHECKOUT_DATA;
   payload?: null;
-};
+}
 
-export type SetCheckoutCompleteAction = {
-  type: 'checkout/set-checkout-complete';
-  payload: boolean;
-};
+export interface SetGetCheckoutDataAction {
+  type: typeof SET_GET_CHECKOUT_DATA;
+  payload: GetCheckoutDataPayload;
+}
 
-export type SetCheckoutIdAction = {
-  type: 'checkout/set-checkout-id';
-  payload: string;
-};
+export interface SetGetCheckoutErrorAction {
+  type: typeof SET_GET_CHECKOUT_ERROR;
+  payload: GraphQLError | null;
+}
 
-export type SetCheckoutSourceAction = {
-  type: 'checkout/set-checkout-source';
-  payload: string;
-};
+export interface SetProcessCheckoutDataAction {
+  type: typeof SET_PROCESS_CHECKOUT_DATA;
+  payload: CheckoutProperties;
+}
 
-export type SetCheckoutUrlAction = {
-  type: 'checkout/set-checkout-url';
-  payload: string;
-};
+export interface SetProcessCheckoutErrorAction {
+  type: typeof SET_PROCESS_CHECKOUT_ERROR;
+  payload: GraphQLError | null;
+}
 
-export type SetCheckoutDataAction = {
-  type: 'checkout/set-checkout-data';
-  payload: CheckoutState;
-};
-
-export type CheckoutReducerAction =
+export type Actions =
   | ClearCheckoutDataAction
-  | GetCheckoutAction
-  | ProcessCheckoutAction
-  | SetCheckoutDataAction
-  | SetCheckoutCompleteAction
-  | SetCheckoutIdAction
-  | SetCheckoutSourceAction
-  | SetCheckoutUrlAction;
+  | SetGetCheckoutDataAction
+  | SetGetCheckoutErrorAction
+  | SetProcessCheckoutDataAction
+  | SetProcessCheckoutErrorAction;
+
+export type GetCheckout = (
+  payload: GetCheckoutInput
+) => Promise<CheckoutProperties>;
+
+export type ProcessCheckout = (
+  payload: ProcessCheckoutInput
+) => Promise<CheckoutProperties>;
 
 export interface CheckoutActions {
   clearCheckoutData: () => void;
-  getCheckout: (payload: GetCheckoutInput) => void;
-  processCheckout: (payload: ProcessCheckoutInput) => void;
+  getCheckout: GetCheckout;
+  processCheckout: ProcessCheckout;
 }
-
-export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
-
-export interface ActionHandlerParams {
-  dispatch: CheckoutDispatch;
-}
-
-export type ActionHandler = ({
-  dispatch
-}: {
-  dispatch: any;
-}) => (action: any) => Promise<void>;

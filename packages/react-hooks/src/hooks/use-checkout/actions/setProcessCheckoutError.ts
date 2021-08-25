@@ -1,3 +1,4 @@
+import { setCacheItem } from '../utils';
 import {
   CheckoutState,
   SetProcessCheckoutErrorAction
@@ -7,10 +8,18 @@ const setProcessCheckoutError = (
   state: CheckoutState,
   action: SetProcessCheckoutErrorAction
 ): CheckoutState => {
+  setCacheItem('checkoutComplete', '');
+  setCacheItem('checkoutId', '');
+  setCacheItem('checkoutSource', '');
+  setCacheItem('checkoutUrl', '');
+
   return {
     ...state,
-    processCheckoutError: action.payload,
-    processCheckoutSuccess: Promise.resolve(false)
+    checkoutComplete: false,
+    checkoutId: '',
+    checkoutSource: '',
+    checkoutUrl: '',
+    processCheckoutError: action.payload
   };
 };
 

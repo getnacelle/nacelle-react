@@ -22,8 +22,7 @@ const setCheckoutData = (
     checkoutId,
     checkoutSource,
     checkoutUrl,
-    processCheckoutError: null,
-    processCheckoutSuccess: Promise.resolve(true)
+    processCheckoutError: null
   };
 };
 

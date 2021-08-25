@@ -1,33 +1,33 @@
 import React, {
   useState,
   useRef,
-  useMemo,
   useEffect,
   useContext,
   FC,
-  Reducer
+  useCallback,
+  useReducer
 } from 'react';
-import { useReducerAsync, AsyncActionHandlers } from 'use-reducer-async';
-import 'abort-controller/polyfill';
-
 import {
-  getCheckout as getCheckoutActionHandler,
-  processCheckout as processCheckoutActionHandler
-} from './async-handlers';
+  getCheckout as getCheckoutRequest,
+  processCheckout as processCheckoutRequest
+} from './checkout-requests';
 import { getCacheString, getCacheBoolean } from './utils';
 import {
-  Actions,
-  AsyncActions,
   CheckoutActions,
   CheckoutState,
-  Credentials
+  Credentials,
+  GetCheckout,
+  GraphQLError,
+  ProcessCheckout
 } from './use-checkout.types';
 
 import checkoutReducer, {
   initialState,
   CLEAR_CHECKOUT_DATA,
-  GET_CHECKOUT,
-  PROCESS_CHECKOUT
+  SET_GET_CHECKOUT_DATA,
+  SET_GET_CHECKOUT_ERROR,
+  SET_PROCESS_CHECKOUT_DATA,
+  SET_PROCESS_CHECKOUT_ERROR
 } from './use-checkout.reducer';
 
 export type CheckoutContextValue = null | CheckoutState;
@@ -45,14 +45,6 @@ const CheckoutActionContext =
   React.createContext<CheckoutActionContextValue>(null);
 const IsCheckingOutContext = React.createContext<boolean>(false);
 
-const asyncActionHandlers: AsyncActionHandlers<
-  Reducer<CheckoutState, Actions>,
-  AsyncActions
-> = {
-  [GET_CHECKOUT]: getCheckoutActionHandler,
-  [PROCESS_CHECKOUT]: processCheckoutActionHandler
-};
-
 export const CheckoutProvider: FC<CheckoutProviderProps> = ({
   children,
   credentials,
@@ -61,73 +53,100 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
   const hasFetchedCheckout = useRef(false);
-  const [checkoutState, dispatch] = useReducerAsync(
-    checkoutReducer,
-    initialState,
-    asyncActionHandlers
+  const setGetCheckoutError = (getCheckoutError: GraphQLError | null) =>
+    dispatch({ type: SET_GET_CHECKOUT_ERROR, payload: getCheckoutError });
+  const setProcessCheckoutError = (processCheckoutError: GraphQLError | null) =>
+    dispatch({
+      type: SET_PROCESS_CHECKOUT_ERROR,
+      payload: processCheckoutError
+    });
+
+  // Set up the reducer
+  const [checkoutState, dispatch] = useReducer(checkoutReducer, initialState);
+
+  // Set up the `checkoutActions`
+  const clearCheckoutData = () => dispatch({ type: CLEAR_CHECKOUT_DATA });
+
+  const getCheckout: GetCheckout = useCallback(
+    async ({ id, url }) => {
+      const getCheckoutResponse = await getCheckoutRequest({
+        credentials,
+        id,
+        url,
+        getCheckoutError: checkoutState.getCheckoutError,
+        setGetCheckoutError
+      }).catch((err) => {
+        throw new Error(err);
+      });
+
+      if (typeof getCheckoutResponse === 'object') {
+        dispatch({
+          type: SET_GET_CHECKOUT_DATA,
+          payload: {
+            checkoutComplete: getCheckoutResponse.checkoutComplete,
+            checkoutSource: getCheckoutResponse.checkoutSource
+          }
+        });
+        return getCheckoutResponse;
+      }
+
+      throw new Error(
+        checkoutState.getCheckoutError?.message ||
+          'Could not fetch checkout data with `getCheckout`'
+      );
+    },
+    [checkoutState.getCheckoutError, credentials]
   );
 
-  const checkoutActions = useMemo<CheckoutActions>(() => {
-    const checkoutProperties = {
-      checkoutComplete: checkoutState.checkoutComplete,
-      checkoutId: checkoutState.checkoutId,
-      checkoutSource: checkoutState.checkoutSource,
-      checkoutUrl: checkoutState.checkoutUrl
-    };
+  const processCheckout: ProcessCheckout = useCallback(
+    async ({ lineItems, discountCodes, metafields, note }) => {
+      const processCheckoutResponse = await processCheckoutRequest({
+        credentials,
+        lineItems,
+        discountCodes,
+        metafields,
+        note,
+        source: checkoutState.checkoutSource,
+        checkoutId: checkoutState.checkoutId,
+        isCheckingOut,
+        setIsCheckingOut,
+        processCheckoutError: checkoutState.processCheckoutError,
+        setProcessCheckoutError
+      }).catch((err) => {
+        throw new Error(err);
+      });
 
-    return {
-      clearCheckoutData: () => dispatch({ type: CLEAR_CHECKOUT_DATA }),
-      getCheckout: async (payload) => {
-        dispatch({ type: GET_CHECKOUT, payload, credentials });
-
-        const success = await checkoutState.getCheckoutSuccess;
-
-        if (success) {
-          return checkoutProperties;
-        }
-
-        throw new Error(
-          checkoutState.getCheckoutError?.message ||
-            'Could not fetch checkout data with `getCheckout`'
-        );
-      },
-      processCheckout: async (payload) => {
+      if (typeof processCheckoutResponse === 'object') {
         dispatch({
-          type: PROCESS_CHECKOUT,
-          credentials,
-          payload,
-          isMounted,
-          isCheckingOut,
-          setIsCheckingOut,
-          redirectUserToCheckout
+          type: SET_PROCESS_CHECKOUT_DATA,
+          payload: processCheckoutResponse
         });
 
-        const success = await checkoutState.processCheckoutSuccess;
-
-        if (success) {
-          return checkoutProperties;
+        if (
+          redirectUserToCheckout &&
+          isMounted &&
+          processCheckoutResponse.checkoutUrl
+        ) {
+          window.location.href = processCheckoutResponse.checkoutUrl;
         }
 
-        throw new Error(
-          checkoutState.processCheckoutError?.message ||
-            'Could not process checkout via `processCheckout`'
-        );
+        return processCheckoutResponse;
       }
-    };
-  }, [
-    checkoutState.checkoutComplete,
-    checkoutState.checkoutId,
-    checkoutState.checkoutSource,
-    checkoutState.checkoutUrl,
-    checkoutState.getCheckoutError,
-    checkoutState.getCheckoutSuccess,
-    checkoutState.processCheckoutError,
-    checkoutState.processCheckoutSuccess,
-    credentials,
-    dispatch,
-    isCheckingOut,
-    redirectUserToCheckout
-  ]);
+
+      throw new Error(
+        checkoutState.processCheckoutError?.message ||
+          'Could not process checkout via `processCheckout`'
+      );
+    },
+    [
+      checkoutState.checkoutId,
+      checkoutState.checkoutSource,
+      checkoutState.processCheckoutError,
+      credentials,
+      isCheckingOut,
+      redirectUserToCheckout
+    ]
+  );
 
   // throw an error if credentials are missing
   useEffect(() => {
@@ -165,13 +184,16 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
       !hasFetchedCheckout.current
     ) {
       hasFetchedCheckout.current = true;
-      checkoutActions.getCheckout({ id, url });
+
+      getCheckout({ id, url }).catch((err) => console.warn(err));
     }
-  }, [checkoutActions, checkoutState, isCheckingOut]);
+  }, [checkoutState, getCheckout, isCheckingOut]);
 
   return (
     <CheckoutDataContext.Provider value={checkoutState}>
-      <CheckoutActionContext.Provider value={checkoutActions}>
+      <CheckoutActionContext.Provider
+        value={{ clearCheckoutData, getCheckout, processCheckout }}
+      >
         <IsCheckingOutContext.Provider value={isCheckingOut}>
           {children}
         </IsCheckingOutContext.Provider>

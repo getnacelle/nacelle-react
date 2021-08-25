@@ -1,4 +1,4 @@
-import React, { Dispatch, Reducer, ReducerState, ReducerAction } from 'react';
+import React from 'react';
 import { Checkout, MetafieldInput } from '@nacelle/types';
 import { CartItem, AnyObject } from '../common/types';
 import {
@@ -6,9 +6,7 @@ import {
   SET_GET_CHECKOUT_DATA,
   SET_GET_CHECKOUT_ERROR,
   SET_PROCESS_CHECKOUT_DATA,
-  SET_PROCESS_CHECKOUT_ERROR,
-  GET_CHECKOUT,
-  PROCESS_CHECKOUT
+  SET_PROCESS_CHECKOUT_ERROR
 } from './use-checkout.reducer';
 
 /**
@@ -67,19 +65,34 @@ export interface GetCheckoutResponse {
   errors: GraphQLError[];
 }
 
-export interface GetCheckoutInput {
+export interface GetCheckoutRequestInput {
+  credentials: Credentials;
   id: string;
   url: string;
+  getCheckoutError: GraphQLError | null;
+  setGetCheckoutError: (getCheckoutError: GraphQLError | null) => void;
 }
 
-export interface ProcessCheckoutInput {
+export type GetCheckoutInput = Pick<GetCheckoutRequestInput, 'id' | 'url'>;
+
+export interface ProcessCheckoutRequestInput {
+  credentials: Credentials;
   lineItems: CartItem[];
+  isCheckingOut: boolean;
+  setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
+  processCheckoutError: GraphQLError | null;
+  setProcessCheckoutError: (processCheckoutError: GraphQLError | null) => void;
   checkoutId?: string;
   discountCodes?: string[];
   metafields?: MetafieldInput[];
-  note?: string;
   source?: string;
+  note?: string;
 }
+
+export type ProcessCheckoutInput = Pick<
+  ProcessCheckoutRequestInput,
+  'lineItems' | 'discountCodes' | 'metafields' | 'note'
+>;
 
 export interface CheckoutProperties {
   checkoutComplete: boolean;
@@ -90,49 +103,13 @@ export interface CheckoutProperties {
 
 export interface CheckoutState extends CheckoutProperties {
   getCheckoutError: GraphQLError | null;
-  getCheckoutSuccess: Promise<boolean> | null;
   processCheckoutError: GraphQLError | null;
-  processCheckoutSuccess: Promise<boolean> | null;
 }
-
-export type GetCheckoutProperties = Pick<
-  CheckoutState,
-  | 'checkoutComplete'
-  | 'checkoutSource'
-  | 'getCheckoutError'
-  | 'getCheckoutSuccess'
->;
 
 export type GetCheckoutDataPayload = Pick<
-  GetCheckoutProperties,
+  CheckoutState,
   'checkoutComplete' | 'checkoutSource'
 >;
-
-export type ProcessCheckoutProperties = Pick<
-  CheckoutState,
-  | 'checkoutComplete'
-  | 'checkoutId'
-  | 'checkoutSource'
-  | 'checkoutUrl'
-  | 'processCheckoutError'
-  | 'processCheckoutSuccess'
->;
-
-export interface GetCheckoutAction {
-  type: typeof GET_CHECKOUT;
-  credentials: Credentials;
-  payload: GetCheckoutInput;
-}
-
-export interface ProcessCheckoutAction {
-  type: typeof PROCESS_CHECKOUT;
-  credentials: Credentials;
-  payload: ProcessCheckoutInput;
-  isCheckingOut: boolean;
-  setIsCheckingOut: React.Dispatch<React.SetStateAction<boolean>>;
-  isMounted: React.MutableRefObject<boolean>;
-  redirectUserToCheckout: boolean;
-}
 
 export interface ClearCheckoutDataAction {
   type: typeof CLEAR_CHECKOUT_DATA;
@@ -166,37 +143,16 @@ export type Actions =
   | SetProcessCheckoutDataAction
   | SetProcessCheckoutErrorAction;
 
-export type AsyncActions = GetCheckoutAction | ProcessCheckoutAction;
+export type GetCheckout = (
+  payload: GetCheckoutInput
+) => Promise<CheckoutProperties>;
 
-export type CheckoutReducerAction = Actions | AsyncActions;
+export type ProcessCheckout = (
+  payload: ProcessCheckoutInput
+) => Promise<CheckoutProperties>;
 
 export interface CheckoutActions {
   clearCheckoutData: () => void;
-  getCheckout: (
-    payload: GetCheckoutInput
-  ) => Promise<CheckoutProperties | GraphQLError>;
-  processCheckout: (
-    payload: ProcessCheckoutInput
-  ) => Promise<CheckoutProperties | GraphQLError>;
+  getCheckout: GetCheckout;
+  processCheckout: ProcessCheckout;
 }
-
-export type CheckoutDispatch = React.Dispatch<CheckoutReducerAction>;
-
-export interface ActionHandlerParams {
-  dispatch: CheckoutDispatch;
-}
-
-export type ActionHandler<R extends Reducer<any, any>, AsyncActions> = ({
-  dispatch,
-  getState,
-  signal
-}: {
-  dispatch: Dispatch<ReducerAction<R>>;
-  getState: () => ReducerState<R>;
-  signal: AbortSignal;
-}) => (action: AsyncActions) => Promise<void>;
-
-export type AsyncActionHandler<AsyncActionType> = ActionHandler<
-  Reducer<CheckoutState, Actions>,
-  AsyncActionType
->;

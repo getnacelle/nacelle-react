@@ -14,9 +14,7 @@ const clearCheckoutData = (state: CheckoutState): CheckoutState => {
     checkoutSource: '',
     checkoutUrl: '',
     getCheckoutError: null,
-    getCheckoutSuccess: null,
-    processCheckoutError: null,
-    processCheckoutSuccess: null
+    processCheckoutError: null
   };
 };
 

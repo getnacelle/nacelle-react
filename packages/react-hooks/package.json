@@ -35,7 +35,8 @@
     "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.1"
+    "rollup": "^2.23.1",
+    "tslib": "^2.3.1"
   },
   "repository": {
     "type": "git",

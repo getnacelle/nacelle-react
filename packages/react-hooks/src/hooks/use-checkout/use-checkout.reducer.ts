@@ -23,16 +23,8 @@ export const initialState: CheckoutState = {
 export const CLEAR_CHECKOUT_DATA = 'checkout/clear-checkout-data';
 export const SET_GET_CHECKOUT_DATA = 'checkout/set-get-checkout-data';
 export const SET_GET_CHECKOUT_ERROR = 'checkout/set-get-checkout-error';
-export const SET_GET_CHECKOUT_SUCCESS = 'checkout/set-get-checkout-success';
 export const SET_PROCESS_CHECKOUT_DATA = 'checkout/set-process-checkout-data';
 export const SET_PROCESS_CHECKOUT_ERROR = 'checkout/set-process-checkout-error';
-export const SET_PROCESS_CHECKOUT_SUCCESS =
-  'checkout/set-process-checkout-success';
-
-// note: GET_CHECKOUT and PROCESS_CHECKOUT are async actions which are
-// handled separately, by the useReducerAsync hook, in ./use-checkout.provider.tsx
-export const GET_CHECKOUT = 'checkout/get-checkout';
-export const PROCESS_CHECKOUT = 'checkout/process-checkout';
 
 const checkoutReducer: Reducer<CheckoutState, Actions> = (
   state: CheckoutState,

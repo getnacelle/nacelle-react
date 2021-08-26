@@ -1,4 +1,12 @@
-import React, { useReducer, useMemo, useContext, FC } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+  useContext,
+  FC
+} from 'react';
+import { get } from 'idb-keyval';
 import { CartItem } from '../common/types';
 import { convertLegacyCartItem, isItemInCart } from './utils';
 
@@ -62,40 +70,47 @@ export const CartProvider: FC<CartProviderProps> = ({
   updateItem,
   isInCart
 }) => {
-  let cart: CartItem[] = [];
-  let unformattedCart: CartItem[] | LegacyCartItem[];
+  const [cart, setCart] = useState<CartItem[]>([]);
 
-  const isClient = typeof window !== 'undefined';
+  useEffect(() => {
+    let formattedCart: CartItem[] = [];
+    let unformattedCart: CartItem[] | LegacyCartItem[];
 
-  if (isClient) {
-    let cartString: string | null = '';
+    async function initCart() {
+      let cartString: string | null | undefined = '';
 
-    if (storage) {
-      if (storage === 'local') {
-        cartString = window.localStorage.getItem(cacheKey);
-      } else if (storage === 'session') {
-        cartString = window.sessionStorage.getItem(cacheKey);
+      if (storage) {
+        if (storage === 'local') {
+          cartString = window.localStorage.getItem(cacheKey);
+        } else if (storage === 'session') {
+          cartString = window.sessionStorage.getItem(cacheKey);
+        } else if (storage === 'idb') {
+          cartString = await get(cacheKey);
+        }
+        if (cartString) {
+          unformattedCart = JSON.parse(cartString);
+
+          const hasLegacyCartItems = unformattedCart?.length
+            ? unformattedCart
+                .map((i: CartItem | LegacyCartItem) => 'productId' in i)
+                .some((truthy) => truthy)
+            : false;
+
+          if (hasLegacyCartItems) {
+            formattedCart = (unformattedCart as LegacyCartItem[]).map((item) =>
+              convertLegacyCartItem(item)
+            );
+          } else {
+            formattedCart = unformattedCart as CartItem[];
+          }
+          console.log('cart', formattedCart);
+          setCart(formattedCart);
+        }
       }
     }
 
-    if (cartString) {
-      unformattedCart = JSON.parse(cartString);
-
-      const hasLegacyCartItems = unformattedCart?.length
-        ? unformattedCart
-            .map((i: CartItem | LegacyCartItem) => 'productId' in i)
-            .some((truthy) => truthy)
-        : false;
-
-      if (hasLegacyCartItems) {
-        cart = (unformattedCart as LegacyCartItem[]).map((item) =>
-          convertLegacyCartItem(item)
-        );
-      } else {
-        cart = unformattedCart as CartItem[];
-      }
-    }
-  }
+    initCart();
+  }, [storage, cacheKey]);
 
   const [state, dispatch] = useReducer(cartReducer, {
     ...initialState,

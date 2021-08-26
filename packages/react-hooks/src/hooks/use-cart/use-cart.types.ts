@@ -106,11 +106,13 @@ const cartToggleStates = {
   closed: 'closed'
 } as const;
 
-export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];
+export type CartToggleStates =
+  typeof cartToggleStates[keyof typeof cartToggleStates];
 
 const storageTypes = {
   session: 'session',
-  local: 'local'
+  local: 'local',
+  idb: 'idb'
 } as const;
 
 export type StorageTypes =

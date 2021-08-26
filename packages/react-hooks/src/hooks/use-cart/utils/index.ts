@@ -1,3 +1,4 @@
+import { set, del } from 'idb-keyval';
 import { CartItem } from '../../common/types';
 import { LegacyCartItem, StorageTypes } from '../use-cart.types';
 
@@ -20,7 +21,14 @@ export function setCacheItem(storage: StorageTypes | null) {
     return window.sessionStorage.setItem.bind(sessionStorage);
   }
 
-  return () => {};
+  return (cacheKey: string | null, payload: string) => {
+    if (storage === 'idb') {
+      if (cacheKey && payload) {
+        return set(cacheKey, payload);
+      }
+    }
+    return {};
+  };
 }
 
 export function unsetCacheItem(storage: StorageTypes | null) {
@@ -29,8 +37,14 @@ export function unsetCacheItem(storage: StorageTypes | null) {
   } else if (storage === 'session') {
     return window.sessionStorage.removeItem.bind(sessionStorage);
   }
-
-  return () => {};
+  return (cacheKey: string | null) => {
+    if (storage === 'idb') {
+      if (cacheKey) {
+        return del(cacheKey);
+      }
+    }
+    return {};
+  };
 }
 
 export function convertLegacyCartItem(legacyItem: LegacyCartItem): CartItem {

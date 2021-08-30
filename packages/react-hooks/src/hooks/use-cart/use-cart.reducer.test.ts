@@ -5,9 +5,22 @@ const cartItem = {
   variant: shopifyItem?.variants ? shopifyItem.variants[0] : { id: '12345' },
   quantity: 1
 };
+const cartItems = [
+  {
+    product: shopifyItem,
+    variant: shopifyItem?.variants ? shopifyItem.variants[0] : { id: '12345' },
+    quantity: 1
+  },
+  {
+    product: shopifyItem,
+    variant: shopifyItem?.variants ? shopifyItem.variants[1] : { id: '23456' },
+    quantity: 1
+  }
+];
 
 import cartReducer, {
   initialState,
+  INIT_CART,
   ADD_TO_CART,
   UPDATE_ITEM,
   REMOVE_FROM_CART,
@@ -45,6 +58,16 @@ describe('useCart reducer', () => {
 
     Object.defineProperty(window, 'localStorage', {
       value: storageMock()
+    });
+  });
+
+  describe(`${INIT_CART}`, () => {
+    it('should initialize cart with payload items', () => {
+      const result = cartReducer(initialState, {
+        type: INIT_CART,
+        payload: cartItems
+      });
+      expect(result.cart).toEqual(cartItems);
     });
   });
 
@@ -100,9 +123,9 @@ describe('useCart reducer', () => {
           cacheKey: 'cart'
         }
       );
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([cartItem]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [cartItem]
+      );
     });
 
     it('should add to item sessionStorage cart', () => {
@@ -429,9 +452,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...cartItem, quantity: 2 }]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [{ ...cartItem, quantity: 2 }]
+      );
     });
 
     it('should increment the quantity of an item in sessionStorage cart', () => {
@@ -499,9 +522,9 @@ describe('useCart reducer', () => {
         cacheKey: 'cart'
       });
 
-      expect(
-        JSON.parse(window.localStorage.getItem('cart') as string)
-      ).toEqual([{ ...cartItem, quantity: 1 }]);
+      expect(JSON.parse(window.localStorage.getItem('cart') as string)).toEqual(
+        [{ ...cartItem, quantity: 1 }]
+      );
     });
 
     it('should decrement the quantity of an item in sessionStorage cart', () => {

@@ -5,6 +5,7 @@ import {
   ClearCartFunction,
   DecrementItemFunction,
   IncrementItemFunction,
+  InitCartFunction,
   RemoveFromCartFunction,
   ToggleCartFunction,
   UpdateItemFunction,
@@ -16,11 +17,13 @@ import {
   clearCart as clearCartDefault,
   decrementItem as decrementItemDefault,
   incrementItem as incrementItemDefault,
+  initCart as initCartDefault,
   removeFromCart as removeFromCartDefault,
   toggleCart as toggleCartDefault,
   updateItem as updateItemDefault
 } from './actions';
 
+export const INIT_CART = 'cart/init-cart';
 export const ADD_TO_CART = 'cart/add-to-cart';
 export const INCREMENT_ITEM = 'cart/increment-item';
 export const DECREMENT_ITEM = 'cart/decrement-item';
@@ -40,6 +43,7 @@ export interface CreateCartReducerParams {
   clearCart?: ClearCartFunction;
   decrementItem?: DecrementItemFunction;
   incrementItem?: IncrementItemFunction;
+  initCart?: InitCartFunction;
   removeFromCart?: RemoveFromCartFunction;
   toggleCart?: ToggleCartFunction;
   updateItem?: UpdateItemFunction;
@@ -51,6 +55,12 @@ const cartReducer = (
   action: CartReducerAction
 ): CartState => {
   switch (action.type) {
+    case INIT_CART: {
+      return action.initCart
+        ? action.initCart(state, action)
+        : initCartDefault(state, action);
+    }
+
     case ADD_TO_CART: {
       return action.addToCart
         ? action.addToCart(state, action)

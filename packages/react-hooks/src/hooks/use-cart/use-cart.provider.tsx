@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useMemo,
-  useContext,
-  FC
-} from 'react';
+import React, { useEffect, useReducer, useMemo, useContext, FC } from 'react';
 import { get } from 'idb-keyval';
 import { CartItem } from '../common/types';
 import { convertLegacyCartItem, isItemInCart } from './utils';
@@ -18,6 +11,7 @@ import {
   ClearCartFunction,
   DecrementItemFunction,
   IncrementItemFunction,
+  InitCartFunction,
   IsInCartFunction,
   LegacyCartItem,
   RemoveFromCartFunction,
@@ -28,6 +22,7 @@ import {
 
 import cartReducer, {
   initialState,
+  INIT_CART,
   ADD_TO_CART,
   UPDATE_ITEM,
   REMOVE_FROM_CART,
@@ -43,6 +38,7 @@ export type CartProviderProps = {
   children: JSX.Element | JSX.Element[];
   storage?: StorageTypes;
   cacheKey?: string;
+  initCart?: InitCartFunction;
   addToCart?: AddToCartFunction;
   clearCart?: ClearCartFunction;
   decrementItem?: DecrementItemFunction;
@@ -70,15 +66,14 @@ export const CartProvider: FC<CartProviderProps> = ({
   updateItem,
   isInCart
 }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [state, dispatch] = useReducer(cartReducer, initialState);
 
   useEffect(() => {
-    let formattedCart: CartItem[] = [];
+    let cart: CartItem[] = [];
     let unformattedCart: CartItem[] | LegacyCartItem[];
 
     async function initCart() {
       let cartString: string | null | undefined = '';
-
       if (storage) {
         if (storage === 'local') {
           cartString = window.localStorage.getItem(cacheKey);
@@ -97,28 +92,31 @@ export const CartProvider: FC<CartProviderProps> = ({
             : false;
 
           if (hasLegacyCartItems) {
-            formattedCart = (unformattedCart as LegacyCartItem[]).map((item) =>
+            cart = (unformattedCart as LegacyCartItem[]).map((item) =>
               convertLegacyCartItem(item)
             );
           } else {
-            formattedCart = unformattedCart as CartItem[];
+            cart = unformattedCart as CartItem[];
           }
-          console.log('cart', formattedCart);
-          setCart(formattedCart);
+          if (cart) {
+            dispatch({
+              type: INIT_CART,
+              payload: cart
+            });
+          }
         }
       }
     }
-
     initCart();
   }, [storage, cacheKey]);
 
-  const [state, dispatch] = useReducer(cartReducer, {
-    ...initialState,
-    cart
-  });
-
   const cartActions: CartActions = useMemo(
     () => ({
+      initCart: (payload: CartItem[]): void =>
+        dispatch({
+          type: INIT_CART,
+          payload
+        }),
       addToCart: (payload: CartItem): void =>
         dispatch({
           type: ADD_TO_CART,

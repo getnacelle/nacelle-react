@@ -17,7 +17,7 @@ const checkoutCredentials = {
 
 function MyApp({ Component, pageProps, space, products }) {
   return (
-    <CartProvider storage={'idb'}>
+    <CartProvider>
       <CheckoutProvider credentials={checkoutCredentials}>
         <Global styles={styles.global} />
         <ProductSearchProvider products={products}>

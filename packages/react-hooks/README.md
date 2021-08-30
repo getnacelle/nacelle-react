@@ -155,7 +155,7 @@ const App = () => {
 
 ##### Cart Persistence
 
-By default, the `<CartProvider />` uses [Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to persist the cart between refreshes. If you would prefer to use [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) instead of Local Storage, pass `storage={'session'}` as a prop. To disable cart storage entirely, pass `storage={null}` as a prop.
+By default, the `<CartProvider />` uses [Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) to persist the cart between refreshes. If you would prefer to use [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) instead of Local Storage, pass `storage={'session'}` as a prop. If you would prefer to use [Index DB Storage](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) instead, pass `storage={'idb'}` as a prop. To disable cart storage entirely, pass `storage={null}` as a prop.
 
 When using Local Storage or Session Storage to perist the cart, the default storage key of `'cart'` can be overriden by supplying a `cacheKey="my-custom-cart=key"` prop.
 

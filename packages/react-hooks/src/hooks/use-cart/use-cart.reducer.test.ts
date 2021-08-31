@@ -1,4 +1,5 @@
 import { shopifyItem } from '@nacelle/react-dev-utils';
+import { set, del } from 'idb-keyval';
 
 const cartItem = {
   product: shopifyItem,
@@ -30,9 +31,14 @@ import cartReducer, {
   TOGGLE_CART
 } from './use-cart.reducer';
 
+jest.mock('idb-keyval');
+const mockedSet = set as jest.Mocked<typeof set>;
+const mockedDel = del as jest.Mocked<typeof del>;
+
 describe('useCart reducer', () => {
   beforeEach(() => {
     jest.resetAllMocks();
+    jest.mock('idb-keyval');
 
     const storageMock = () => {
       let store: any = {};
@@ -65,7 +71,9 @@ describe('useCart reducer', () => {
     it('should initialize cart with payload items', () => {
       const result = cartReducer(initialState, {
         type: INIT_CART,
-        payload: cartItems
+        payload: cartItems,
+        storage: 'idb',
+        cacheKey: 'cart'
       });
       expect(result.cart).toEqual(cartItems);
     });
@@ -143,6 +151,23 @@ describe('useCart reducer', () => {
       ).toEqual([cartItem]);
     });
 
+    it('should add to item idbStorage cart', () => {
+      cartReducer(
+        { ...initialState },
+        {
+          type: ADD_TO_CART,
+          payload: cartItem,
+          storage: 'idb',
+          cacheKey: 'cart'
+        }
+      );
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith(
+        'cart',
+        JSON.stringify([cartItem])
+      );
+    });
+
     it('should add to item localStorage cart using custom cacheKey', () => {
       cartReducer(
         { ...initialState },
@@ -171,6 +196,23 @@ describe('useCart reducer', () => {
       expect(
         JSON.parse(window.sessionStorage.getItem('new-cart') as string)
       ).toEqual([cartItem]);
+    });
+
+    it('should add to item idbStorage cart using custom cacheKey', async () => {
+      cartReducer(
+        { ...initialState },
+        {
+          type: ADD_TO_CART,
+          payload: cartItem,
+          storage: 'idb',
+          cacheKey: 'new-cart'
+        }
+      );
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith(
+        'new-cart',
+        JSON.stringify([cartItem])
+      );
     });
   });
 
@@ -336,6 +378,38 @@ describe('useCart reducer', () => {
       ]);
     });
 
+    it('should update some values of an item in idbStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+      cartReducer(cartState, {
+        type: UPDATE_ITEM,
+        payload: {
+          ...cartItem,
+          product: {
+            ...cartItem.product,
+            title: 'Updated Title'
+          },
+          quantity: 10
+        },
+        storage: 'idb',
+        cacheKey: 'cart'
+      });
+
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith(
+        'cart',
+        JSON.stringify([
+          {
+            ...cartItem,
+            quantity: 10,
+            product: { ...cartItem.product, title: 'Updated Title' }
+          }
+        ])
+      );
+    });
+
     it('should update to a falsy value of an item in the cart', () => {
       const cartState = {
         ...initialState,
@@ -418,6 +492,23 @@ describe('useCart reducer', () => {
         JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([]);
     });
+
+    it('should remove an item from idbStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+
+      cartReducer(cartState, {
+        type: REMOVE_FROM_CART,
+        payload: cartItem,
+        storage: 'idb',
+        cacheKey: 'cart'
+      });
+
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith('cart', JSON.stringify([]));
+    });
   });
 
   describe(`${INCREMENT_ITEM}`, () => {
@@ -473,6 +564,26 @@ describe('useCart reducer', () => {
       expect(
         JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([{ ...cartItem, quantity: 2 }]);
+    });
+
+    it('should increment the quantity of an item in idbStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [cartItem]
+      };
+
+      cartReducer(cartState, {
+        type: INCREMENT_ITEM,
+        payload: cartItem,
+        storage: 'idb',
+        cacheKey: 'cart'
+      });
+
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith(
+        'cart',
+        JSON.stringify([{ ...cartItem, quantity: 2 }])
+      );
     });
   });
 
@@ -544,6 +655,26 @@ describe('useCart reducer', () => {
         JSON.parse(window.sessionStorage.getItem('cart') as string)
       ).toEqual([{ ...cartItem, quantity: 1 }]);
     });
+
+    it('should decrement the quantity of an item in idbStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [{ ...cartItem, quantity: 2 }]
+      };
+
+      cartReducer(cartState, {
+        type: DECREMENT_ITEM,
+        payload: cartItem,
+        storage: 'idb',
+        cacheKey: 'cart'
+      });
+
+      expect(mockedSet).toHaveBeenCalledTimes(1);
+      expect(mockedSet).toHaveBeenCalledWith(
+        'cart',
+        JSON.stringify([{ ...cartItem, quantity: 1 }])
+      );
+    });
   });
 
   describe(`${CLEAR_CART}`, () => {
@@ -560,6 +691,21 @@ describe('useCart reducer', () => {
       });
 
       expect(result.cart).toEqual([]);
+    });
+
+    it('should remove all items from the idbStorage cart', () => {
+      const cartState = {
+        ...initialState,
+        cart: [{ ...cartItem, quantity: 2 }]
+      };
+
+      cartReducer(cartState, {
+        type: CLEAR_CART,
+        storage: 'idb',
+        cacheKey: 'cart'
+      });
+
+      expect(mockedDel).toHaveBeenCalledTimes(1);
     });
   });
 

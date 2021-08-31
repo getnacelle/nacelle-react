@@ -15,36 +15,43 @@ export function isItemInCart(cart: CartItem[], payload: CartItem): boolean {
 }
 
 export function setCacheItem(storage: StorageTypes | null) {
-  if (storage === 'local') {
-    return window.localStorage.setItem.bind(localStorage);
-  } else if (storage === 'session') {
-    return window.sessionStorage.setItem.bind(sessionStorage);
-  }
-
-  return (cacheKey: string | null, payload: string) => {
-    if (storage === 'idb') {
-      if (cacheKey && payload) {
-        return set(cacheKey, payload);
-      }
+  switch (storage) {
+    case 'local': {
+      return window.localStorage.setItem.bind(localStorage);
     }
-    return {};
-  };
+
+    case 'session': {
+      return window.sessionStorage.setItem.bind(sessionStorage);
+    }
+
+    case 'idb': {
+      return (key: string, value: string) => set(key, value);
+    }
+
+    default: {
+      return () => {};
+    }
+  }
 }
 
 export function unsetCacheItem(storage: StorageTypes | null) {
-  if (storage === 'local') {
-    return window.localStorage.removeItem.bind(localStorage);
-  } else if (storage === 'session') {
-    return window.sessionStorage.removeItem.bind(sessionStorage);
-  }
-  return (cacheKey: string | null) => {
-    if (storage === 'idb') {
-      if (cacheKey) {
-        return del(cacheKey);
-      }
+  switch (storage) {
+    case 'local': {
+      return window.localStorage.removeItem.bind(localStorage);
     }
-    return {};
-  };
+
+    case 'session': {
+      return window.sessionStorage.removeItem.bind(sessionStorage);
+    }
+
+    case 'idb': {
+      return (key: string) => del(key);
+    }
+
+    default: {
+      return () => {};
+    }
+  }
 }
 
 export function convertLegacyCartItem(legacyItem: LegacyCartItem): CartItem {

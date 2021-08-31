@@ -182,7 +182,7 @@ An array containing:
 
 2. `cartActions`: an object containing methods for interacting with the cart:
 
-- `initCart(items)` - initialize/override the cart with a list of cart items
+- `initCart(items)` - initialize/override the cart with an array of cart items
 - `addToCart(item)` - add an item to the cart; if the item is already in the cart this function will increase the quantity of that item
 - `updateItem(item)` - modify properties of an item in the cart
 - `removeFromCart(item)` - remove an item from the cart

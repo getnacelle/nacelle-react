@@ -1,5 +1,6 @@
 import { CartItem } from '../../common/types';
 
+import { setCacheItem } from '~/hooks/use-cart/utils';
 import { InitCartAction, CartState } from '~/hooks/use-cart/use-cart.types';
 
 const initCart: InitCartFunction = (
@@ -7,6 +8,8 @@ const initCart: InitCartFunction = (
   action: InitCartAction
 ) => {
   const cart: CartItem[] = [...action.payload];
+
+  setCacheItem(action.storage)(action.cacheKey || 'cart', JSON.stringify(cart));
 
   return {
     ...state,

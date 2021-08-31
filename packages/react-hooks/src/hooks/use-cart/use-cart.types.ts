@@ -39,6 +39,8 @@ export type CartActions = {
 export type InitCartAction = {
   type: 'cart/init-cart';
   payload: CartItem[];
+  storage: StorageTypes;
+  cacheKey: string;
   initCart?: InitCartFunction;
 };
 

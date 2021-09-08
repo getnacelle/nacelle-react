@@ -1,3 +1,4 @@
+import { set, del } from 'idb-keyval';
 import { CartItem } from '../../common/types';
 import { LegacyCartItem, StorageTypes } from '../use-cart.types';
 
@@ -14,23 +15,43 @@ export function isItemInCart(cart: CartItem[], payload: CartItem): boolean {
 }
 
 export function setCacheItem(storage: StorageTypes | null) {
-  if (storage === 'local') {
-    return window.localStorage.setItem.bind(localStorage);
-  } else if (storage === 'session') {
-    return window.sessionStorage.setItem.bind(sessionStorage);
-  }
+  switch (storage) {
+    case 'local': {
+      return window.localStorage.setItem.bind(localStorage);
+    }
 
-  return () => {};
+    case 'session': {
+      return window.sessionStorage.setItem.bind(sessionStorage);
+    }
+
+    case 'idb': {
+      return (key: string, value: string) => set(key, value);
+    }
+
+    default: {
+      return () => {};
+    }
+  }
 }
 
 export function unsetCacheItem(storage: StorageTypes | null) {
-  if (storage === 'local') {
-    return window.localStorage.removeItem.bind(localStorage);
-  } else if (storage === 'session') {
-    return window.sessionStorage.removeItem.bind(sessionStorage);
-  }
+  switch (storage) {
+    case 'local': {
+      return window.localStorage.removeItem.bind(localStorage);
+    }
 
-  return () => {};
+    case 'session': {
+      return window.sessionStorage.removeItem.bind(sessionStorage);
+    }
+
+    case 'idb': {
+      return (key: string) => del(key);
+    }
+
+    default: {
+      return () => {};
+    }
+  }
 }
 
 export function convertLegacyCartItem(legacyItem: LegacyCartItem): CartItem {

@@ -7,6 +7,7 @@ import { AddToCartFunction } from './actions/addToCart';
 import { ClearCartFunction } from './actions/clearCart';
 import { DecrementItemFunction } from './actions/decrementItem';
 import { IncrementItemFunction } from './actions/incrementItem';
+import { InitCartFunction } from './actions/initCart';
 import { RemoveFromCartFunction } from './actions/removeFromCart';
 import { ToggleCartFunction } from './actions/toggleCart';
 import { UpdateItemFunction } from './actions/updateItem';
@@ -29,9 +30,18 @@ export type CartActions = {
   updateItem: (payload: CartItem) => void;
   removeFromCart: (payload: CartItem) => void;
   incrementItem: (payload: CartItem) => void;
+  initCart: (payload: CartItem[]) => void;
   decrementItem: (payload: CartItem) => void;
   toggleCart: (payload: CartToggleStates) => void;
   clearCart: () => void;
+};
+
+export type InitCartAction = {
+  type: 'cart/init-cart';
+  payload: CartItem[];
+  storage: StorageTypes;
+  cacheKey: string;
+  initCart?: InitCartFunction;
 };
 
 export type AddToCartAction = {
@@ -96,6 +106,7 @@ export type CartReducerAction =
   | AddToCartAction
   | UpdateItemAction
   | IncrementItemAction
+  | InitCartAction
   | DecrementItemAction
   | RemoveFromCartAction
   | ToggleVisibilityAction
@@ -106,11 +117,13 @@ const cartToggleStates = {
   closed: 'closed'
 } as const;
 
-export type CartToggleStates = typeof cartToggleStates[keyof typeof cartToggleStates];
+export type CartToggleStates =
+  typeof cartToggleStates[keyof typeof cartToggleStates];
 
 const storageTypes = {
   session: 'session',
-  local: 'local'
+  local: 'local',
+  idb: 'idb'
 } as const;
 
 export type StorageTypes =
@@ -123,6 +136,7 @@ export type { AddToCartFunction } from './actions/addToCart';
 export type { ClearCartFunction } from './actions/clearCart';
 export type { DecrementItemFunction } from './actions/decrementItem';
 export type { IncrementItemFunction } from './actions/incrementItem';
+export type { InitCartFunction } from './actions/initCart';
 export type { RemoveFromCartFunction } from './actions/removeFromCart';
 export type { ToggleCartFunction } from './actions/toggleCart';
 export type { UpdateItemFunction } from './actions/updateItem';

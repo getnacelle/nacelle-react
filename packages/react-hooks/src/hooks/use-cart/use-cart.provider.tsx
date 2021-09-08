@@ -101,7 +101,9 @@ export const CartProvider: FC<CartProviderProps> = ({
           if (cart) {
             dispatch({
               type: INIT_CART,
-              payload: cart
+              payload: cart,
+              storage,
+              cacheKey
             });
           }
         }
@@ -115,7 +117,9 @@ export const CartProvider: FC<CartProviderProps> = ({
       initCart: (payload: CartItem[]): void =>
         dispatch({
           type: INIT_CART,
-          payload
+          payload,
+          storage,
+          cacheKey
         }),
       addToCart: (payload: CartItem): void =>
         dispatch({

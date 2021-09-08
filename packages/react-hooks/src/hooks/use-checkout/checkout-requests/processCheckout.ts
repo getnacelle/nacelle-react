@@ -122,6 +122,8 @@ export default async function processCheckout({
   } catch (err) {
     setIsCheckingOut(false);
 
-    throw new Error(err);
+    if (typeof err === 'string') {
+      throw new Error(err);
+    }
   }
 }

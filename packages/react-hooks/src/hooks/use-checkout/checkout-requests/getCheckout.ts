@@ -67,6 +67,8 @@ export default async function getCheckout({
 
     throw new Error(error.message);
   } catch (err) {
-    throw new Error(err);
+    if (typeof err === 'string') {
+      throw new Error(err);
+    }
   }
 }

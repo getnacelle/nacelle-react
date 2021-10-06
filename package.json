@@ -48,11 +48,11 @@
     "lerna": "^3.22.1",
     "lint-staged": "^10.2.11",
     "listr2": "^3.1.1",
-    "next": "^10.2.0",
+    "next": "^11.1.2",
     "node-emoji": "^1.10.0",
     "prettier": "^2.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-test-renderer": "^16.13.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.23.1",
@@ -69,6 +69,5 @@
       "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
       "pre-push": "npm run test:ci"
     }
-  },
-  "dependencies": {}
+  }
 }

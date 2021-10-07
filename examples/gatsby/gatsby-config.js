@@ -5,12 +5,9 @@ module.exports = {
     {
       resolve: '@nacelle/gatsby-source-nacelle',
       options: {
-        nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-        nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-        nacelleEndpoint: process.env.NACELLE_ENDPOINT,
-        cmsPreviewEnabled: process.env.NACELLE_PREVIEW_MODE,
-        contentfulPreviewSpaceId: process.env.CONTENTFUL_PREVIEW_SPACE_ID,
-        contentfulPreviewApiToken: process.env.CONTENTFUL_PREVIEW_API_TOKEN,
+        nacelleSpaceId: process.env.GATSBY_NACELLE_SPACE_ID,
+        nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
+        nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT,
         cacheDuration: 1000 * 60 * 60 * 24 // 1 day in ms
       }
     },

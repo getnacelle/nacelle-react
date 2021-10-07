@@ -9,8 +9,12 @@ To run this locally, you'll need to first [create a Nacelle account](https://das
 Next, we'll use these as environment variables. Create a `.env` file in the root of the `examples/gatsby` project with the following values:
 
 ```dotenv
-NACELLE_SPACE_ID=your-nacelle-space-id
-NACELLE_GRAPHQL_TOKEN=your-nacelle-graphql-token
+# .env
+
+GATSBY_NACELLE_SPACE_ID=<your-nacelle-space-id>
+GATSBY_NACELLE_GRAPHQL_TOKEN=<your-nacelle-graphql-token>
+GATSBY_NACELLE_GRAPHQL_ENDPOINT= <nacelle-storefront-graphql-endpoint>
+
 ```
 
 You're ready to go! Get started with Yarn or NPM:

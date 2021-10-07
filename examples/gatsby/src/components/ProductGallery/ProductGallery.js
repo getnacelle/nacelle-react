@@ -7,19 +7,14 @@ import * as styles from './ProductGallery.styles';
 const ProductGallery = ({ products }) => {
   return (
     <Grid
-      rowGap="6em"
-      columns="repeat(auto-fit, minmax(20em, 1fr))"
+      rowGap="8em"
+      columns="repeat(auto-fit, minmax(25em, 1fr))"
       styles={styles.grid}
     >
-      {products.map(
-        (product, idx) =>
-          product &&
-          product.variants && (
-            <ProductCard
-              product={product}
-              key={`${idx}::${product.remoteId}`}
-            />
-          )
+      {products.map((product, idx) =>
+        product?.variants ? (
+          <ProductCard product={product} key={`${idx}::${product.remoteId}`} />
+        ) : null
       )}
     </Grid>
   );

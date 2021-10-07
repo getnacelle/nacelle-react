@@ -4,7 +4,7 @@ import { graphql } from 'gatsby';
 import ContentSections from 'components/ContentSections';
 
 const HomePage = ({ data }) => (
-  <ContentSections sections={data.nacelleContent.sections} />
+  <ContentSections sections={data.nacelleContent?.sections} />
 );
 
 export default HomePage;

@@ -4,18 +4,24 @@ export const columnLayout = {
 };
 
 export const column = {
-  '@media screen and (max-width: 1023px)': {
-    maxWidth: 'unset'
-  },
-  maxWidth: '50%',
+  width: '100vw',
   minHeight: '25em',
-  display: 'flex'
+  display: 'flex',
+  maxWidth: 'unset',
+  '@media screen and (min-width: 1023px)': {
+    width: '50%'
+  }
 };
 
 export const image = {
-  width: '100%',
+  width: '100vw',
   height: '100%',
-  objectFit: 'cover'
+  maxHeight: '35em',
+  objectFit: 'cover',
+  '@media screen and (min-width: 1023px)': {
+    width: '50vw',
+    maxHeight: 'unset'
+  }
 };
 
 export const title = {

@@ -18,7 +18,9 @@ const HeroBanner = ({ fields }) => {
           format={IMAGE_FORMATS}
         />
       )}
-      <h1 css={styles.bannerTitle}>{fields.title}</h1>
+      <div css={styles.titleBlock}>
+        <h1 css={styles.bannerTitle}>{fields.title}</h1>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@
     "packages/*",
     "examples/*"
   ],
-  "version": "5.2.0",
+  "version": "5.2.1",
   "publish": {
     "allowBranch": "main",
     "ignoreChanges": [

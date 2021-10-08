@@ -3,14 +3,18 @@ import { graphql } from 'gatsby';
 
 import ContentSections from 'components/ContentSections';
 import ProductGallery from 'components/ProductGallery';
+import PageNavigator from 'components/PageNavigator';
 
-const Collection = ({ data }) => {
+const Collection = ({ data, pathContext }) => {
   const products = data.allNacelleProduct.edges.map((edge) => edge.node);
   const page = data.nacelleContent;
+  const { numPages, handle } = pathContext;
+
   return (
     <>
       {page && <ContentSections sections={page.sections} />}
       <ProductGallery products={products} />
+      <PageNavigator numPages={numPages} basePath={`/collections/${handle}`} />
     </>
   );
 };

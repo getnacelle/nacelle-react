@@ -41,6 +41,7 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
     }
   `);
   collections.data.allNacelleCollection.edges.forEach((collection) => {
+    // Build Product Loading Pages (PLPs) for each collection
     const { handle, productLists } = collection.node;
 
     if (productLists.length) {
@@ -48,15 +49,34 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
         (productList) => productList.slug === 'default'
       );
 
-      createPage({
-        // Build a Product Loading Page (PLP) for each collection
-        path: `/collections/${handle}`,
-        component: path.resolve('./src/templates/collection.js'),
-        context: {
-          handle,
-          handles: defaultList && defaultList.handles
-        }
-      });
+      if (defaultList?.handles.length) {
+        // Paginate the collection
+        const collectionProductHandles = defaultList.handles;
+        const productsPerPage = 12;
+        const numPages = Math.ceil(
+          collectionProductHandles.length / productsPerPage
+        );
+        Array.from({ length: numPages }).forEach((_, i) => {
+          const handles = collectionProductHandles.slice(
+            i * productsPerPage,
+            (i + 1) * productsPerPage
+          );
+
+          createPage({
+            path:
+              i === 0
+                ? `/collections/${handle}`
+                : `/collections/${handle}/${i + 1}`,
+            component: path.resolve('./src/templates/collection.js'),
+            context: {
+              handle,
+              handles,
+              numPages,
+              currentPage: i + 1
+            }
+          });
+        });
+      }
     }
   });
 };

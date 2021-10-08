@@ -6,6 +6,7 @@ import ProductGallery from 'components/ProductGallery';
 const CollectionGrid = ({ fields }) => {
   const [products, setProducts] = useState([]);
   const collectionHandle = fields.collectionHandle;
+  const itemsToShow = fields.itemsToShow || 12;
 
   useEffect(() => {
     const fetchCollection = async () => {
@@ -22,9 +23,9 @@ const CollectionGrid = ({ fields }) => {
       if (collection) {
         const products = await $nacelle.data
           .products({
-            handles: collection.productLists.find(
-              (listEntry) => listEntry.slug === 'default'
-            ).handles
+            handles: collection.productLists
+              .find((listEntry) => listEntry.slug === 'default')
+              .handles.slice(0, itemsToShow)
           })
           .catch((err) => {
             console.error(

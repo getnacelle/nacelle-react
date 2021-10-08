@@ -61,20 +61,17 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: productData,
-      uniqueIdProperty: 'pimSyncSourceProductId'
+      data: productData
     }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: collectionData,
-      uniqueIdProperty: 'pimSyncSourceCollectionId'
+      data: collectionData
     }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: contentData,
-      uniqueIdProperty: 'cmsSyncSourceContentId'
+      data: contentData
     })
   ]).catch((err) => {
     throw new Error(

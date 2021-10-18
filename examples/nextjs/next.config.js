@@ -1,4 +1,6 @@
-module.exports = {
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
   images: {
     domains: [
       'cdn.shopify.com',
@@ -8,4 +10,4 @@ module.exports = {
       'nacelle-assets.s3-us-west-2.amazonaws.com'
     ]
   }
-};
+});

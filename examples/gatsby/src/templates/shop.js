@@ -8,13 +8,13 @@ import PageNavigator from 'components/PageNavigator';
 const Collection = ({ data, pageContext }) => {
   const products = data.allNacelleProduct.edges.map((edge) => edge.node);
   const page = data.nacelleContent;
-  const { numPages, handle } = pageContext;
+  const { numPages } = pageContext;
 
   return (
     <>
       {page && <ContentSections sections={page.sections} />}
       <ProductGallery products={products} />
-      <PageNavigator numPages={numPages} basePath={`/collections/${handle}`} />
+      <PageNavigator numPages={numPages} basePath="/shop" />
     </>
   );
 };
@@ -22,7 +22,7 @@ const Collection = ({ data, pageContext }) => {
 export default Collection;
 
 export const query = graphql`
-  query ProductInCollection($handles: [String], $handle: String) {
+  query ProductInHandlesArray($handles: [String]) {
     allNacelleProduct(filter: { handle: { in: $handles } }) {
       edges {
         node {
@@ -78,7 +78,7 @@ export const query = graphql`
         }
       }
     }
-    nacelleContent(type: { eq: "page" }, handle: { eq: $handle }) {
+    nacelleContent(type: { eq: "page" }, handle: { eq: "shop" }) {
       sections
     }
   }

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Global } from '@emotion/core';
 import { CartProvider, CheckoutProvider } from '@nacelle/react-hooks';
+import createShopifyCheckoutClient from '@nacelle/shopify-checkout';
 import { ProductSearchProvider } from 'providers/ProductSearch';
 import Layout from 'components/Layout';
 import * as styles from 'styles/global.styles';
 
-const checkoutCredentials = {
-  nacelleSpaceId: process.env.GATSBY_NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
-};
+const checkoutClient = createShopifyCheckoutClient({
+  storefrontCheckoutToken: process.env.GATSBY_SHOPIFY_STOREFRONT_CHECKOUT_TOKEN,
+  myshopifyDomain: process.env.GATSBY_MYSHOPIFY_DOMAIN,
+  storefrontApiVersion: process.env.GATSBY_STOREFRONT_API_VERSION
+});
 
 export const wrapPageElement = ({ element, props }) => (
   <Layout {...props}>{element}</Layout>
@@ -17,7 +18,7 @@ export const wrapPageElement = ({ element, props }) => (
 
 export const wrapRootElement = ({ element }) => (
   <CartProvider>
-    <CheckoutProvider credentials={checkoutCredentials}>
+    <CheckoutProvider checkoutClient={checkoutClient}>
       <Global styles={styles.global} />
       <ProductSearchProvider>{element}</ProductSearchProvider>
     </CheckoutProvider>

@@ -38,7 +38,7 @@ export interface SetGetCheckoutErrorAction {
 
 export interface SetGetCheckoutDataAction {
   type: typeof SET_GET_CHECKOUT_DATA;
-  payload: Pick<CheckoutProperties, 'completed'>;
+  payload: Pick<CheckoutProperties, 'completed' | 'id' | 'url'>;
 }
 
 export interface SetProcessCheckoutDataAction {

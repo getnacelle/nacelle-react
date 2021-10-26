@@ -1,4 +1,4 @@
-import { cacheKeys, setCacheItem } from '../utils';
+import { cacheKeys, setCacheItem, unsetCacheItem } from '../utils';
 import {
   CheckoutState,
   SetGetCheckoutErrorAction
@@ -9,8 +9,8 @@ const setGetCheckoutError = (
   action: SetGetCheckoutErrorAction
 ): CheckoutState => {
   setCacheItem(cacheKeys.completed, 'false');
-  setCacheItem(cacheKeys.id, '');
-  setCacheItem(cacheKeys.url, '');
+  unsetCacheItem(cacheKeys.id);
+  unsetCacheItem(cacheKeys.url);
 
   return {
     ...state,

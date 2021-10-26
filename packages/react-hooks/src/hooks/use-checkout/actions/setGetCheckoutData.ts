@@ -5,12 +5,17 @@ const setGetCheckoutData = (
   state: CheckoutState,
   action: SetGetCheckoutDataAction
 ): CheckoutState => {
-  const { completed } = action.payload;
+  const { completed, id, url } = action.payload;
+
   setCacheItem(cacheKeys.completed, completed.toString());
+  setCacheItem(cacheKeys.id, id);
+  setCacheItem(cacheKeys.url, url);
 
   return {
     ...state,
-    completed
+    completed,
+    id,
+    url
   };
 };
 

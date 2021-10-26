@@ -12,7 +12,6 @@ lerna-debug.log
 # Environment Variables
 .env
 .env.production
-package-lock.json
 
 # Vercel CLI
 .vercel

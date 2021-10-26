@@ -1,9 +1,6 @@
 {
   "npmClient": "npm",
-  "packages": [
-    "packages/*",
-    "examples/*"
-  ],
+  "packages": ["packages/*", "examples/*"],
   "version": "5.2.1",
   "publish": {
     "allowBranch": "main",
@@ -15,12 +12,5 @@
       "**/**/*.fixtures.**"
     ],
     "message": "chore(release): publish"
-  },
-  "command": {
-    "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
-    }
   }
 }

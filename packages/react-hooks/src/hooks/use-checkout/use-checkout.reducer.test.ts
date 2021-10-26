@@ -3,10 +3,9 @@ import checkoutReducer, {
   CLEAR_CHECKOUT_DATA,
   SET_PROCESS_CHECKOUT_DATA
 } from './use-checkout.reducer';
+import { cacheKeys } from './utils';
 
-const complete = true;
-const id = '112233';
-const source = 'Shopify';
+const id = '112233'; // the checkout ID
 
 describe('useCheckout reducer', () => {
   beforeEach(() => {
@@ -37,31 +36,22 @@ describe('useCheckout reducer', () => {
 
   it('should set all properties of checkoutState', async () => {
     const url = 'https://endofie.party';
-    const checkoutComplete = complete;
-    const checkoutId = id;
-    const checkoutSource = source;
-    const checkoutUrl = url;
 
     const checkoutState = checkoutReducer(initialState, {
       type: SET_PROCESS_CHECKOUT_DATA,
-      payload: { checkoutComplete, checkoutId, checkoutSource, checkoutUrl }
+      payload: { id, url }
     });
 
-    expect(checkoutState.checkoutComplete).toEqual(complete);
+    expect(checkoutState.completed).toEqual(false);
     expect(
-      JSON.parse(window.localStorage.getItem('checkoutComplete') as string)
-    ).toEqual(complete);
+      JSON.parse(window.localStorage.getItem(cacheKeys.completed) as string)
+    ).toEqual(false);
 
-    expect(checkoutState.checkoutId).toEqual(id);
-    expect(window.localStorage.getItem('checkoutId') as string).toEqual(id);
+    expect(checkoutState.id).toEqual(id);
+    expect(window.localStorage.getItem(cacheKeys.id) as string).toEqual(id);
 
-    expect(checkoutState.checkoutSource).toEqual(source);
-    expect(window.localStorage.getItem('checkoutSource') as string).toEqual(
-      source
-    );
-
-    expect(checkoutState.checkoutUrl).toEqual(url);
-    expect(window.localStorage.getItem('checkoutUrl') as string).toEqual(url);
+    expect(checkoutState.url).toEqual(url);
+    expect(window.localStorage.getItem(cacheKeys.url) as string).toEqual(url);
   });
 
   it('should clear all properties of checkoutState', async () => {
@@ -69,17 +59,14 @@ describe('useCheckout reducer', () => {
       type: CLEAR_CHECKOUT_DATA
     });
 
-    expect(checkoutState.checkoutComplete).toEqual(false);
-    expect(window.localStorage.getItem('checkoutComplete')).toEqual(null);
+    expect(checkoutState.completed).toEqual(false);
+    expect(window.localStorage.getItem(cacheKeys.completed)).toEqual(null);
 
-    expect(checkoutState.checkoutId).toEqual('');
-    expect(window.localStorage.getItem('checkoutId')).toEqual(null);
+    expect(checkoutState.id).toEqual('');
+    expect(window.localStorage.getItem(cacheKeys.id)).toEqual(null);
 
-    expect(checkoutState.checkoutSource).toEqual('');
-    expect(window.localStorage.getItem('checkoutSource')).toEqual(null);
-
-    expect(checkoutState.checkoutUrl).toEqual('');
-    expect(window.localStorage.getItem('checkoutUrl')).toEqual(null);
+    expect(checkoutState.url).toEqual('');
+    expect(window.localStorage.getItem(cacheKeys.url)).toEqual(null);
   });
 });
 

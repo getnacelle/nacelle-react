@@ -1,27 +1,12 @@
-import { GraphQLRequestParams } from '../use-checkout.types';
+import { CacheKey } from '../use-checkout.types';
 
-export async function nacelleStorefrontRequest({
-  credentials,
-  query,
-  variables
-}: GraphQLRequestParams) {
-  const response: Response = await fetch(credentials.nacelleEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Nacelle-Space-Id': credentials.nacelleSpaceId,
-      'X-Nacelle-Space-Token': credentials.nacelleGraphqlToken
-    },
-    body: JSON.stringify({
-      query,
-      variables
-    })
-  });
+export const cacheKeys = {
+  completed: 'checkoutComplete',
+  id: 'checkoutId',
+  url: 'checkoutUrl'
+} as const;
 
-  return response;
-}
-
-export function getCacheBoolean(key: string): boolean {
+export function getCacheBoolean(key: CacheKey, defaultValue: boolean): boolean {
   if (typeof window !== 'undefined') {
     const item = window.localStorage.getItem(key);
 
@@ -32,10 +17,13 @@ export function getCacheBoolean(key: string): boolean {
     return false;
   }
 
-  return false;
+  return defaultValue;
 }
 
-export function getCacheString(key: string): string {
+export function getCacheString(
+  key: CacheKey,
+  defaultValue: string = ''
+): string {
   if (typeof window !== 'undefined') {
     const item = window.localStorage.getItem(key);
 
@@ -46,10 +34,10 @@ export function getCacheString(key: string): string {
     return '';
   }
 
-  return '';
+  return defaultValue;
 }
 
-export function setCacheItem(key: string, value: string): void {
+export function setCacheItem(key: CacheKey, value: string): void {
   if (typeof window !== 'undefined' && value) {
     window.localStorage.setItem(key, value);
   }

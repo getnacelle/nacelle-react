@@ -1,19 +1,16 @@
-import { setCacheItem } from '../utils';
+import { cacheKeys, setCacheItem } from '../utils';
 import { CheckoutState, SetGetCheckoutDataAction } from '../use-checkout.types';
 
 const setGetCheckoutData = (
   state: CheckoutState,
   action: SetGetCheckoutDataAction
 ): CheckoutState => {
-  const { checkoutComplete, checkoutSource } = action.payload;
-  setCacheItem('checkoutComplete', checkoutComplete.toString());
-  setCacheItem('checkoutSource', checkoutSource);
+  const { completed } = action.payload;
+  setCacheItem(cacheKeys.completed, completed.toString());
 
   return {
     ...state,
-    checkoutComplete,
-    checkoutSource,
-    getCheckoutError: null
+    completed
   };
 };
 

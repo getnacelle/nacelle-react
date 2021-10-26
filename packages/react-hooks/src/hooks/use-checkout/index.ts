@@ -12,7 +12,7 @@ import { CheckoutState, CheckoutActions } from './use-checkout.types';
  * @returns an array with:
  * - [0]: checkout data object
  * - [1]: checkout functions object containing `processCheckout`, `getCheckout`, and `clearCheckoutData`
- * - [2]: an isCheckingOut boolean
+ * - [2]: an `isCheckingOut` boolean
  */
 const useCheckout = () => {
   const checkoutState = useCheckoutState();

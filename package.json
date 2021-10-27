@@ -8,7 +8,7 @@
     "lint": "lerna run lint",
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap --hoist --nohoist=@nacelle/client-js*",
-    "publish": "npm run build && lerna publish",
+    "release": "npm run build && lerna publish",
     "create": "node ./scripts/create"
   },
   "devDependencies": {

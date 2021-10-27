@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-components",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "A collection of atomic components for building Nacelle applications",
   "main": "build/index.js",
   "module": "build/index.es.js",

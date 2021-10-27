@@ -1,7 +1,10 @@
 {
   "npmClient": "npm",
-  "packages": ["packages/*", "examples/*"],
-  "version": "5.2.1",
+  "packages": [
+    "packages/*",
+    "examples/*"
+  ],
+  "version": "6.0.0",
   "publish": {
     "allowBranch": "main",
     "ignoreChanges": [

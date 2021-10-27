@@ -1,45 +1,71 @@
 # @nacelle/react-hooks
 
-> React Hooks for use with Nacelle apps
+> React Hooks for Nacelle-fueled storefronts
 
 ## Install
 
-### With NPM
-
 ```bash
 npm i @nacelle/react-hooks
-```
-
-### With Yarn
-
-```bash
-yarn add @nacelle/react-hooks
 ```
 
 ## Using the Hooks
 
 ### `useCheckout`
 
-A hook which uses items in a cart to generate a checkout via Nacelle's Hail Frequency API.
+Use a checkout provider to create and manage checkouts.
 
 #### Setting Up the Provider
 
-Because checkout data and checkout actions should exist across the app, the `<CheckoutProvider />` needs to surround the root component of the application. The provider requires a `credentials` prop, with a `credentials` object containing the`nacelleSpaceId`, `nacelleGraphqlToken`, and `nacelleEndpoint` values found in your Space Settings in the [Nacelle Dashboard](https://dashboard.getnacelle.com).
+Because checkout data and checkout actions should exist across the app, the `<CheckoutProvider />` needs to surround the root component of the application. The provider requires a `checkoutClient` prop, which is given an instance of a checkout client such as [`@nacelle/shopify-checkout`](https://www.npmjs.com/package/@nacelle/shopify-checkout). For example:
 
 ```jsx
 import { CheckoutProvider } from '@nacelle/react-hooks';
+import createShopifyCheckoutClient from '@nacelle/shopify-checkout';
 
-const checkoutCredentials = {
-  nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
-};
+const shopifyCheckoutClient = createShopifyCheckoutClient({
+  // for more info, see https://www.npmjs.com/package/@nacelle/shopify-checkout
+  storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_CHECKOUT_TOKEN,
+  myshopifyDomain: process.env.MYSHOPIFY_DOMAIN,
+  storefrontApiVersion: process.env.STOREFRONT_API_VERSION
+});
 
 const App = () => {
-  <CheckoutProvider credentials={checkoutCredentials}>
+  <CheckoutProvider checkoutClient={shopifyCheckoutClient}>
     <main>...</main>
   </CheckoutProvider>;
 };
+```
+
+You're welcome to create your own checkout client. It just needs to expose two methods:
+
+```ts
+function get(
+  params: any
+): Promise<{
+  id: string;
+  url: string;
+  completed: boolean;
+} | void> {
+  try {
+    // fetch an existing checkout
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+function process(
+  params: any
+): Promise<{
+  id: string;
+  url: string;
+  completed: boolean;
+} | void> {
+  try {
+    // create a new checkout or update an existing checkout
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 ```
 
 #### The `useCheckout` Hook
@@ -60,74 +86,64 @@ An array containing:
 
 1. `checkoutData`: an object containing the following properties:
 
-- `checkoutComplete` (boolean) - signals whether the checkout process has successfully completed
-- `checkoutId` (string) - the checkout ID
-- `checkoutSource` (string) - the checkout provider (e.g. 'Shopify')
-- `checkoutUrl` (string) - the url of the checkout page
-- `getCheckoutError` (GraphQLError | null) - error returned from the API when fetching the `checkoutComplete` and `checkoutSource`
-- `processCheckoutError` (GraphQLError | null) - error returned from the API when processing a checkout
+- `completed` (boolean) - signals whether the checkout process has successfully completed
+- `id` (string) - the checkout ID
+- `url` (string) - the URL of the checkout page
+- `getCheckoutError` (string) - error returned from the checkout client when fetching an existing checkout
+- `processCheckoutError` (string) - error returned from the checkout client when processing a checkout
 
 2. `checkoutActions`: an object containing the following properties:
 
-- `processCheckout({ lineItems, checkoutId?, discountCodes?, metafields?, note?, source? })`: (function) when called, initiates checkout processing
-  - Accepts an object with the following properties:
-    - `lineItems` (_required_): an array containing objects representing items in the cart, where each object contains a `product` (_object_), `variant` (_object_) and `quantity`
-    - `checkoutId` (_optional_): a string representing the checkout identification token from a previously-initiated checkout sequence
-    - `metafields` (_optional_): an array of key-value pairs of metadata associated with the checkout
-    - `note` (_optional_): a string representing the order note
-    - `discountCodes` (_optional_): an array of strings representing the discount codes to be applied
-    - `source` (_optional_): a string representing the name of the checkout service provider
-  - Either rejects with an error message, or returns a promise which resolves to an object containing the `checkoutComplete`, `checkoutId`, `checkoutSource`, and `checkoutUrl`
-- `getCheckout({ id, url })` (function) when called with a checkout `id` and `url`, updates the `checkoutData.checkoutComplete` (note: `useCheckout` runs this function automatically - it is provided only to satisfy special use cases)
-  - Accepts an object with the following properties:
-    - `id` (_required_): a string representing the checkout identification token from a previously-initiated checkout sequence
-    - `url` (_required_): a string representing the checkout URL from a previously-initiated checkout sequence
-  - Either rejects with an error message, or returns a promise which resolves to an object containing the `checkoutComplete`, `checkoutId`, `checkoutSource`, and `checkoutUrl`
+- `processCheckout(params)`: (function) initiates checkout processing
+  - Accepts parameters required by the checkout client's `process` method
+  - Either rejects with an error message, or returns a promise which resolves to an object containing the `completed`, `id`, and `url`
+- `getCheckout(params)` (function) updates the `checkoutData` (note: `useCheckout` runs this function automatically - it is provided only to satisfy special use cases)
+  - Accepts parameters required by the checkout client's `get` method
+  - Either rejects with an error message, or returns a promise which resolves to an object containing the `completed`, `id`, and `url`
 - `clearCheckoutData`: (function) when called, resets the `checkoutData` and clears `checkoutData` values stored in browser storage
-  - Accepts: nothing
-  - Returns: nothing
+  - Accepts: N/A
+  - Returns: N/A
 
-3. `isCheckingOut`: a boolean that indicates whether or not checkout information is presently being exchanged with Nacelle's Hail Frequency API
+3. `isCheckingOut`: a boolean that indicates whether or not the `processCheckout` function is currently running
 
 ##### Example Usage
 
 ```jsx
 // Using the useCheckout hook
+//
+// This example assumes that you're creating a Shopify
+// checkout with `@nacelle/shopify-checkout. For more info,
+// see https://www.npmjs.com/package/@nacelle/shopify-checkout.
+//
+// If using a different checkout client, adjust the `processCheckout`
+// params accordingly.
 
 import { useCheckout } from '@nacelle/react-hooks';
 
 const Cart = () => {
-  const lineItems = [
-    { id: 123456789, quantity: 1 },
-    { id: 987654321, quantity: 4 }
+  const [checkoutData, checkoutActions, isCheckingOut] = useCheckout();
+  const cartItems = [
+    { variantId: 123456789, quantity: 1 },
+    { variantId: 987654321, quantity: 4 }
   ];
 
-  const credentials = {
-    nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-    nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: process.env.NACELLE_ENDPOINT
-  };
-
-  const [checkoutData, checkoutActions, isCheckingOut] = useCheckout({
-    credentials: checkoutCredentials,
-    lineItems: cart
-  });
-
   useEffect(() => {
-    if (checkoutData.checkoutComplete) {
+    if (checkoutData.completed) {
       checkoutActions.clearCheckoutData();
-      cartActions.clearCart();
+      // any other post-checkout actions, such as clearing the cart
     }
-  }, [checkoutData.checkoutComplete, clearCheckoutData, cartActions]);
+  }, [checkoutData.completed, clearCheckoutData]);
+
+  const processCheckout = async () => {
+    await checkoutActions.processCheckout({ cartItems }).then(() => {
+      window.location = checkoutData.url;
+    });
+  };
 
   return (
     <>
       <h2>Cart</h2>
-      <button
-        type="button"
-        disabled={isCheckingOut}
-        onClick={() => checkoutActions.processCheckout({ lineItems: cart })}
-      >
+      <button type="button" disabled={isCheckingOut} onClick={processCheckout}>
         {isLoading ? <>Loading...</> : <>Checkout</>}
       </button>
     </>

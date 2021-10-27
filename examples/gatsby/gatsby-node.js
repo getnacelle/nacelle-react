@@ -24,6 +24,31 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
     })
   );
 
+  // Create `/shop` pages
+  const allProductHandles = products.data.allNacelleProduct.edges.map(
+    (edge) => edge.node.handle
+  );
+  if (allProductHandles.length) {
+    const productsPerPage = 12;
+    const numPages = Math.ceil(allProductHandles.length / productsPerPage);
+    Array.from({ length: numPages }).forEach((_, i) => {
+      const handles = allProductHandles.slice(
+        i * productsPerPage,
+        (i + 1) * productsPerPage
+      );
+
+      createPage({
+        path: i === 0 ? '/shop' : `/shop/${i + 1}`,
+        component: path.resolve('./src/templates/shop.js'),
+        context: {
+          handles,
+          numPages,
+          currentPage: i + 1
+        }
+      });
+    });
+  }
+
   // Fetch all collections
   const collections = await graphql(`
     {

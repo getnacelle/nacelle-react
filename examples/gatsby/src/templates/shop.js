@@ -3,14 +3,18 @@ import { graphql } from 'gatsby';
 
 import ContentSections from 'components/ContentSections';
 import ProductGallery from 'components/ProductGallery';
+import PageNavigator from 'components/PageNavigator';
 
-const Collection = ({ data }) => {
+const Collection = ({ data, pageContext }) => {
   const products = data.allNacelleProduct.edges.map((edge) => edge.node);
   const page = data.nacelleContent;
+  const { numPages } = pageContext;
+
   return (
     <>
       {page && <ContentSections sections={page.sections} />}
       <ProductGallery products={products} />
+      <PageNavigator numPages={numPages} basePath="/shop" />
     </>
   );
 };
@@ -18,8 +22,8 @@ const Collection = ({ data }) => {
 export default Collection;
 
 export const query = graphql`
-  query {
-    allNacelleProduct {
+  query ProductInHandlesArray($handles: [String]) {
+    allNacelleProduct(filter: { handle: { in: $handles } }) {
       edges {
         node {
           remoteId
@@ -28,11 +32,19 @@ export const query = graphql`
           featuredMedia {
             remoteImage {
               childImageSharp {
-                gatsbyImageData(width: 320, placeholder: TRACED_SVG)
+                gatsbyImageData(width: 320)
+                fluid {
+                  ...GatsbyImageSharpFluid
+                }
               }
             }
             src
             altText
+          }
+          metafields {
+            key
+            namespace
+            value
           }
           variants {
             id
@@ -55,7 +67,10 @@ export const query = graphql`
               altText
               remoteImage {
                 childImageSharp {
-                  gatsbyImageData(width: 320, placeholder: TRACED_SVG)
+                  gatsbyImageData(width: 320)
+                  fluid {
+                    ...GatsbyImageSharpFluid
+                  }
                 }
               }
             }

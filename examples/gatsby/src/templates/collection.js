@@ -5,10 +5,10 @@ import ContentSections from 'components/ContentSections';
 import ProductGallery from 'components/ProductGallery';
 import PageNavigator from 'components/PageNavigator';
 
-const Collection = ({ data, pathContext }) => {
+const Collection = ({ data, pageContext }) => {
   const products = data.allNacelleProduct.edges.map((edge) => edge.node);
   const page = data.nacelleContent;
-  const { numPages, handle } = pathContext;
+  const { numPages, handle } = pageContext;
 
   return (
     <>
@@ -40,6 +40,11 @@ export const query = graphql`
             }
             src
             altText
+          }
+          metafields {
+            key
+            namespace
+            value
           }
           variants {
             id

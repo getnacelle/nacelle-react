@@ -3,22 +3,24 @@ import React from 'react';
 import { Global } from '@emotion/core';
 import { CartProvider } from '@nacelle/react-hooks';
 import { CheckoutProvider } from '@nacelle/react-hooks';
+import createShopifyCheckoutClient from '@nacelle/shopify-checkout';
 
 import Layout from 'components/Layout';
 import { nacelleClient } from 'services';
 import { ProductSearchProvider } from 'providers/ProductSearch';
 import * as styles from 'styles/global.styles';
 
-const checkoutCredentials = {
-  nacelleSpaceId: process.env.NEXT_PUBLIC_NACELLE_SPACE_ID,
-  nacelleGraphqlToken: process.env.NEXT_PUBLIC_NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NEXT_PUBLIC_NACELLE_ENDPOINT
-};
+const checkoutClient = createShopifyCheckoutClient({
+  storefrontCheckoutToken:
+    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_CHECKOUT_TOKEN,
+  myshopifyDomain: process.env.NEXT_PUBLIC_MYSHOPIFY_DOMAIN,
+  storefrontApiVersion: process.env.NEXT_PUBLIC_STOREFRONT_API_VERSION
+});
 
 function MyApp({ Component, pageProps, space, products }) {
   return (
     <CartProvider>
-      <CheckoutProvider credentials={checkoutCredentials}>
+      <CheckoutProvider checkoutClient={checkoutClient}>
         <Global styles={styles.global} />
         <ProductSearchProvider products={products}>
           <Layout space={space}>

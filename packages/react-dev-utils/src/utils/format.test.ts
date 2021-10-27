@@ -29,7 +29,7 @@ const currencies = [
     locale: 'es-MX',
     currencyCode: 'MXN',
     value: 2744,
-    expectedValue: '$2744.00'
+    expectedValue: '$2,744.00'
   }
 ];
 

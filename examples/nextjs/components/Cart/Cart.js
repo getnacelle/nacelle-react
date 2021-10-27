@@ -12,18 +12,26 @@ import * as styles from './Cart.styles';
 const Cart = () => {
   const [{ cart, show }, cartActions] = useCart();
   const { isMobile } = useDetectDevice();
-  const [
-    { checkoutComplete },
-    { processCheckout, clearCheckoutData },
-    isCheckingOut
-  ] = useCheckout();
+  const [checkoutData, checkoutActions, isCheckingOut] = useCheckout();
+  const checkoutItems = cart.map((cartItem) => ({
+    quantity: cartItem.quantity,
+    variantId: cartItem.variant.id,
+    metafields: [...cartItem.product.metafields, ...cartItem.variant.metafields]
+  }));
+  const processCheckout = async () => {
+    await checkoutActions
+      .processCheckout({ cartItems: checkoutItems })
+      .then(() => {
+        window.location = checkoutData.url;
+      });
+  };
 
   useEffect(() => {
-    if (checkoutComplete) {
-      clearCheckoutData();
+    if (checkoutData.completed) {
+      checkoutActions.clearCheckoutData();
       cartActions.clearCart();
     }
-  }, [checkoutComplete, clearCheckoutData, cartActions]);
+  }, [checkoutData.completed, checkoutActions, cartActions]);
 
   const cartStateStyle = show ? styles.show : styles.hide;
 
@@ -58,7 +66,7 @@ const Cart = () => {
         </h4>
       </footer>
       <Button
-        onClick={() => processCheckout({ lineItems: cart })}
+        onClick={() => processCheckout({ cartItems: checkoutItems })}
         disabled={!cart.length || isCheckingOut}
         styles={styles.checkoutButton}
         fullwidth={true}

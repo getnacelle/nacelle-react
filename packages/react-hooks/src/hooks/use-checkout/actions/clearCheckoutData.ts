@@ -1,20 +1,17 @@
-import { unsetCacheItem } from '../utils';
+import { cacheKeys, unsetCacheItem } from '../utils';
 import { CheckoutState } from 'hooks/use-checkout/use-checkout.types';
 
-const clearCheckoutData = (state: CheckoutState): CheckoutState => {
-  unsetCacheItem('checkoutComplete');
-  unsetCacheItem('checkoutId');
-  unsetCacheItem('checkoutSource');
-  unsetCacheItem('checkoutUrl');
+const clearCheckoutData = (): CheckoutState => {
+  unsetCacheItem(cacheKeys.completed);
+  unsetCacheItem(cacheKeys.id);
+  unsetCacheItem(cacheKeys.url);
 
   return {
-    ...state,
-    checkoutComplete: false,
-    checkoutId: '',
-    checkoutSource: '',
-    checkoutUrl: '',
-    getCheckoutError: null,
-    processCheckoutError: null
+    completed: false,
+    id: '',
+    url: '',
+    getCheckoutError: '',
+    processCheckoutError: ''
   };
 };
 

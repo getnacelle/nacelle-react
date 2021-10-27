@@ -62,6 +62,11 @@ export const query = graphql`
         src
         altText
       }
+      metafields {
+        key
+        namespace
+        value
+      }
       variants {
         id
         availableForSale

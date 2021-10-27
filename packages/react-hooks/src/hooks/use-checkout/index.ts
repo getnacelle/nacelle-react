@@ -7,12 +7,12 @@ import {
 import { CheckoutState, CheckoutActions } from './use-checkout.types';
 
 /**
- * @descr Create a Shopify checkout with Nacelle's Hail Frequency API
+ * Create and manage checkouts.
  *
  * @returns an array with:
  * - [0]: checkout data object
- * - [1]: checkout functions object containing `processCheckout`, `getCheckout`, and `clearCheckoutData`
- * - [2]: an isCheckingOut boolean
+ * - [1]: object containing `processCheckout`, `getCheckout`, and `clearCheckoutData` checkout functions
+ * - [2]: an `isCheckingOut` boolean
  */
 const useCheckout = () => {
   const checkoutState = useCheckoutState();

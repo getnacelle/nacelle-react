@@ -1,4 +1,4 @@
-import { setCacheItem } from '../utils';
+import { cacheKeys, setCacheItem, unsetCacheItem } from '../utils';
 import {
   CheckoutState,
   SetGetCheckoutErrorAction
@@ -8,17 +8,15 @@ const setGetCheckoutError = (
   state: CheckoutState,
   action: SetGetCheckoutErrorAction
 ): CheckoutState => {
-  setCacheItem('checkoutComplete', '');
-  setCacheItem('checkoutId', '');
-  setCacheItem('checkoutSource', '');
-  setCacheItem('checkoutUrl', '');
+  setCacheItem(cacheKeys.completed, 'false');
+  unsetCacheItem(cacheKeys.id);
+  unsetCacheItem(cacheKeys.url);
 
   return {
     ...state,
-    checkoutComplete: false,
-    checkoutId: '',
-    checkoutSource: '',
-    checkoutUrl: '',
+    completed: false,
+    id: '',
+    url: '',
     getCheckoutError: action.payload
   };
 };

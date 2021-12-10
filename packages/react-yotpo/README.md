@@ -61,12 +61,12 @@ import { YotpoReviews } from '@nacelle/react-yotpo';
 
 ### YotpoStarRating
 
-Adds a div element to the dom that Yotpo will use to add product ratings.
+Adds a div element to the dom that Yotpo will use to add product ratings. The component requires a `productId` prop, which corresponds to the `pimSyncSourceProductId`.
 
 ```jsx
 import { YotpoStarRating } from '@nacelle/react-yotpo';
 
-<YotpoStarRating productId={shopifyProductId} />;
+<YotpoStarRating productId={pimSyncSourceProductId} />;
 ```
 
 ### YotpoScripts

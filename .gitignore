@@ -2,6 +2,8 @@ node_modules/
 build/
 public/
 coverage/
+examples/*/package-lock.json
+packages/*/package-lock.json
 
 .cache/
 .DS_Store

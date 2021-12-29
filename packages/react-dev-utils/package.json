@@ -1,6 +1,6 @@
 {
   "name": "@nacelle/react-dev-utils",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "Development utilities for Nacelle React projects",
   "main": "build/index.js",
   "module": "build/index.es.js",

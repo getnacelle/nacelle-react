@@ -27,7 +27,7 @@
     "lodash.set": "^4.3.2"
   },
   "peerDependencies": {
-    "gatsby": "^2.0.32",
+    "gatsby": ">2.0.31",
     "gatsby-source-filesystem": "^2.6.1",
     "graphql": "^14.7.0"
   },

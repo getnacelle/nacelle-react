@@ -12,13 +12,17 @@ All `nacelle-react` [**packages**](https://github.com/getnacelle/nacelle-react/t
 
 [**Examples**](https://github.com/getnacelle/nacelle-react/tree/main/examples) demonstrate React project setups with metaframeworks such as [Next.js](https://github.com/getnacelle/nacelle-react/tree/main/examples/nextjs) and [Gatsby](https://github.com/getnacelle/nacelle-react/tree/main/examples/gatsby)) and a variety of third-party integrations.
 
-To scaffold a frontend example project, we recommend using [`degit`](https://www.npmjs.com/package/degit):
+Using `degit` for project scaffolding allows you to create a fresh project without needing to clone the `nacelle-react` monorepo. To scaffold a frontend example project, we recommend using [`degit`](https://www.npmjs.com/package/degit):
 
 ```
 npx degit https://github.com/getnacelle/nacelle-react/examples/<example-project-name> my-new-project
 ```
 
-Using `degit` for project scaffolding allows you to create a fresh project without needing to clone the `nacelle-react` monorepo.
+After scaffolding up a new project with `degit`, we recommend initializing source control with Git:
+
+```
+git init -b main
+```
 
 ## How to Contribute
 

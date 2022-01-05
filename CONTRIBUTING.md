@@ -69,7 +69,7 @@ To create a new example project or a new NPM package within the repo, just run `
 
 #### Ensure Public Access for Scoped Packages
 
-If your package is scoped (i.e. `@nacelle/package-name`), be sure to include the `publichConfig` property in the `package.json`. This specifies that the scoped package should be public (the default is private for scoped packages).
+If your package is scoped (i.e. `@nacelle/package-name`), be sure to include the `publishConfig` property in the `package.json`. This specifies that the scoped package should be public (the default is private for scoped packages).
 
 ```json
 "publishConfig": {

@@ -10,7 +10,7 @@ All `nacelle-react` [**packages**](https://github.com/getnacelle/nacelle-react/t
 
 ## Examples
 
-[**Examples**](https://github.com/getnacelle/nacelle-react/tree/main/examples) demonstrate React project setups with a particular metaframework or third-party integration.
+[**Examples**](https://github.com/getnacelle/nacelle-react/tree/main/examples) demonstrate React project setups with metaframeworks such as [Next.js](https://github.com/getnacelle/nacelle-react/tree/main/examples/nextjs) and [Gatsby](https://github.com/getnacelle/nacelle-react/tree/main/examples/gatsby)) and a variety of third-party integrations.
 
 To scaffold a frontend example project, we recommend using [`degit`](https://www.npmjs.com/package/degit):
 

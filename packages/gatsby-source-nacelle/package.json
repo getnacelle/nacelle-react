@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@nacelle/contentful-preview-connector": "^0.1.5",
-    "@nacelle/storefront-sdk": "^1.0.0-alpha.3",
+    "@nacelle/storefront-sdk": "^1.0.1",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2"
   },

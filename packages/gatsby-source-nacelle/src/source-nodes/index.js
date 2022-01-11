@@ -61,7 +61,10 @@ module.exports = async function ({
           newNodeCount += 1;
         } else {
           touchNode({
-            nodeId: `Nacelle${dataType}-${entry[uniqueIdProperty]}`
+            id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
+            internal: {
+              type: `Nacelle${dataType}`
+            }
           });
         }
       });

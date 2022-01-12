@@ -2,7 +2,6 @@ const sourceNodes = require('./src/source-nodes');
 const typeDefs = require('./src/type-defs');
 const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
 const { nacelleClient: createNacelleClient } = require('./src/services');
-// const NacelleClient = require('@nacelle/client-js-sdk').default;
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({

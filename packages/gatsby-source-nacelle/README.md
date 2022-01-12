@@ -33,34 +33,34 @@ npm i @nacelle/gatsby-source-nacelle
 
 ### Configure
 
-Then add the plugin to your `gatsby-config.js`. Be sure to include your `nacelle-space-id` and `nacelle-graphql-token`, which you can find in your Space settings in the [Nacelle Dashboard](https://dashboard.getnacelle.com/).
-
-#### Adding Your Credentials Securely
-
-Create a `.env` file with your Nacelle credentials. For more information about using environment variables in a Gatsby project, check out the [Gatsby docs](https://www.gatsbyjs.org/docs/environment-variables/).
-
-```dotenv
-# .env
-NACELLE_SPACE_ID=your-nacelle-space-id
-NACELLE_GRAPHQL_TOKEN=your-nacelle-graphql-token
-```
+It's recommended to create a NacelleClient and pass it to `gatsby-source-nacelle`. This gives you the best control of your client, allowing you to setup [CMS previews](https://docs.getnacelle.com/integrations/contentful-preview.html) and the [Nacelle V2 Compatibility Connector](https://www.npmjs.com/package/@nacelle/compatibility-connector).
 
 ```javascript
 // gatsby-config.js
 require('dotenv').config();
+
+const NacelleClient = require('@nacelle/client-js-sdk').default;
+
+const client = new NacelleClient({
+  useStatic: false,
+  token: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
+  id: process.env.GATSBY_NACELLE_SPACE_ID,
+  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
+});
 
 module.exports = {
   plugins: [
     {
       resolve: '@nacelle/gatsby-source-nacelle',
       options: {
-        nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-        nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN
+        nacelleClient: client
       }
     }
   ]
 };
 ```
+
+You'll note that we use `.env` variables to set Nacelle credentials. You can learn more about using environment variables with Gatsby in the [Gatsby docs](https://www.gatsbyjs.org/docs/environment-variables/)
 
 ## Additional Features
 

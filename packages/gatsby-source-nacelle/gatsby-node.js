@@ -11,7 +11,9 @@ exports.pluginOptionsSchema = ({ Joi }) => {
     nacelleGraphqlToken: Joi.string().description(
       'GraphQL Token from the Nacelle Dashboard'
     ),
-    nacelleClient: Joi.optional(),
+    nacelleClient: Joi.optional().description(
+      'Instance of the `@nacelle/client-js-sdk` which you want to use to fetch your nacelle data'
+    ),
     contentfulPreviewApiToken: Joi.string().description(
       'Contentful Preview API token from Contentful Dashboard settings'
     ),

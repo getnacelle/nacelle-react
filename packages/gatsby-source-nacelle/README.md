@@ -33,7 +33,7 @@ npm i @nacelle/gatsby-source-nacelle
 
 ### Configure
 
-It's recommended to create a NacelleClient and pass it to `gatsby-source-nacelle`. This gives you the best control of your client, allowing you to setup [CMS previews](https://docs.getnacelle.com/integrations/contentful-preview.html) and the [Nacelle V2 Compatibility Connector](https://www.npmjs.com/package/@nacelle/compatibility-connector).
+It's recommended to create a NacelleClient and pass it to `gatsby-source-nacelle`. This gives you the best control of your client, allowing you to setup [CMS previews](https://docs.getnacelle.com/integrations/contentful-preview.html) and the [Nacelle v2 Compatibility Connector](https://www.npmjs.com/package/@nacelle/compatibility-connector).
 
 ```javascript
 // gatsby-config.js

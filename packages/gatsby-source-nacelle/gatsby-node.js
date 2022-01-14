@@ -11,8 +11,14 @@ exports.pluginOptionsSchema = ({ Joi }) => {
     nacelleGraphqlToken: Joi.string().description(
       'GraphQL Token from the Nacelle Dashboard'
     ),
+    nacelleEndpoint: Joi.string().description(
+      'Storefront Endpoint from the Nacelle Dashboard'
+    ),
     nacelleClient: Joi.optional().description(
       'Instance of the `@nacelle/client-js-sdk` which you want to use to fetch your nacelle data'
+    ),
+    contentfulPreviewSpaceId: Joi.string().description(
+      'Space ID from Contentful Dashboard settings'
     ),
     contentfulPreviewApiToken: Joi.string().description(
       'Contentful Preview API token from Contentful Dashboard settings'
@@ -36,16 +42,16 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
     nacelleClient
   } = pluginOptions;
 
-  const client = nacelleClient
-    ? nacelleClient
-    : createNacelleClient({
-        previewMode: cmsPreviewEnabled(pluginOptions),
-        nacelleSpaceId,
-        nacelleGraphqlToken,
-        nacelleEndpoint,
-        contentfulPreviewSpaceId,
-        contentfulPreviewApiToken
-      });
+  const client =
+    nacelleClient ||
+    createNacelleClient({
+      previewMode: cmsPreviewEnabled(pluginOptions),
+      nacelleSpaceId,
+      nacelleGraphqlToken,
+      nacelleEndpoint,
+      contentfulPreviewSpaceId,
+      contentfulPreviewApiToken
+    });
 
   const [
     spaceData,

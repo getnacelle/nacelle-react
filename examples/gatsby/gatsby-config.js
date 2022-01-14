@@ -1,13 +1,20 @@
 require('dotenv').config();
 
+const NacelleClient = require('@nacelle/client-js-sdk').default;
+
+const client = new NacelleClient({
+  useStatic: false,
+  token: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
+  id: process.env.GATSBY_NACELLE_SPACE_ID,
+  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
+});
+
 module.exports = {
   plugins: [
     {
       resolve: '@nacelle/gatsby-source-nacelle',
       options: {
-        nacelleSpaceId: process.env.GATSBY_NACELLE_SPACE_ID,
-        nacelleGraphqlToken: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
-        nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT,
+        nacelleClient: client,
         cacheDuration: 1000 * 60 * 60 * 24 // 1 day in ms
       }
     },

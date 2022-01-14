@@ -1,16 +1,22 @@
 const sourceNodes = require('./src/source-nodes');
 const typeDefs = require('./src/type-defs');
 const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
-const { nacelleClient } = require('./src/services');
+const { nacelleClient: createNacelleClient } = require('./src/services');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
-    nacelleSpaceId: Joi.string()
-      .required()
-      .description('Space ID from the Nacelle Dashboard'),
-    nacelleGraphqlToken: Joi.string()
-      .required()
-      .description('GraphQL Token from the Nacelle Dashboard'),
+    nacelleSpaceId: Joi.string().description(
+      'Space ID from the Nacelle Dashboard'
+    ),
+    nacelleGraphqlToken: Joi.string().description(
+      'GraphQL Token from the Nacelle Dashboard'
+    ),
+    nacelleEndpoint: Joi.string().description(
+      'Storefront Endpoint from the Nacelle Dashboard'
+    ),
+    nacelleClient: Joi.optional().description(
+      'Instance of the `@nacelle/client-js-sdk` which you want to use to fetch your nacelle data'
+    ),
     contentfulPreviewSpaceId: Joi.string().description(
       'Space ID from Contentful Dashboard settings'
     ),
@@ -32,28 +38,35 @@ exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
     nacelleGraphqlToken,
     nacelleEndpoint,
     contentfulPreviewSpaceId,
-    contentfulPreviewApiToken
+    contentfulPreviewApiToken,
+    nacelleClient
   } = pluginOptions;
 
-  const client = nacelleClient({
-    previewMode: cmsPreviewEnabled(pluginOptions),
-    nacelleSpaceId,
-    nacelleGraphqlToken,
-    nacelleEndpoint,
-    contentfulPreviewSpaceId,
-    contentfulPreviewApiToken
-  });
-
-  const [spaceData, productData, collectionData, contentData] =
-    await Promise.all([
-      // fetch data from Nacelle's Hail Frequency API
-      client.data.space(),
-      client.data.allProducts(),
-      client.data.allCollections(),
-      client.data.allContent()
-    ]).catch((err) => {
-      throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
+  const client =
+    nacelleClient ||
+    createNacelleClient({
+      previewMode: cmsPreviewEnabled(pluginOptions),
+      nacelleSpaceId,
+      nacelleGraphqlToken,
+      nacelleEndpoint,
+      contentfulPreviewSpaceId,
+      contentfulPreviewApiToken
     });
+
+  const [
+    spaceData,
+    productData,
+    collectionData,
+    contentData
+  ] = await Promise.all([
+    // fetch data from Nacelle's Hail Frequency API
+    client.data.space(),
+    client.data.allProducts(),
+    client.data.allCollections(),
+    client.data.allContent()
+  ]).catch((err) => {
+    throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
+  });
 
   await Promise.all([
     // use Nacelle data to create Gatsby nodes

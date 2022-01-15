@@ -39,13 +39,11 @@ It's recommended to create a NacelleClient and pass it to `gatsby-source-nacelle
 // gatsby-config.js
 require('dotenv').config();
 
-const NacelleClient = require('@nacelle/client-js-sdk').default;
+const NacelleClient = require('@nacelle/storefront-sdk').default;
 
 const client = new NacelleClient({
-  useStatic: false,
-  token: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
-  id: process.env.GATSBY_NACELLE_SPACE_ID,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
+  token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
+  nacelleEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
 });
 
 module.exports = {
@@ -74,13 +72,19 @@ For example, a build with the following configuration will force a re-fetch of p
 // gatsby-config.js
 require('dotenv').config();
 
+const NacelleClient = require('@nacelle/storefront-sdk').default;
+
+const client = new NacelleClient({
+  token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
+  nacelleEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
+});
+
 module.exports = {
   plugins: [
     {
       resolve: '@nacelle/gatsby-source-nacelle',
       options: {
-        nacelleSpaceId: process.env.NACELLE_SPACE_ID,
-        nacelleGraphqlToken: process.env.NACELLE_GRAPHQL_TOKEN,
+        nacelleClient: client,
         cacheDuration: 1000 * 60 * 60 * 24 // 1 day in ms
       }
     }
@@ -90,7 +94,7 @@ module.exports = {
 
 ### Gatsby Image
 
-`@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` of content, collections, and products, as well as the `media` of products.
+`@nacelle/gatsby-source-nacelle` provides a way to easily integrate with Gatsby's powerful [image processing tools](https://www.gatsbyjs.org/docs/working-with-images/#optimizing-images-with-gatsby-image) to enable progressive image loading with visually-compelling loading strategies such as [Traced SVG](https://using-gatsby-image.gatsbyjs.org/traced-svg/) and [Background Color](https://using-gatsby-image.gatsbyjs.org/background-color/). Gatsby Image is directly compatible with the `featuredMedia` and `media` of products.
 
 Enabling these image processing techniques requires installing [gatsby-source-filesystem](https://www.npmjs.com/package/gatsby-source-filesystem), [`gatsby-plugin-sharp`](https://www.npmjs.com/package/gatsby-plugin-sharp), and [`gatsby-transformer-sharp`](https://www.npmjs.com/package/gatsby-transformer-sharp):
 

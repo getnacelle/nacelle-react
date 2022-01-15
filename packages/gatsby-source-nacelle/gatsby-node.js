@@ -7,15 +7,6 @@ exports.pluginOptionsSchema = ({ Joi }) => {
     nacelleClient: Joi.required().description(
       'Instance of the `@nacelle/storefront-sdk` which you want to use to fetch your nacelle data'
     ),
-    contentfulPreviewSpaceId: Joi.string().description(
-      'Space ID from Contentful Dashboard settings'
-    ),
-    contentfulPreviewApiToken: Joi.string().description(
-      'Contentful Preview API token from Contentful Dashboard settings'
-    ),
-    cmsPreviewEnabled: Joi.boolean().description(
-      `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
-    ),
     cacheDuration: Joi.number().description(
       'Max duration in ms that gatsby-source-nacelle caches product, collection, and content data from previous builds'
     )

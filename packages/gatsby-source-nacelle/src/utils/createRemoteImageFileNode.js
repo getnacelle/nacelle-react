@@ -40,16 +40,15 @@ async function createFileNode(
   node,
   nodeMedia,
   gatsbyApi,
-  { isImage = () => true, imageProperties = ['src', 'url'] }
+  { isImage = () => true, imageProperties = ['src', 'thumbnailSrc'] }
 ) {
   try {
     const { createRemoteFileNode } = require('gatsby-source-filesystem');
     const nodeMediaEntry = getNodeMedia(node, nodeMedia);
 
     if (nodeMediaEntry) {
-      const address = (Array.isArray(imageProperties)
-        ? imageProperties
-        : [imageProperties]
+      const address = (
+        Array.isArray(imageProperties) ? imageProperties : [imageProperties]
       ).map((property) => nodeMediaEntry[property])[0];
 
       if (isImage(nodeMediaEntry)) {
@@ -106,10 +105,11 @@ module.exports = async function (
 
     await Promise.all(
       nodeMediaArray.map((media) => {
-        if (Array.isArray(node[media])) {
+        const extractedNodeMedia = getNodeMedia(node, media);
+        if (Array.isArray(extractedNodeMedia)) {
           return Promise.all(
-            node.media.map((_media, idx) =>
-              createFileNode(node, [media, idx], gatsbyApi, options)
+            extractedNodeMedia.map((_media, idx) =>
+              createFileNode(node, [...media, idx], gatsbyApi, options)
             )
           );
         } else {

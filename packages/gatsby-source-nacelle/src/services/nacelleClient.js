@@ -1,18 +1,18 @@
-const NacelleClient = require('@nacelle/client-js-sdk').default;
+const NacelleClient = require('@nacelle/storefront-sdk').default;
 
 module.exports = function nacelleClient({
-  nacelleSpaceId = '',
-  nacelleGraphqlToken = '',
-  nacelleEndpoint = '',
+  nacelleStorefrontToken = '',
+  nacelleStorefrontEndpoint = '',
+  locale = 'en-US',
   contentfulPreviewSpaceId = '',
   contentfulPreviewApiToken = '',
   previewMode = false
 }) {
   const clientSettings = {
-    id: nacelleSpaceId || process.env.NACELLE_SPACE_ID,
-    token: nacelleGraphqlToken || process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: nacelleEndpoint || 'https://hailfrequency.com/v3/graphql',
-    useStatic: false
+    token: nacelleStorefrontToken || process.env.NACELLE_STOREFRONT_TOKEN,
+    storefrontEndpoint:
+      nacelleStorefrontEndpoint || process.env.NACELLE_STOREFRONT_ENDPOINT,
+    locale
   };
 
   // Initialize the Nacelle Client

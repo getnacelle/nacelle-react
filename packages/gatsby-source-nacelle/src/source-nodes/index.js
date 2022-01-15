@@ -13,11 +13,9 @@ module.exports = async function ({
   gatsbyApi,
   pluginOptions,
   data,
-  keyMappings = [
-    { oldKey: 'id', newKey: 'remoteId' },
-    { oldKey: 'fields', newKey: 'remoteFields' }
-  ],
-  uniqueIdProperty = 'remoteId'
+  dataType,
+  keyMappings = [{ oldKey: 'fields', newKey: 'remoteFields' }],
+  uniqueIdProperty = 'nacelleEntryId'
 }) {
   const {
     replaceKey,
@@ -28,25 +26,8 @@ module.exports = async function ({
   const { actions, createContentDigest, cache } = gatsbyApi;
   const { createNode, touchNode } = actions;
 
-  const dataSample = Array.isArray(data) ? data[0] : data;
-  let dataType;
-
-  if (dataSample.linklists) {
-    dataType = 'space';
-  } else if (dataSample.pimSyncSourceProductId) {
-    dataType = 'product';
-  } else if (dataSample.pimSyncSourceCollectionId) {
-    dataType = 'collection';
-  } else if (dataSample.cmsSyncSourceContentId) {
-    dataType = 'content';
-  }
-
-  const dataTypeLower = dataType.toLowerCase();
-  const dataTypeUpper =
-    dataType.charAt(0).toUpperCase() + dataType.substring(1, dataType.length);
-
   try {
-    console.info(`[gatsby-source-nacelle] fetching ${dataTypeLower}`);
+    console.info(`[gatsby-source-nacelle] fetching ${dataType}`);
 
     // handle incremental builds
     const lastFetched = await cache.get('nacelle-timestamp');
@@ -65,11 +46,11 @@ module.exports = async function ({
           cacheIsInvalid(lastFetched, pluginOptions)
         ) {
           const nodeMeta = {
-            id: `Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`,
+            id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
             parent: null,
             children: [],
             internal: {
-              type: `Nacelle${dataTypeUpper}`,
+              type: `Nacelle${dataType}`,
               contentDigest: createContentDigest(entry)
             }
           };
@@ -80,18 +61,18 @@ module.exports = async function ({
           newNodeCount += 1;
         } else {
           touchNode({
-            nodeId: `Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`
+            nodeId: `Nacelle${dataType}-${entry[uniqueIdProperty]}`
           });
         }
       });
     } else if (Object.keys(formattedData).length) {
       // don't make an effort to cache single entries, such as Nacelle Space data
       const nodeMeta = {
-        id: `Nacelle${dataTypeUpper}-${formattedData[uniqueIdProperty]}`,
+        id: `Nacelle${dataType}`,
         parent: null,
         children: [],
         internal: {
-          type: `Nacelle${dataTypeUpper}`,
+          type: `Nacelle${dataType}`,
           contentDigest: createContentDigest(formattedData)
         }
       };
@@ -103,17 +84,17 @@ module.exports = async function ({
     if (Array.isArray(formattedData)) {
       if (newNodeCount) {
         console.info(
-          `[gatsby-source-nacelle] created ${newNodeCount} new ${dataTypeLower} nodes`
+          `[gatsby-source-nacelle] created ${newNodeCount} new ${dataType} nodes`
         );
       } else {
         console.info(
-          `[gatsby-source-nacelle] using cached ${dataTypeLower} nodes from previous build`
+          `[gatsby-source-nacelle] using cached ${dataType} nodes from previous build`
         );
       }
     }
   } catch (err) {
     throw new Error(
-      `Problem sourcing Nacelle ${dataTypeLower} nodes: ${err.message}`
+      `Problem sourcing Nacelle ${dataType} nodes: ${err.message}`
     );
   }
 };

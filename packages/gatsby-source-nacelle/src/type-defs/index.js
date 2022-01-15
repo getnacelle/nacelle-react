@@ -1,270 +1,223 @@
 module.exports = `
-"A product that has been indexed by Nacelle"
-  type NacelleProduct implements Node @dontInfer {
-    remoteId: ID!
-    handle: String!
-    locale: String!
-    globalHandle: String!
-    pimSyncSourceDomain: String!
-    pimSyncSource: String
-    pimSyncSourceProductId: String
-    pimSyncSourceLocale: String
-    title: String
-    description: String
-    priceRange: PriceRange
-    productType: String
-    featuredMedia: NacelleMedia
-    availableForSale: Boolean!
-    vendor: String
-    tags: [String!]
-    media: [NacelleMedia!]
-    metafields: [Metafield!]
-    variants: [ProductVariant!]
-    createdAt: Int
-    updatedAt: Int
-    indexedAt: Int!
-  }
+type CollectionContent @dontInfer {
+  collectionEntryId: ID!
+  createdAt: Int
+  description: String
+  fields: JSON
+  handle: String
+  indexedAt: Int
+  locale: String
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  published: Boolean
+  sourceEntryId: ID!
+  title: String
+  updatedAt: Int
+}
 
-  "The price range and currency of a product"
-  type PriceRange @dontInfer {
-    min: String
-    max: String
-    currencyCode: String
-  }
+"Represents master pieces of content like a page, article, employee, press-release, etc."
+type NacelleContent implements Node @dontInfer {
+  collections: [NacelleContentCollection!]
+  createdAt: Int
+  remoteFields: JSON
+  handle: String
+  indexedAt: Int
+  locale: String
+  nacelleEntryId: ID!
+  published: Boolean
+  sourceEntryId: ID!
+  title: String
+  type: String
+  updatedAt: Int
+}
 
-  "Details for different media types associated with content & products"
-  type NacelleMedia @dontInfer {
-    remoteId: ID
-    type: String!
-    src: String!
-    thumbnailSrc: String!
-    altText: String
-    remoteImage: File @link
-  }
+"Represents a collection of content: articles for a blog, employees for an About Us page, press releases for a News page, etc."
+type NacelleContentCollection implements Node @dontInfer {
+  content: CollectionContent
+  createdAt: Int
+  entries: [NacelleContent!]
+  indexedAt: Int
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  sourceEntryId: ID!
+  tags: [String!]
+  updatedAt: Int
+}
 
-  "A flexible key / value store that can be associated with many other pieces of Nacelle data"
-  type Metafield @dontInfer {
-    id: ID
-    namespace: String
-    key: String!
-    value: String!
-    source: String
-  }
+"A piece of media that can represent an Image, 3dModel, or Video."
+type Media @dontInfer {
+  altText: String
+  id: ID
+  mimeType: String
+  src: String!
+  thumbnailSrc: String
+  type: String!
+  remoteImage: File @link
+}
 
-  "A product option that differs from the base product"
-  type ProductVariant @dontInfer {
-    id: ID!
-    title: String
-    price: String
-    priceCurrency: String
-    compareAtPrice: String
-    compareAtPriceCurrency: String
-    priceRules: [ProductPriceRule!]
-    swatchSrc: String
-    selectedOptions: [SelectedProductOption!]
-    featuredMedia: NacelleMedia
-    sku: String
-    availableForSale: Boolean
-    metafields: [Metafield!]
-    weight: Float
-    weightUnit: String
-    quantityAvailable: Int
-  }
+"Metafields represent custom metadata attached to a resource. Metafields can be sorted into namespaces and are comprised of keys, values"
+type Metafield @dontInfer {
+  id: ID
+  key: String!
+  namespace: String
+  value: String!
+}
 
-  type ProductPriceRule @dontInfer {
-    id: ID
-    handle: String!
-    title: String
-    price: String
-    priceCurrency: String
-    comparedAtPrice: String
-    priceBreaks: [ProductPriceBreaks!]
-    availableTo: [String!]
-    metafields: [Metafield!]
-  }
+type NacelleNavigationGroup implements Node @dontInfer {
+  groupId: String
+  items: [NavigationGroupItem!]
+  title: String
+  updatedAt: String
+  updatedBy: String
+}
 
-  type ProductPriceBreaks @dontInfer {
-    quantityMin: Int
-    quantityMax: Int
-    price: String
-    metafields: [Metafield]
-  }
+type NavigationGroupItem @dontInfer {
+  items: [NavigationGroupItem!]
+  title: String!
+  url: String!
+}
 
-  "Available options for a product variant (i.e. color, size, etc)"
-  type SelectedProductOption @dontInfer {
-    name: String!
-    value: String!
-  }
+"A price break definition."
+type PriceBreak @dontInfer {
+  metafields: [Metafield!]
+  price: String
+  quantityMax: Int
+  quantityMin: Int
+}
 
-  "A collection of products that has been indexed by Nacelle"
-  type NacelleCollection implements Node @dontInfer {
-    remoteId: ID!
-    handle: String!
-    locale: String!
-    globalHandle: String!
-    pimSyncSourceDomain: String!
-    pimSyncSource: String
-    pimSyncSourceCollectionId: String
-    pimSyncSourceLocale: String
-    title: String
-    description: String
-    featuredMedia: NacelleMedia
-    productLists: [NacelleProductList!]
-    createdAt: Int
-    updatedAt: Int
-    metafields: [NacelleCollectionMetafield!]
-  }
+"A price rule definition."
+type PriceRule @dontInfer {
+  availableTo: [String!]
+  comparedAtPrice: String
+  handle: String!
+  id: ID
+  metafields: [Metafield!]
+  price: String!
+  priceBreaks: [PriceBreak!]!
+  priceCurrency: String!
+  title: String!
+}
 
-  type NacelleCollectionMetafield @dontInfer {
-    id: ID
-    namespace: String
-    key: String!
-    value: String!
-    source: String
-  }
+"A product represents an individual item for sale. Products are often physical, but they don't have to be. For example, a digital download (such as a movie, music or ebook file) also qualifies as a product, as do services (such as equipment rental, work for hire, customization of another product or an extended warranty)."
+type NacelleProduct implements Node @dontInfer {
+  availableForSale: Boolean
+  collections: [NacelleProductCollection!]
+  content: ProductContent
+  createdAt: Int
+  indexedAt: Int
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  productType: String
+  sourceEntryId: ID!
+  tags: [String!]
+  updatedAt: Int
+  variants: [Variant!]
+  vendor: String
+}
 
-  "A list of products by handle"
-  type NacelleProductList @dontInfer {
-    title: String!
-    slug: String!
-    locale: String
-    handles: [String!]
-  }
+"Represents a collection of products."
+type NacelleProductCollection implements Node @dontInfer {
+  content: CollectionContent
+  createdAt: Int
+  indexedAt: Int
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  products: [NacelleProduct!]
+  sourceEntryId: ID!
+  tags: [String!]
+  updatedAt: Int
+}
 
-  "Content from a CMS that has been indexed by Nacelle"
-  type NacelleContent implements Node @dontInfer {
-    remoteId: ID!
-    handle: String!
-    locale: String!
-    globalHandle: String!
-    cmsSyncSource: String!
-    cmsSyncSourceDomain: String!
-    cmsSyncSourceContentId: String
-    cmsSyncSourceLocale: String
-    type: String!
-    title: String
-    description: String
-    sections: JSON
-    tags: [String!]
-    remoteFields: JSON
-    articleLists: [ContentArticleList!]
-    relatedArticles: [ContentRelatedArticle!]
-    collectionHandle: String
-    content: String
-    contentHtml: String
-    excerpt: String
-    blogHandle: String
-    featuredMedia: NacelleMedia
-    author: ContentAuthor
-    publishDate: Int
-    createdAt: Int
-    updatedAt: Int
-    indexedAt: Int!
-  }
+"A piece of product content represents the localized version of data points, with more flexibility."
+type ProductContent @dontInfer {
+  createdAt: Int
+  description: String
+  featuredMedia: Media
+  fields: JSON
+  handle: String
+  indexedAt: Int
+  locale: String
+  media: [Media!]
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  options: [ProductOption!]
+  productEntryId: ID
+  published: Boolean
+  sourceEntryId: ID!
+  title: String
+  updatedAt: Int
+}
 
-  "A list of articles by handle"
-  type ContentArticleList @dontInfer {
-    title: String!
-    slug: String!
-    locale: String
-    handles: [String!]
-  }
+"Product property names like Size, Color, and Material that the customers can select. Variants are selected based on permutations of these options."
+type ProductOption @dontInfer {
+  name: String!
+  values: [String!]
+}
 
-  "The author of the content"
-  type ContentAuthor @dontInfer {
-    firstName: String
-    lastName: String
-    bio: String
-    email: String
-  }
+"Properties used by customers to select a product variant. Products can have multiple options, like different sizes or colors."
+type SelectedOption @dontInfer {
+  label: String
+  name: String!
+  value: String!
+}
 
-  "An article that is related to the current article"
-  type ContentRelatedArticle @dontInfer {
-    handle: String!
-    title: String
-    blogHandle: String
-    cmsSyncSourceContentId: String
-    locale: String!
-    createdAt: Int
-    updatedAt: Int
-    description: String
-    excerpt: String
-    tags: [String!]
-    author: ContentAuthor
-    featuredMedia: NacelleMedia
-    publishDate: Int
-  }
+type NacelleSpaceProperties implements Node @dontInfer {
+  properties: [SpacePropertyNamespace]
+  updatedAt: String
+  updatedBy: String
+}
 
-  type OptionalMetafield @dontInfer {
-    key: String
-    value: String
-  }
+type SpacePropertyItem @dontInfer {
+  key: String!
+  value: String!
+}
 
-  input MetafieldInput @dontInfer {
-    namespace: String
-    key: String
-    value: String
-    source: String
-  }
+type SpacePropertyNamespace @dontInfer {
+  items: [SpacePropertyItem]
+  namespace: String
+}
 
-  "A sapce that has been created in the Nacelle dashboard"
-  type NacelleSpace implements Node @dontInfer {
-    remoteId: ID!
-    type: String
-    name: String
-    domain: String
-    token: String
-    buildHook: String
-      @deprecated(
-        reason: "Features for this field were never implemented; it is currently a no-op"
-      )
-    privateToken: String
-    publicToken: String
-    pimSyncSourceDomain: String!
-    cmsSyncSourceDomain: String
-    linklists: [SpaceLinkList!]
-    affinityLinklists: [SpaceAffinityLinkList!]
-    metafields: [Metafield!]
-    users: [SpaceUser!]
-    featureFlags: [String]
-  }
+"A product variant represents a different version of a product, such as differing sizes or differing colors."
+type Variant @dontInfer {
+  availableForSale: Boolean
+  compareAtPrice: String
+  content: VariantContent
+  createdAt: Int
+  indexedAt: Int
+  metafields: [Metafield!]
+  nacelleEntryId: ID
+  price: String
+  priceCurrency: String
+  priceRules: [PriceRule!]
+  productEntryId: ID
+  productHandle: String
+  quantityAvailable: Int
+  sku: String
+  sourceEntryId: ID!
+  updatedAt: Int
+  weight: Float
+  weightUnit: String
+}
 
-  input SpaceInput @dontInfer {
-    id: String!
-    domain: String
-    name: String
-    token: String
-    privateToken: String
-    publicToken: String
-    type: String
-    buildHook: String
-    pimSyncSourceDomain: String
-    cmsSyncSourceDomain: String
-  }
-
-  "A user who has access to a space"
-  type SpaceUser @dontInfer {
-    id: ID!
-    email: String
-    role: String
-  }
-
-  type SpaceAffinityLinkList @dontInfer {
-    affinityGroupSlug: String!
-    linklists: [SpaceLinkList!]!
-  }
-
-  "A list of links that can be used to generate pages & routes in a headless app"
-  type SpaceLinkList @dontInfer {
-    handle: String!
-    links: [Link!]
-  }
-
-  "A link used to generate pages & routes in a headless app"
-  type Link @dontInfer {
-    title: String!
-    to: String!
-    type: String
-    links: [Link!]
-  }
+"A piece of variant content represents the localized version of data points, with more flexibility."
+type VariantContent @dontInfer {
+  createdAt: Int
+  description: String
+  featuredMedia: Media
+  fields: JSON
+  indexedAt: Int
+  locale: String
+  media: [Media!]
+  metafields: [Metafield!]
+  nacelleEntryId: ID!
+  productEntryId: ID
+  productHandle: String
+  published: Boolean
+  selectedOptions: [SelectedOption!]
+  sourceEntryId: ID
+  swatchSrc: String
+  title: String
+  updatedAt: Int
+  variantEntryId: ID
+}
 `;

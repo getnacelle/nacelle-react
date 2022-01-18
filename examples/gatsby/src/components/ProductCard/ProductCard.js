@@ -50,7 +50,7 @@ const ProductCard = ({
       product,
       variant: {
         ...productVariant,
-        id: productVariant.sourceEntryId
+        id: `gid://shopify/ProductVariant/${productVariant.content.sourceEntryId}`
       },
       quantity
     };

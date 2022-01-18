@@ -86,6 +86,7 @@ export const query = graphql`
         content {
           swatchSrc
           title
+          sourceEntryId
           featuredMedia {
             src
             thumbnailSrc

@@ -10,7 +10,7 @@ const CollectionGrid = ({ fields }) => {
   useEffect(() => {
     const fetchCollection = async () => {
       const collections = await $nacelle
-        .collections({
+        .productCollections({
           handle: collectionHandle
         })
         .catch(() =>

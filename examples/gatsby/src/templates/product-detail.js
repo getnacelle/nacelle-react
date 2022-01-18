@@ -49,18 +49,21 @@ export default ProductDetail;
 
 export const query = graphql`
   query ProductQuery($handle: String!) {
-    nacelleProduct(handle: { eq: $handle }) {
-      remoteId
-      handle
-      title
-      featuredMedia {
-        remoteImage {
-          childImageSharp {
-            gatsbyImageData(width: 800, placeholder: TRACED_SVG)
+    nacelleProduct(content: { handle: { eq: $handle } }) {
+      nacelleEntryId
+      content {
+        handle
+        title
+        locale
+        featuredMedia {
+          remoteImage {
+            childImageSharp {
+              gatsbyImageData(width: 800, placeholder: TRACED_SVG)
+            }
           }
+          src
+          altText
         }
-        src
-        altText
       }
       metafields {
         key
@@ -68,10 +71,10 @@ export const query = graphql`
         value
       }
       variants {
-        id
+        nacelleEntryId
+        sourceEntryId
         availableForSale
         compareAtPrice
-        compareAtPriceCurrency
         price
         priceCurrency
         metafields {
@@ -80,15 +83,17 @@ export const query = graphql`
           value
         }
         sku
-        swatchSrc
-        title
-        featuredMedia {
-          src
-          thumbnailSrc
-          altText
-          remoteImage {
-            childImageSharp {
-              gatsbyImageData(width: 800, placeholder: TRACED_SVG)
+        content {
+          swatchSrc
+          title
+          featuredMedia {
+            src
+            thumbnailSrc
+            altText
+            remoteImage {
+              childImageSharp {
+                gatsbyImageData(width: 800, placeholder: TRACED_SVG)
+              }
             }
           }
         }

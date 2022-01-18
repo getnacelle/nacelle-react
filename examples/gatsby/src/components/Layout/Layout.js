@@ -9,27 +9,31 @@ const Cart = Loadable(() => import('../Cart'));
 
 const Layout = ({ children }) => {
   const query = graphql`
-    query LinkListsQuery {
-      nacelleSpace {
-        name
-        linklists {
-          handle
-          links {
+    query navigationQuery {
+      allNacelleNavigationGroup {
+        edges {
+          node {
+            groupId
             title
-            to
-            type
+            items {
+              title
+              url
+            }
           }
         }
       }
     }
   `;
-  const spaceData = useStaticQuery(query);
+  const navigationData = useStaticQuery(query);
+  const navigationArray = navigationData.allNacelleNavigationGroup.edges.map(
+    (edge) => edge.node
+  );
   return (
     <>
-      <Header space={spaceData.nacelleSpace} />
+      <Header nav={navigationArray[0]} />
       <Cart />
       <main>{children}</main>
-      <Footer space={spaceData.nacelleSpace} />
+      <Footer />
     </>
   );
 };

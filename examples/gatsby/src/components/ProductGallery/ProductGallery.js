@@ -13,7 +13,10 @@ const ProductGallery = ({ products }) => {
     >
       {products.map((product, idx) =>
         product?.variants ? (
-          <ProductCard product={product} key={`${idx}::${product.remoteId}`} />
+          <ProductCard
+            product={product}
+            key={`${idx}::${product.nacelleEntryId}`}
+          />
         ) : null
       )}
     </Grid>

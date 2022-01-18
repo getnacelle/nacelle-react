@@ -6,12 +6,11 @@ import ProductGallery from 'components/ProductGallery';
 const CollectionGrid = ({ fields }) => {
   const [products, setProducts] = useState([]);
   const collectionHandle = fields.collectionHandle;
-  const itemsToShow = fields.itemsToShow || 12;
 
   useEffect(() => {
     const fetchCollection = async () => {
-      const collection = await $nacelle.data
-        .collection({
+      const collections = await $nacelle
+        .collections({
           handle: collectionHandle
         })
         .catch(() =>
@@ -20,12 +19,12 @@ const CollectionGrid = ({ fields }) => {
           )
         );
 
-      if (collection) {
-        const products = await $nacelle.data
+      if (collections) {
+        const products = await $nacelle
           .products({
-            handles: collection.productLists
-              .find((listEntry) => listEntry.slug === 'default')
-              .handles.slice(0, itemsToShow)
+            handles: collections.products.map(
+              (product) => product.content.handle
+            )
           })
           .catch((err) => {
             console.error(

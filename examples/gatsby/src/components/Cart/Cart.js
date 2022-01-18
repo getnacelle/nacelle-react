@@ -20,8 +20,8 @@ const Cart = () => {
   const processCheckout = async () => {
     await checkoutActions
       .processCheckout({ cartItems: checkoutItems })
-      .then(() => {
-        window.location = checkoutData.url;
+      .then((data) => {
+        window.location = data.url;
       });
   };
 
@@ -50,7 +50,7 @@ const Cart = () => {
         {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={`${idx}::${item.id}`}
+            key={`${idx}::${item.variant.id}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />
@@ -105,8 +105,8 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   };
 
   const removeItemFromCart = () => cartActions.removeFromCart(item);
-  const { featuredMedia: variantMedia } = item.variant;
-  const { featuredMedia: productMedia } = item.product;
+  const { featuredMedia: variantMedia } = item.variant.content;
+  const { featuredMedia: productMedia } = item.product.content;
   const altText =
     variantMedia.altText || productMedia.altText || item.product.title;
 

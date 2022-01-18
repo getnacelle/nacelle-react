@@ -35,17 +35,25 @@ const ProductCard = ({
   const [, { addToCart, toggleCart }] = useCart();
   const device = useDetectDevice();
   const imageData =
-    product.featuredMedia && getImage(product.featuredMedia.remoteImage);
+    product.content.featuredMedia &&
+    getImage(product.content.featuredMedia.remoteImage);
 
-  const productLink = `/products/${product.handle}`;
+  const productLink = `/products/${product.content.handle}`;
   const productVariant = product.variants[0];
   const formatPrice = formatCurrency(
-    product.locale,
+    product.content.locale,
     productVariant.priceCurrency
   );
 
   const addItemToCart = () => {
-    const item = { product, variant: productVariant, quantity };
+    const item = {
+      product,
+      variant: {
+        ...productVariant,
+        id: productVariant.sourceEntryId
+      },
+      quantity
+    };
     const stay = 'open';
 
     addToCart(item);
@@ -57,7 +65,9 @@ const ProductCard = ({
   const incrementQty = () => setQuantity((qty) => qty + 1);
   const decrementQty = () => setQuantity((qty) => (qty > 1 ? qty - 1 : 1));
   const altText =
-    product.featuredMedia.altText || product.title || 'product card';
+    product.content.featuredMedia.altText ||
+    product.content.title ||
+    'product card';
 
   return (
     <article css={[styles.cardMargin, cardStyles]}>
@@ -71,7 +81,7 @@ const ProductCard = ({
               <GatsbyImage image={imageData} alt={altText} css={imageStyles} />
             ) : (
               <Image
-                src={product.featuredMedia.src}
+                src={product.content.featuredMedia.src}
                 alt={altText}
                 width={320}
                 format={IMAGE_FORMATS}
@@ -82,7 +92,7 @@ const ProductCard = ({
 
           <div css={styles.column}>
             <LinkPDP pdpLink={productLink}>
-              <h3 css={styles.productTitle}>{product.title}</h3>
+              <h3 css={styles.productTitle}>{product.content.title}</h3>
             </LinkPDP>
             <span css={styles.productPrice}>
               {formatPrice(productVariant.price)}

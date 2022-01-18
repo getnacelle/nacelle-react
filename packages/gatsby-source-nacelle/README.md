@@ -43,7 +43,7 @@ const NacelleClient = require('@nacelle/storefront-sdk').default;
 
 const client = new NacelleClient({
   token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
+  storefrontEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
 });
 
 module.exports = {
@@ -76,7 +76,7 @@ const NacelleClient = require('@nacelle/storefront-sdk').default;
 
 const client = new NacelleClient({
   token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
+  storefrontEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
 });
 
 module.exports = {

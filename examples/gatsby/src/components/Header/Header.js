@@ -26,7 +26,7 @@ const MobileNav = ({ show, navItems, toggleNav, title }) => {
       <div css={styles.mobileNavItems}>
         {navItems.map((link, idx) => (
           <Link
-            to={link.to}
+            to={link.url}
             key={`${link.title}-${idx}`}
             onClick={toggleNav}
             activeStyle={{ color: '#ee7acb' }}
@@ -45,7 +45,7 @@ const DesktopNav = ({ navItems }) => {
     <nav css={styles.nav}>
       {navItems.map((link, idx) => (
         <Link
-          to={link.to}
+          to={link.url}
           key={`${link.title}-${idx}`}
           activeStyle={{ color: '#ee7acb' }}
           css={styles.navLink}
@@ -57,7 +57,7 @@ const DesktopNav = ({ navItems }) => {
   );
 };
 
-const Header = ({ space }) => {
+const Header = ({ nav }) => {
   const [{ cart }, { toggleCart }] = useCart();
   const [showNav, setShowNav] = useState(false);
   const [showCartCount, setShowCartCount] = useState(false);
@@ -66,8 +66,7 @@ const Header = ({ space }) => {
   useEffect(() => {
     setShowCartCount(cart.length > 0);
   }, [cart]);
-
-  const navItems = space.linklists[0].links;
+  const navItems = nav.items;
 
   return (
     <header css={styles.header}>
@@ -77,13 +76,13 @@ const Header = ({ space }) => {
         <span />
       </Button>
       <Link to="/" css={styles.name}>
-        {space.name}
+        Example Store
       </Link>
       <MobileNav
         show={showNav}
         navItems={navItems}
         toggleNav={toggleNav}
-        title={space.name}
+        title="Example Store"
       />
       <DesktopNav navItems={navItems} />
       <div css={styles.buttons}>

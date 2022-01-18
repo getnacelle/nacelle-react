@@ -15,28 +15,27 @@ export const ProductSearchProvider = ({ children }) => {
           node {
             availableForSale
             createdAt
-            description
-            handle
-            id
-            indexedAt
-            title
-            tags
-            priceRange {
-              min
-              max
-              currencyCode
+            content {
+              description
+              handle
+              title
             }
+            nacelleEntryId
+            indexedAt
+            tags
             variants {
               availableForSale
-              title
-              selectedOptions {
-                name
-                value
-              }
-              featuredMedia {
-                src
-                thumbnailSrc
-                altText
+              content {
+                title
+                selectedOptions {
+                  name
+                  value
+                }
+                featuredMedia {
+                  src
+                  thumbnailSrc
+                  altText
+                }
               }
               price
               priceCurrency
@@ -117,7 +116,9 @@ function addFacetsToProducts(products) {
     const variantFacets = variants
       ? variants
           .map((variant) =>
-            variant.selectedOptions.filter((option) => option.name !== 'Title')
+            variant.content.selectedOptions.filter(
+              (option) => option.name !== 'Title'
+            )
           )
           .reduce((filters, option) => filters.concat(option))
           .map((option) => ({ ...option, name: option.name.toLowerCase() }))

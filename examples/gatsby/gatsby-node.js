@@ -7,7 +7,9 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
       allNacelleProduct {
         edges {
           node {
-            handle
+            content {
+              handle
+            }
           }
         }
       }
@@ -16,17 +18,17 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
   products.data.allNacelleProduct.edges.forEach((product) =>
     createPage({
       // Build a Product Detail Page (PDP) for each product
-      path: `/products/${product.node.handle}`,
+      path: `/products/${product.node.content.handle}`,
       component: path.resolve('./src/templates/product-detail.js'),
       context: {
-        handle: product.node.handle
+        handle: product.node.content.handle
       }
     })
   );
 
   // Create `/shop` pages
   const allProductHandles = products.data.allNacelleProduct.edges.map(
-    (edge) => edge.node.handle
+    (edge) => edge.node.content.handle
   );
   if (allProductHandles.length) {
     const productsPerPage = 12;
@@ -52,56 +54,54 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
   // Fetch all collections
   const collections = await graphql(`
     {
-      allNacelleCollection {
+      allNacelleProductCollection {
         edges {
           node {
-            handle
-            productLists {
-              slug
-              handles
+            content {
+              handle
+            }
+            products {
+              content {
+                handle
+              }
             }
           }
         }
       }
     }
   `);
-  collections.data.allNacelleCollection.edges.forEach((collection) => {
+  collections.data.allNacelleProductCollection.edges.forEach((collection) => {
     // Build Product Loading Pages (PLPs) for each collection
-    const { handle, productLists } = collection.node;
+    const handle = collection.content?.handle;
+    if (!handle) return;
+    const products = collection.products;
 
-    if (productLists.length) {
-      const defaultList = productLists.find(
-        (productList) => productList.slug === 'default'
-      );
-
-      if (defaultList?.handles.length) {
-        // Paginate the collection
-        const collectionProductHandles = defaultList.handles;
-        const productsPerPage = 12;
-        const numPages = Math.ceil(
-          collectionProductHandles.length / productsPerPage
+    if (products.length) {
+      const productsPerPage = 12;
+      const numPages = Math.ceil(products.length / productsPerPage);
+      Array.from({ length: numPages }).forEach((_, i) => {
+        const paginatedProducts = products.slice(
+          i * productsPerPage,
+          (i + 1) * productsPerPage
         );
-        Array.from({ length: numPages }).forEach((_, i) => {
-          const handles = collectionProductHandles.slice(
-            i * productsPerPage,
-            (i + 1) * productsPerPage
-          );
+        const handles = paginatedProducts.map(
+          (product) => product.content.handle
+        );
 
-          createPage({
-            path:
-              i === 0
-                ? `/collections/${handle}`
-                : `/collections/${handle}/${i + 1}`,
-            component: path.resolve('./src/templates/collection.js'),
-            context: {
-              handle,
-              handles,
-              numPages,
-              currentPage: i + 1
-            }
-          });
+        createPage({
+          path:
+            i === 0
+              ? `/collections/${handle}`
+              : `/collections/${handle}/${i + 1}`,
+          component: path.resolve('./src/templates/collection.js'),
+          context: {
+            handle,
+            handles,
+            numPages,
+            currentPage: i + 1
+          }
         });
-      }
+      });
     }
   });
 };

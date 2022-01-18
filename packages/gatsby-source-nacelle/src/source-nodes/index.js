@@ -60,12 +60,7 @@ module.exports = async function ({
 
           newNodeCount += 1;
         } else {
-          touchNode({
-            id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
-            internal: {
-              type: `Nacelle${dataType}`
-            }
-          });
+          touchNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`);
         }
       });
     } else if (Object.keys(formattedData).length) {

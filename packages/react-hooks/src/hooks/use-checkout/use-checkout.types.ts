@@ -76,7 +76,7 @@ export interface CheckoutClient {
 export type CheckoutProviderProps = {
   children: JSX.Element | JSX.Element[];
   checkoutClient: CheckoutClient;
-  redirectUserToCheckout: boolean;
+  redirectUserToCheckout?: boolean;
 };
 
 export type CheckoutContextValue = null | CheckoutState;

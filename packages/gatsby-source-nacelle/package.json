@@ -21,15 +21,14 @@
   "author": "Nacelle Inc. (getnacelle.com)",
   "license": "ISC",
   "dependencies": {
-    "@nacelle/contentful-preview-connector": "^0.1.5",
-    "@nacelle/storefront-sdk": "^1.0.1",
+    "@nacelle/storefront-sdk": "^1.0.3",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2"
   },
   "peerDependencies": {
-    "gatsby": ">2.0.31",
-    "gatsby-source-filesystem": ">2.6.0",
-    "graphql": "^14.7.0"
+    "gatsby": ">4.0.0",
+    "gatsby-source-filesystem": ">4.0.0",
+    "graphql": ">15.0.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

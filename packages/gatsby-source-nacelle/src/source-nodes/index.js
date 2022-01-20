@@ -23,7 +23,7 @@ module.exports = async function ({
     hasBeenIndexedSinceLastBuild
   } = require('../utils');
 
-  const { actions, createContentDigest, cache } = gatsbyApi;
+  const { actions, createContentDigest, cache, getNode } = gatsbyApi;
   const { createNode, touchNode } = actions;
 
   try {
@@ -60,7 +60,8 @@ module.exports = async function ({
 
           newNodeCount += 1;
         } else {
-          touchNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`);
+          const node = getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`);
+          if (node) touchNode(node);
         }
       });
     } else if (Object.keys(formattedData).length) {

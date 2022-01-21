@@ -35,15 +35,18 @@ const CheckoutClientContext = React.createContext<CheckoutClient>({
   process: () => Promise.resolve({ id: '', url: '', completed: false })
 });
 
-const CheckoutDataContext =
-  React.createContext<CheckoutContextValue>(initialState);
-const CheckoutActionContext =
-  React.createContext<CheckoutActionContextValue>(null);
+const CheckoutDataContext = React.createContext<CheckoutContextValue>(
+  initialState
+);
+const CheckoutActionContext = React.createContext<CheckoutActionContextValue>(
+  null
+);
 const IsCheckingOutContext = React.createContext<boolean>(false);
 
 export const CheckoutProvider: FC<CheckoutProviderProps> = ({
   children,
-  checkoutClient
+  checkoutClient,
+  redirectUserToCheckout
 }) => {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const isMounted = useRef(true);
@@ -131,6 +134,15 @@ export const CheckoutProvider: FC<CheckoutProviderProps> = ({
       getCheckout({ id, url }).catch((err) => console.warn(err));
     }
   }, [checkoutState, getCheckout, isCheckingOut]);
+
+  useEffect(() => {
+    if (typeof redirectUserToCheckout !== 'undefined') {
+      console.warn(
+        '[@nacelle/react-hooks|useCheckout] The `redirectUserToCheckout` prop is deprecated. ' +
+          'Please handle the customer redirect to the checkout URL in your project code.'
+      );
+    }
+  });
 
   return (
     <CheckoutClientContext.Provider value={checkoutClient}>

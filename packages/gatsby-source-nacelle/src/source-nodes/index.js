@@ -25,7 +25,7 @@ module.exports = async function ({
   ],
   uniqueIdProperty = 'remoteId'
 }) {
-  const { actions, createContentDigest, cache } = gatsbyApi;
+  const { actions, createContentDigest, cache, getNode } = gatsbyApi;
   const { createNode, touchNode } = actions;
 
   const dataSample = Array.isArray(data) ? data[0] : data;
@@ -92,9 +92,9 @@ module.exports = async function ({
 
           newNodeCount += 1;
         } else {
-          touchNode({
-            nodeId: `Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`
-          });
+          touchNode(
+            getNode(`Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`)
+          );
         }
       });
     } else if (Object.keys(formattedData).length) {

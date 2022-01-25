@@ -1,6 +1,6 @@
 const sourceNodes = require('./src/source-nodes');
 const typeDefs = require('./src/type-defs');
-const { createRemoteImageFileNode, cmsPreviewEnabled } = require('./src/utils');
+const { cmsPreviewEnabled } = require('./src/utils');
 const { nacelleClient: createNacelleClient } = require('./src/services');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
@@ -97,42 +97,6 @@ exports.createSchemaCustomization = ({ actions }) => {
   // create custom type definitions to maintain data shape
   // in both preview and production settings
   actions.createTypes(typeDefs);
-};
-
-exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
-  try {
-    // the user can opt into using Gatsby Image by installing `gatsby-source-filesystem`
-    require('gatsby-source-filesystem');
-
-    const gatsbyApi = { actions, getCache, createNodeId };
-    const isImage = (nodeMediaEntry) =>
-      nodeMediaEntry &&
-      nodeMediaEntry.type &&
-      nodeMediaEntry.type.startsWith('image');
-
-    if (node.internal.type === 'NacelleProduct') {
-      await createRemoteImageFileNode(
-        node,
-        ['featuredMedia', 'media'],
-        gatsbyApi,
-        { isImage }
-      );
-    }
-
-    if (node.internal.type === 'NacelleCollection') {
-      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
-        isImage
-      });
-    }
-
-    if (node.internal.type === 'NacelleContent') {
-      await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
-        isImage
-      });
-    }
-  } catch (err) {
-    return null;
-  }
 };
 
 exports.onPostBootstrap = async function ({ cache }) {

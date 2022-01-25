@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Global } from '@emotion/core';
+import { Global } from '@emotion/react';
 import { CartProvider, CheckoutProvider } from '@nacelle/react-hooks';
 import createShopifyCheckoutClient from '@nacelle/shopify-checkout';
 import { ProductSearchProvider } from 'providers/ProductSearch';

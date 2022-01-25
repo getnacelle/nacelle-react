@@ -19,6 +19,8 @@ Follow these steps to add `gatsby-source-nacelle` to your Gatsby site:
 
 ### Install
 
+First make sure you're site is using Gatsby v4. Then follow the below instructions to start using the plugin. 
+
 #### With Yarn
 
 ```shell

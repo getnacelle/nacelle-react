@@ -1,6 +1,6 @@
 {
   "name": "nacelle-nextjs-example",
-  "version": "6.1.1",
+  "version": "7.0.0",
   "private": true,
   "scripts": {
     "lint": "eslint ./",
@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
-    "@nacelle/react-components": "^6.1.0",
-    "@nacelle/react-hooks": "^6.1.1",
+    "@nacelle/react-components": "^7.0.0",
+    "@nacelle/react-hooks": "^7.0.0",
     "@nacelle/shopify-checkout": "^0.0.6",
     "@react-hook/media-query": "^1.1.1",
     "fuse.js": "^6.4.1",
@@ -25,7 +25,7 @@
     "@babel/core": "^7.11.1",
     "@emotion/babel-preset-css-prop": "^10.0.27",
     "@nacelle/client-js-sdk": "^2.0.2",
-    "@nacelle/react-dev-utils": "^6.1.0",
+    "@nacelle/react-dev-utils": "^7.0.0",
     "eslint": "^7.6.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",

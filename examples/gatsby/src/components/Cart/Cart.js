@@ -124,7 +124,7 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   return (
     <div css={styles.cartItem}>
       <Link
-        to={`/products/${item.product.handle}`}
+        to={`/products/${item.product.content.handle}`}
         css={[styles.thumbnailContainer, isMobile && { paddingLeft: 0 }]}
       >
         <Image
@@ -136,7 +136,7 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 
       <div css={[styles.column, { width: '100%' }]}>
         <div css={styles.cartItemTitleLayout}>
-          <h4 css={styles.cartItemTitle}>{item.product.title}</h4>
+          <h4 css={styles.cartItemTitle}>{item.product.content.title}</h4>
           {isMobile && (
             <span css={[styles.cartItemPrice, { flexGrow: 0 }]}>
               {formatPrice(item.variant.price)}

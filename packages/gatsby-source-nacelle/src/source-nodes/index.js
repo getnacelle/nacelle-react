@@ -50,7 +50,7 @@ module.exports = async function ({
       : replaceKey(data, keyMappings);
 
     if (Array.isArray(formattedData)) {
-      formattedData.forEach(async (entry) => {
+      for (const entry of formattedData) {
         if (
           hasBeenIndexedSinceLastBuild(entry, lastFetched) ||
           cacheIsInvalid(lastFetched, pluginOptions)
@@ -75,7 +75,7 @@ module.exports = async function ({
         } else {
           touchNode(getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`));
         }
-      });
+      }
     } else if (Object.keys(formattedData).length) {
       // don't make an effort to cache single entries, such as Nacelle Space data
       const nodeMeta = {
@@ -126,7 +126,7 @@ async function fetchRemoteImageNodes(dataType, node, gatsbyApi) {
   const isImage = (nodeMediaEntry) =>
     nodeMediaEntry &&
     nodeMediaEntry.type &&
-    nodeMediaEntry.type.startsWith('image');
+    nodeMediaEntry.type.toLowerCase().startsWith('image');
   if (dataType === 'Product') {
     await createRemoteImageFileNode(
       node,

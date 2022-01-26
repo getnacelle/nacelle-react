@@ -15,13 +15,13 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
       }
     }
   `);
-  products.data.allNacelleProduct.edges.forEach((product) =>
+  products.data.allNacelleProduct.edges.forEach(({ node: product }) =>
     createPage({
       // Build a Product Detail Page (PDP) for each product
-      path: `/products/${product.node.content.handle}`,
+      path: `/products/${product.content.handle}`,
       component: path.resolve('./src/templates/product-detail.js'),
       context: {
-        handle: product.node.content.handle
+        handle: product.content.handle
       }
     })
   );
@@ -70,40 +70,40 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
       }
     }
   `);
-  collections.data.allNacelleProductCollection.edges.forEach((collection) => {
-    // Build Product Loading Pages (PLPs) for each collection
-    const handle = collection.content?.handle;
-    if (!handle) return;
-    const products = collection.products;
-
-    if (products.length) {
-      const productsPerPage = 12;
-      const numPages = Math.ceil(products.length / productsPerPage);
-      Array.from({ length: numPages }).forEach((_, i) => {
-        const paginatedProducts = products.slice(
-          i * productsPerPage,
-          (i + 1) * productsPerPage
-        );
-        const handles = paginatedProducts.map(
-          (product) => product.content.handle
-        );
-
-        createPage({
-          path:
-            i === 0
-              ? `/collections/${handle}`
-              : `/collections/${handle}/${i + 1}`,
-          component: path.resolve('./src/templates/collection.js'),
-          context: {
-            handle,
-            handles,
-            numPages,
-            currentPage: i + 1
-          }
+  collections.data.allNacelleProductCollection.edges.forEach(
+    ({ node: collection }) => {
+      // Build Product Loading Pages (PLPs) for each collection
+      const handle = collection.content?.handle;
+      if (!handle) return;
+      const products = collection.products;
+      if (products.length) {
+        const productsPerPage = 12;
+        const numPages = Math.ceil(products.length / productsPerPage);
+        Array.from({ length: numPages }).forEach((_, i) => {
+          const paginatedProducts = products.slice(
+            i * productsPerPage,
+            (i + 1) * productsPerPage
+          );
+          const handles = paginatedProducts.map(
+            (product) => product.content.handle
+          );
+          createPage({
+            path:
+              i === 0
+                ? `/collections/${handle}`
+                : `/collections/${handle}/${i + 1}`,
+            component: path.resolve('./src/templates/collection.js'),
+            context: {
+              handle,
+              handles,
+              numPages,
+              currentPage: i + 1
+            }
+          });
         });
-      });
+      }
     }
-  });
+  );
 };
 
 exports.onCreateBabelConfig = ({ actions }) => {

@@ -1,3 +1,9 @@
+const {
+  replaceKey,
+  cacheIsInvalid,
+  hasBeenIndexedSinceLastBuild,
+  createRemoteImageFileNode
+} = require('../utils');
 /**
  * Creates Gatsby nodes from Nacelle data
  * @param {Object} config - configuration object
@@ -17,14 +23,18 @@ module.exports = async function ({
   keyMappings = [{ oldKey: 'fields', newKey: 'remoteFields' }],
   uniqueIdProperty = 'nacelleEntryId'
 }) {
-  const {
-    replaceKey,
-    cacheIsInvalid,
-    hasBeenIndexedSinceLastBuild
-  } = require('../utils');
-
   const { actions, createContentDigest, cache, getNode } = gatsbyApi;
   const { createNode, touchNode } = actions;
+
+  // detect if users have opted into gatsby image
+  let useGatsbyImage = false;
+  try {
+    // the user can opt into using Gatsby Image by installing `gatsby-source-filesystem`
+    require('gatsby-source-filesystem');
+    useGatsbyImage = true;
+  } catch (err) {
+    // do nothing because useGatsbyImage is already false
+  }
 
   try {
     console.info(`[gatsby-source-nacelle] fetching ${dataType}`);
@@ -40,7 +50,7 @@ module.exports = async function ({
       : replaceKey(data, keyMappings);
 
     if (Array.isArray(formattedData)) {
-      formattedData.forEach((entry) => {
+      formattedData.forEach(async (entry) => {
         if (
           hasBeenIndexedSinceLastBuild(entry, lastFetched) ||
           cacheIsInvalid(lastFetched, pluginOptions)
@@ -56,12 +66,14 @@ module.exports = async function ({
           };
 
           const node = Object.assign({}, entry, nodeMeta);
+          if (useGatsbyImage) {
+            await fetchRemoteImageNodes(dataType, node, gatsbyApi);
+          }
           createNode(node);
 
           newNodeCount += 1;
         } else {
-          const node = getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`);
-          if (node) touchNode(node);
+          touchNode(getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`));
         }
       });
     } else if (Object.keys(formattedData).length) {
@@ -77,6 +89,9 @@ module.exports = async function ({
       };
 
       const node = Object.assign({}, formattedData, nodeMeta);
+      if (useGatsbyImage) {
+        await fetchRemoteImageNodes(dataType, node, gatsbyApi);
+      }
       createNode(node);
     }
 
@@ -97,3 +112,30 @@ module.exports = async function ({
     );
   }
 };
+
+/**
+ * helper for fetching images based on the content type.
+ * @param {string} dataType - kind of node data
+ * @param {Object} node - the new node to be created
+ * @param {Object} gatsbyApi - Functions provided by `Gatsby for managing nodes`
+ * @param {Object} gatsbyApi.actions
+ * @param {function} gatsbyApi.getCache
+ * @param {function} gatsbyApi.createNodeId
+ */
+async function fetchRemoteImageNodes(dataType, node, gatsbyApi) {
+  const isImage = (nodeMediaEntry) =>
+    nodeMediaEntry &&
+    nodeMediaEntry.type &&
+    nodeMediaEntry.type.startsWith('image');
+  if (dataType === 'Product') {
+    await createRemoteImageFileNode(
+      node,
+      [
+        ['content', 'featuredMedia'],
+        ['content', 'media']
+      ],
+      gatsbyApi,
+      { isImage }
+    );
+  }
+}

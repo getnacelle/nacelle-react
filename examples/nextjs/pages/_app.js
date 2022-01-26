@@ -1,8 +1,7 @@
 import App from 'next/app';
 import React from 'react';
 import { Global } from '@emotion/core';
-import { CartProvider } from '@nacelle/react-hooks';
-import { CheckoutProvider } from '@nacelle/react-hooks';
+import { CartProvider, CheckoutProvider } from '@nacelle/react-hooks';
 import createShopifyCheckoutClient from '@nacelle/shopify-checkout';
 
 import Layout from 'components/Layout';

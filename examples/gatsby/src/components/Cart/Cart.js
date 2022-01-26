@@ -11,17 +11,28 @@ import * as styles from './Cart.styles';
 const Cart = () => {
   const [{ cart, show }, cartActions] = useCart();
   const { isMobile } = useDetectDevice();
-  const [checkoutData, checkoutActions, isCheckingOut] = useCheckout();
+  const [checkoutData, checkoutActions] = useCheckout();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const checkoutItems = cart.map((cartItem) => ({
     quantity: cartItem.quantity,
     variantId: cartItem.variant.id,
     metafields: [...cartItem.product.metafields, ...cartItem.variant.metafields]
   }));
+
   const processCheckout = async () => {
-    await checkoutActions
+    // initiate checkout & redirect customer to checkout URL
+    setIsCheckingOut(true);
+
+    return await checkoutActions
       .processCheckout({ cartItems: checkoutItems })
-      .then((data) => {
-        window.location = data.url;
+      .then(({ url, completed }) => {
+        if (url && !completed) {
+          window.location.href = url;
+        }
+      })
+      .catch((err) => {
+        setIsCheckingOut(false);
+        console.error(err);
       });
   };
 

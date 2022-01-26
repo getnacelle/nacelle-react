@@ -1,6 +1,5 @@
 const sourceNodes = require('./src/source-nodes');
 const typeDefs = require('./src/type-defs');
-const { createRemoteImageFileNode } = require('./src/utils');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
@@ -165,33 +164,6 @@ exports.createResolvers = ({ createResolvers }) => {
       }
     }
   });
-};
-
-exports.onCreateNode = async ({ actions, getCache, createNodeId, node }) => {
-  try {
-    // the user can opt into using Gatsby Image by installing `gatsby-source-filesystem`
-    require('gatsby-source-filesystem');
-
-    const gatsbyApi = { actions, getCache, createNodeId };
-    const isImage = (nodeMediaEntry) =>
-      nodeMediaEntry &&
-      nodeMediaEntry.type &&
-      nodeMediaEntry.type.toLowerCase().startsWith('image');
-
-    if (node.internal.type === 'NacelleProduct') {
-      await createRemoteImageFileNode(
-        node,
-        [
-          ['content', 'featuredMedia'],
-          ['content', 'media']
-        ],
-        gatsbyApi,
-        { isImage }
-      );
-    }
-  } catch (err) {
-    return null;
-  }
 };
 
 exports.onPostBootstrap = async function ({ cache }) {

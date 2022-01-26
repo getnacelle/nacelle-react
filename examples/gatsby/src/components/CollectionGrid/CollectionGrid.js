@@ -11,7 +11,7 @@ const CollectionGrid = ({ fields }) => {
     const fetchCollection = async () => {
       const collections = await $nacelle
         .productCollections({
-          handle: collectionHandle
+          handles: [collectionHandle]
         })
         .catch(() =>
           console.warn(
@@ -19,10 +19,10 @@ const CollectionGrid = ({ fields }) => {
           )
         );
 
-      if (collections) {
+      if (collections.length) {
         const products = await $nacelle
           .products({
-            handles: collections.products.map(
+            handles: collections[0].products.map(
               (product) => product.content.handle
             )
           })

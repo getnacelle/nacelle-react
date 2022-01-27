@@ -50,32 +50,34 @@ module.exports = async function ({
       : replaceKey(data, keyMappings);
 
     if (Array.isArray(formattedData)) {
-      for (const entry of formattedData) {
-        if (
-          hasBeenIndexedSinceLastBuild(entry, lastFetched) ||
-          cacheIsInvalid(lastFetched, pluginOptions)
-        ) {
-          const nodeMeta = {
-            id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
-            parent: null,
-            children: [],
-            internal: {
-              type: `Nacelle${dataType}`,
-              contentDigest: createContentDigest(entry)
+      await Promise.all(
+        formattedData.map(async (entry) => {
+          if (
+            hasBeenIndexedSinceLastBuild(entry, lastFetched) ||
+            cacheIsInvalid(lastFetched, pluginOptions)
+          ) {
+            const nodeMeta = {
+              id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
+              parent: null,
+              children: [],
+              internal: {
+                type: `Nacelle${dataType}`,
+                contentDigest: createContentDigest(entry)
+              }
+            };
+
+            const node = Object.assign({}, entry, nodeMeta);
+            if (useGatsbyImage) {
+              await fetchRemoteImageNodes(dataType, node, gatsbyApi);
             }
-          };
+            createNode(node);
 
-          const node = Object.assign({}, entry, nodeMeta);
-          if (useGatsbyImage) {
-            await fetchRemoteImageNodes(dataType, node, gatsbyApi);
+            newNodeCount += 1;
+          } else {
+            touchNode(getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`));
           }
-          createNode(node);
-
-          newNodeCount += 1;
-        } else {
-          touchNode(getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`));
-        }
-      }
+        })
+      );
     } else if (Object.keys(formattedData).length) {
       // don't make an effort to cache single entries, such as Nacelle Space data
       const nodeMeta = {

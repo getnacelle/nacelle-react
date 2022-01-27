@@ -1,12 +1,10 @@
-import NacelleClient from '@nacelle/client-js-sdk';
+import Storefront from '@nacelle/storefront-sdk';
 
 const settings = {
-  id: process.env.GATSBY_NACELLE_SPACE_ID,
-  token: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT,
-  useStatic: false
+  token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
+  storefrontEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
 };
 
-const $nacelle = new NacelleClient(settings);
+const $nacelle = new Storefront(settings);
 
 export default $nacelle;

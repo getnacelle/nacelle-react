@@ -1,12 +1,10 @@
 require('dotenv').config();
 
-const NacelleClient = require('@nacelle/client-js-sdk').default;
+const NacelleClient = require('@nacelle/storefront-sdk').default;
 
 const client = new NacelleClient({
-  useStatic: false,
-  token: process.env.GATSBY_NACELLE_GRAPHQL_TOKEN,
-  id: process.env.GATSBY_NACELLE_SPACE_ID,
-  nacelleEndpoint: process.env.GATSBY_NACELLE_ENDPOINT
+  token: process.env.GATSBY_NACELLE_STOREFRONT_TOKEN,
+  storefrontEndpoint: process.env.GATSBY_NACELLE_STOREFRONT_ENDPOINT
 });
 
 module.exports = {

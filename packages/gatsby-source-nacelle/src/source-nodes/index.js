@@ -19,31 +19,12 @@ module.exports = async function ({
   gatsbyApi,
   pluginOptions,
   data,
-  keyMappings = [
-    { oldKey: 'id', newKey: 'remoteId' },
-    { oldKey: 'fields', newKey: 'remoteFields' }
-  ],
-  uniqueIdProperty = 'remoteId'
+  dataType,
+  keyMappings = [{ oldKey: 'fields', newKey: 'remoteFields' }],
+  uniqueIdProperty = 'nacelleEntryId'
 }) {
   const { actions, createContentDigest, cache, getNode } = gatsbyApi;
   const { createNode, touchNode } = actions;
-
-  const dataSample = Array.isArray(data) ? data[0] : data;
-  let dataType;
-
-  if (dataSample.linklists) {
-    dataType = 'space';
-  } else if (dataSample.pimSyncSourceProductId) {
-    dataType = 'product';
-  } else if (dataSample.pimSyncSourceCollectionId) {
-    dataType = 'collection';
-  } else if (dataSample.cmsSyncSourceContentId) {
-    dataType = 'content';
-  }
-
-  const dataTypeLower = dataType.toLowerCase();
-  const dataTypeUpper =
-    dataType.charAt(0).toUpperCase() + dataType.substring(1, dataType.length);
 
   // detect if users have opted into gatsby image
   let useGatsbyImage = false;
@@ -56,7 +37,7 @@ module.exports = async function ({
   }
 
   try {
-    console.info(`[gatsby-source-nacelle] fetching ${dataTypeLower}`);
+    console.info(`[gatsby-source-nacelle] fetching ${dataType}`);
 
     // handle incremental builds
     const lastFetched = await cache.get('nacelle-timestamp');
@@ -76,11 +57,11 @@ module.exports = async function ({
             cacheIsInvalid(lastFetched, pluginOptions)
           ) {
             const nodeMeta = {
-              id: `Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`,
+              id: `Nacelle${dataType}-${entry[uniqueIdProperty]}`,
               parent: null,
               children: [],
               internal: {
-                type: `Nacelle${dataTypeUpper}`,
+                type: `Nacelle${dataType}`,
                 contentDigest: createContentDigest(entry)
               }
             };
@@ -93,20 +74,18 @@ module.exports = async function ({
 
             newNodeCount += 1;
           } else {
-            touchNode(
-              getNode(`Nacelle${dataTypeUpper}-${entry[uniqueIdProperty]}`)
-            );
+            touchNode(getNode(`Nacelle${dataType}-${entry[uniqueIdProperty]}`));
           }
         })
       );
     } else if (Object.keys(formattedData).length) {
       // don't make an effort to cache single entries, such as Nacelle Space data
       const nodeMeta = {
-        id: `Nacelle${dataTypeUpper}-${formattedData[uniqueIdProperty]}`,
+        id: `Nacelle${dataType}`,
         parent: null,
         children: [],
         internal: {
-          type: `Nacelle${dataTypeUpper}`,
+          type: `Nacelle${dataType}`,
           contentDigest: createContentDigest(formattedData)
         }
       };
@@ -121,17 +100,17 @@ module.exports = async function ({
     if (Array.isArray(formattedData)) {
       if (newNodeCount) {
         console.info(
-          `[gatsby-source-nacelle] created ${newNodeCount} new ${dataTypeLower} nodes`
+          `[gatsby-source-nacelle] created ${newNodeCount} new ${dataType} nodes`
         );
       } else {
         console.info(
-          `[gatsby-source-nacelle] using cached ${dataTypeLower} nodes from previous build`
+          `[gatsby-source-nacelle] using cached ${dataType} nodes from previous build`
         );
       }
     }
   } catch (err) {
     throw new Error(
-      `Problem sourcing Nacelle ${dataTypeLower} nodes: ${err.message}`
+      `Problem sourcing Nacelle ${dataType} nodes: ${err.message}`
     );
   }
 };
@@ -149,21 +128,16 @@ async function fetchRemoteImageNodes(dataType, node, gatsbyApi) {
   const isImage = (nodeMediaEntry) =>
     nodeMediaEntry &&
     nodeMediaEntry.type &&
-    nodeMediaEntry.type.startsWith('image');
-  if (dataType === 'product') {
+    nodeMediaEntry.type.toLowerCase().startsWith('image');
+  if (dataType === 'Product') {
     await createRemoteImageFileNode(
       node,
-      ['featuredMedia', 'media'],
+      [
+        ['content', 'featuredMedia'],
+        ['content', 'media']
+      ],
       gatsbyApi,
       { isImage }
     );
-  } else if (dataType === 'collection') {
-    await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
-      isImage
-    });
-  } else if (dataType === 'content') {
-    await createRemoteImageFileNode(node, 'featuredMedia', gatsbyApi, {
-      isImage
-    });
   }
 }

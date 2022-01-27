@@ -1,30 +1,10 @@
 const sourceNodes = require('./src/source-nodes');
 const typeDefs = require('./src/type-defs');
-const { cmsPreviewEnabled } = require('./src/utils');
-const { nacelleClient: createNacelleClient } = require('./src/services');
 
 exports.pluginOptionsSchema = ({ Joi }) => {
   return Joi.object({
-    nacelleSpaceId: Joi.string().description(
-      'Space ID from the Nacelle Dashboard'
-    ),
-    nacelleGraphqlToken: Joi.string().description(
-      'GraphQL Token from the Nacelle Dashboard'
-    ),
-    nacelleEndpoint: Joi.string().description(
-      'Storefront Endpoint from the Nacelle Dashboard'
-    ),
-    nacelleClient: Joi.optional().description(
-      'Instance of the `@nacelle/client-js-sdk` which you want to use to fetch your nacelle data'
-    ),
-    contentfulPreviewSpaceId: Joi.string().description(
-      'Space ID from Contentful Dashboard settings'
-    ),
-    contentfulPreviewApiToken: Joi.string().description(
-      'Contentful Preview API token from Contentful Dashboard settings'
-    ),
-    cmsPreviewEnabled: Joi.boolean().description(
-      `Toggle Contentful Preview on and off (IMPORTANT: requires that both 'contentfulPreviewSpaceId' and 'contentfulPreviewApiToken' are also set)`
+    nacelleClient: Joi.required().description(
+      'Instance of the `@nacelle/storefront-sdk` which you want to use to fetch your nacelle data'
     ),
     cacheDuration: Joi.number().description(
       'Max duration in ms that gatsby-source-nacelle caches product, collection, and content data from previous builds'
@@ -33,58 +13,68 @@ exports.pluginOptionsSchema = ({ Joi }) => {
 };
 
 exports.sourceNodes = async (gatsbyApi, pluginOptions) => {
-  const {
-    nacelleSpaceId,
-    nacelleGraphqlToken,
-    nacelleEndpoint,
-    contentfulPreviewSpaceId,
-    contentfulPreviewApiToken,
-    nacelleClient
-  } = pluginOptions;
+  const { nacelleClient } = pluginOptions;
 
-  const client =
-    nacelleClient ||
-    createNacelleClient({
-      previewMode: cmsPreviewEnabled(pluginOptions),
-      nacelleSpaceId,
-      nacelleGraphqlToken,
-      nacelleEndpoint,
-      contentfulPreviewSpaceId,
-      contentfulPreviewApiToken
-    });
+  const client = nacelleClient;
 
   const [
     spaceData,
+    navigationData,
     productData,
-    collectionData,
-    contentData
+    productCollectionData,
+    contentData,
+    contentCollectionData
   ] = await Promise.all([
     // fetch data from Nacelle's Hail Frequency API
-    client.data.space(),
-    client.data.allProducts(),
-    client.data.allCollections(),
-    client.data.allContent()
+    client.spaceProperties(),
+    client.navigation(),
+    client.products(),
+    client.productCollections(),
+    client.content(),
+    client.contentCollections()
   ]).catch((err) => {
     throw new Error(`Could not fetch data from Nacelle: ${err.message}`);
   });
 
   await Promise.all([
     // use Nacelle data to create Gatsby nodes
-    sourceNodes({ gatsbyApi, pluginOptions, data: spaceData }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: productData
+      data: spaceData,
+      dataType: 'SpaceProperties',
+      uniqueIdProperty: null
     }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: collectionData
+      data: navigationData,
+      dataType: 'NavigationGroup',
+      uniqueIdProperty: 'groupId'
     }),
     sourceNodes({
       gatsbyApi,
       pluginOptions,
-      data: contentData
+      data: productData,
+      dataType: 'Product'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: productCollectionData,
+      dataType: 'ProductCollection'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: contentData,
+      dataType: 'Content'
+    }),
+    sourceNodes({
+      gatsbyApi,
+      pluginOptions,
+      data: contentCollectionData,
+      dataType: 'ContentCollection'
     })
   ]).catch((err) => {
     throw new Error(
@@ -97,6 +87,83 @@ exports.createSchemaCustomization = ({ actions }) => {
   // create custom type definitions to maintain data shape
   // in both preview and production settings
   actions.createTypes(typeDefs);
+};
+
+exports.createResolvers = ({ createResolvers }) => {
+  createResolvers({
+    NacelleProductCollection: {
+      products: {
+        type: ['NacelleProduct'],
+        resolve: async (source, args, context) => {
+          const { entries } = await context.nodeModel.findAll({
+            query: {
+              filter: {
+                nacelleEntryId: {
+                  in: source.products.map((product) => product.nacelleEntryId)
+                }
+              }
+            },
+            type: 'NacelleProduct'
+          });
+          return entries;
+        }
+      }
+    },
+    NacelleProduct: {
+      collections: {
+        type: ['NacelleProductCollection'],
+        resolve: async (source, args, context) => {
+          const { entries } = await context.nodeModel.findAll({
+            query: {
+              filter: {
+                products: {
+                  elemMatch: { nacelleEntryId: { eq: source.nacelleEntryId } }
+                }
+              }
+            },
+            type: 'NacelleProductCollection'
+          });
+          return entries;
+        }
+      }
+    },
+    NacelleContentCollection: {
+      entries: {
+        type: ['NacelleContent'],
+        resolve: async (source, args, context) => {
+          const { entries } = await context.nodeModel.findAll({
+            query: {
+              filter: {
+                nacelleEntryId: {
+                  in: source.entries.map((entry) => entry.nacelleEntryId)
+                }
+              }
+            },
+            type: 'NacelleContent'
+          });
+          return entries;
+        }
+      }
+    },
+    NacelleContent: {
+      collections: {
+        type: ['NacelleContentCollection'],
+        resolve: async (source, args, context) => {
+          const { entries } = await context.nodeModel.findAll({
+            query: {
+              filter: {
+                entries: {
+                  elemMatch: { nacelleEntryId: { eq: source.nacelleEntryId } }
+                }
+              }
+            },
+            type: 'NacelleContentCollection'
+          });
+          return entries;
+        }
+      }
+    }
+  });
 };
 
 exports.onPostBootstrap = async function ({ cache }) {

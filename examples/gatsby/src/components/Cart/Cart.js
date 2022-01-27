@@ -61,7 +61,7 @@ const Cart = () => {
         {cart.map((item, idx) => (
           <CartItem
             item={item}
-            key={`${idx}::${item.id}`}
+            key={`${idx}::${item.variant.id}`}
             cartActions={cartActions}
             isMobile={isMobile}
           />
@@ -116,15 +116,15 @@ const CartItem = ({ item, cartActions, isMobile }) => {
   };
 
   const removeItemFromCart = () => cartActions.removeFromCart(item);
-  const { featuredMedia: variantMedia } = item.variant;
-  const { featuredMedia: productMedia } = item.product;
+  const { featuredMedia: variantMedia } = item.variant.content;
+  const { featuredMedia: productMedia } = item.product.content;
   const altText =
     variantMedia.altText || productMedia.altText || item.product.title;
 
   return (
     <div css={styles.cartItem}>
       <Link
-        to={`/products/${item.product.handle}`}
+        to={`/products/${item.product.content.handle}`}
         css={[styles.thumbnailContainer, isMobile && { paddingLeft: 0 }]}
       >
         <Image
@@ -136,7 +136,7 @@ const CartItem = ({ item, cartActions, isMobile }) => {
 
       <div css={[styles.column, { width: '100%' }]}>
         <div css={styles.cartItemTitleLayout}>
-          <h4 css={styles.cartItemTitle}>{item.product.title}</h4>
+          <h4 css={styles.cartItemTitle}>{item.product.content.title}</h4>
           {isMobile && (
             <span css={[styles.cartItemPrice, { flexGrow: 0 }]}>
               {formatPrice(item.variant.price)}

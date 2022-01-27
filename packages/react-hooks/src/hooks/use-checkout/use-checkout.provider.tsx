@@ -35,12 +35,10 @@ const CheckoutClientContext = React.createContext<CheckoutClient>({
   process: () => Promise.resolve({ id: '', url: '', completed: false })
 });
 
-const CheckoutDataContext = React.createContext<CheckoutContextValue>(
-  initialState
-);
-const CheckoutActionContext = React.createContext<CheckoutActionContextValue>(
-  null
-);
+const CheckoutDataContext =
+  React.createContext<CheckoutContextValue>(initialState);
+const CheckoutActionContext =
+  React.createContext<CheckoutActionContextValue>(null);
 const IsCheckingOutContext = React.createContext<boolean>(false);
 
 export const CheckoutProvider: FC<CheckoutProviderProps> = ({

@@ -12,7 +12,9 @@ const Collection = ({ data, pageContext }) => {
 
   return (
     <>
-      {page && <ContentSections sections={page.sections} />}
+      {page && page.remoteFields?.sections && (
+        <ContentSections sections={page.remoteFields.sections} />
+      )}
       <ProductGallery products={products} />
       <PageNavigator numPages={numPages} basePath="/shop" />
     </>
@@ -23,23 +25,25 @@ export default Collection;
 
 export const query = graphql`
   query ProductInHandlesArray($handles: [String]) {
-    allNacelleProduct(filter: { handle: { in: $handles } }) {
+    allNacelleProduct(filter: { content: { handle: { in: $handles } } }) {
       edges {
         node {
-          remoteId
-          handle
-          title
-          featuredMedia {
-            remoteImage {
-              childImageSharp {
-                gatsbyImageData(width: 320)
-                fluid {
-                  ...GatsbyImageSharpFluid
+          nacelleEntryId
+          content {
+            handle
+            title
+            featuredMedia {
+              remoteImage {
+                childImageSharp {
+                  gatsbyImageData(width: 320)
+                  fluid {
+                    ...GatsbyImageSharpFluid
+                  }
                 }
               }
+              src
+              altText
             }
-            src
-            altText
           }
           metafields {
             key
@@ -47,10 +51,10 @@ export const query = graphql`
             value
           }
           variants {
-            id
+            nacelleEntryId
+            sourceEntryId
             availableForSale
             compareAtPrice
-            compareAtPriceCurrency
             price
             priceCurrency
             metafields {
@@ -59,17 +63,20 @@ export const query = graphql`
               value
             }
             sku
-            swatchSrc
-            title
-            featuredMedia {
-              src
-              thumbnailSrc
-              altText
-              remoteImage {
-                childImageSharp {
-                  gatsbyImageData(width: 320)
-                  fluid {
-                    ...GatsbyImageSharpFluid
+            content {
+              swatchSrc
+              title
+              sourceEntryId
+              featuredMedia {
+                src
+                thumbnailSrc
+                altText
+                remoteImage {
+                  childImageSharp {
+                    gatsbyImageData(width: 320)
+                    fluid {
+                      ...GatsbyImageSharpFluid
+                    }
                   }
                 }
               }
@@ -79,7 +86,7 @@ export const query = graphql`
       }
     }
     nacelleContent(type: { eq: "page" }, handle: { eq: "shop" }) {
-      sections
+      remoteFields
     }
   }
 `;

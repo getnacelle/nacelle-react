@@ -2,6 +2,10 @@
 
 > React Hooks for Nacelle-fueled storefronts
 
+## NOTICE
+
+This package is deprecated. For up-to-date information and examples related to building frontend projects powered by Nacelle, please see [`docs.nacelle.com`](https://docs.nacelle.com/docs/heads) and the [`nacelle-js`](https://github.com/getnacelle/nacelle-js) repo.
+
 ## Install
 
 ```bash
@@ -39,9 +43,7 @@ const App = () => {
 You're welcome to create your own checkout client. It just needs to expose two methods:
 
 ```ts
-function get(
-  params: any
-): Promise<{
+function get(params: any): Promise<{
   id: string;
   url: string;
   completed: boolean;
@@ -53,9 +55,7 @@ function get(
   }
 }
 
-function process(
-  params: any
-): Promise<{
+function process(params: any): Promise<{
   id: string;
   url: string;
   completed: boolean;

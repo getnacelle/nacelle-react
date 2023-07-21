@@ -4,6 +4,10 @@ Adds a React component [Recharge](https://rechargepayments.com/) subscriptions i
 
 ![Image of RechargeSelect Component](component.png)
 
+## NOTICE
+
+This package is deprecated. For up-to-date information and examples related to building frontend projects powered by Nacelle, please see [`docs.nacelle.com`](https://docs.nacelle.com/docs/heads) and the [`nacelle-js`](https://github.com/getnacelle/nacelle-js) repo.
+
 ## Requirements
 
 - A Nacelle project set up locally. See https://docs.getnacelle.com for getting started.

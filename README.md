@@ -1,29 +1,3 @@
 # `nacelle-react`
 
-Nacelle is a managed backend service that acts as the connective tissue for headless commerce. Our infrastructure is built on an event-driven elastic core that Nacelle fully manages, so you don't have to worry about scaling, updates, and general DevOps. We focus on fighting headless headaches like eventual consistency, backend maintenance, and interoperability so you can build the things that matter to your brand without getting bogged down.
-
-This repository contains packages and examples you can use to build your Nacelle-powered storefront with React.js.
-
-## Packages
-
-All `nacelle-react` [**packages**](https://github.com/getnacelle/nacelle-react/tree/main/packages) are published to npm. Please refer to a package's README for installation instructions.
-
-## Examples
-
-[**Examples**](https://github.com/getnacelle/nacelle-react/tree/main/examples) demonstrate React project setups with metaframeworks such as [Next.js](https://github.com/getnacelle/nacelle-react/tree/main/examples/nextjs) and [Gatsby](https://github.com/getnacelle/nacelle-react/tree/main/examples/gatsby)) and a variety of third-party integrations.
-
-Using `degit` for project scaffolding allows you to create a fresh project without needing to clone the `nacelle-react` monorepo. To scaffold a frontend example project, we recommend using [`degit`](https://www.npmjs.com/package/degit):
-
-```
-npx degit https://github.com/getnacelle/nacelle-react/examples/<example-project-name> my-new-project
-```
-
-After scaffolding up a new project with `degit`, we recommend initializing source control with Git:
-
-```
-git init -b main
-```
-
-## How to Contribute
-
-Please see our [Contribution Guidelines](./CONTRIBUTING.md) for more information about contributing to `nacelle-react`.
+This monorepo and all `packages/`, `examples/`, etc. contained therewithin are deprecated. For up-to-date information about building frontend projects powered by Nacelle, please see [`docs.nacelle.com`](https://docs.nacelle.com/docs/heads).
